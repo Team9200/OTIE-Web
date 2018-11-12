@@ -48,7 +48,13 @@ function signin(req, res) {
         } else {
             user.verify(req.body.password, function (err, isMatch) {
                 if (isMatch && !err) {
-                    var token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET);
+                    var token = jwt.sign(JSON.stringify({
+                        authed: user.authed,
+                        role: user.role,
+                        _id: user._id,
+                        username: user.username,
+                        email: user.email
+                    }), process.env.JWT_SECRET);
                     res.json({
                         success: true,
                         token: token
@@ -79,5 +85,8 @@ function getToken(headers) {
 };
 
 export default {
-    test, signup, signin, profile
+    test,
+    signup,
+    signin,
+    profile
 };
