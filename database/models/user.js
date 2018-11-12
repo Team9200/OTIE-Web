@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 class User extends mongoose.Schema {
     constructor() {
@@ -31,6 +32,8 @@ class User extends mongoose.Schema {
         });
     
         user.statics.create = this.create;
+        user.statics.createHash = this.createHash;
+        user.methods.verify = this.verify;
 
         return user;
     }
@@ -43,6 +46,19 @@ class User extends mongoose.Schema {
         });
 
         return user.save();
+    }
+
+    createHash(password) {
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+    }
+
+    verify(password, callback) {
+        bcrypt.compare(password, this.password, function (err, isMatch) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, isMatch);
+        });
     }
 }
 
