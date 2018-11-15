@@ -1,65 +1,76 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 
-class User extends mongoose.Schema {
+class Malware extends mongoose.Schema {
     constructor() {
-        const user = super({
-            username: {
-                type: String,
-                required: true,
-                unique: true
-            },
-            password: {
-                type: String,
-                required: true
-            },
-            email: {
-                type: String,
-                required: true
-            },
-            clientId: {
+        const malware = super({
+            azid: {
                 type: String
             },
-            authed: {
-                type: Boolean,
-                default: false
+            analyzer: {
+                type: String
             },
-            role: {
-                type: String,
-                enum: ["general", "admin"],
-                default: "general"
+            collector: {
+                type: String
+            },
+            md5: {
+                type: String
+            },
+            sha1: {
+                type: String
+            },
+            sha256: {
+                type: String
+            },
+            filetype: {
+                type: String
+            },
+            tag_name_etc: {
+                type: JSON
+
+            },
+            filesize: {
+                type: Number
+            },
+            behavior: {
+                type: JSON
+            },
+            date: {
+                type: Date
+            },
+            first_seen: {
+                type: Date
+            },
+            taglist: {
+                type: Array
+            },
+            description: {
+                type: String
             }
         });
-    
-        user.statics.create = this.create;
-        user.statics.createHash = this.createHash;
-        user.methods.verify = this.verify;
+        malware.statics.create = this.create;
 
-        return user;
+        return malware;
     }
-
-    create(username, password, email) {
-        const user = new this({
-            username,
-            password,
-            email
+    create(azid, analyzer, collector, md5, sha1, sha256, filetype, tag_name_etc, filesize, behavior, date, first_seen, taglist, description) {
+        const malware = new this({
+             azid
+             ,analyzer
+             , collector
+             , md5
+             , sha1
+             , sha256
+             , filetype
+             , tag_name_etc
+             , filesize
+             , behavior
+             , date
+             , first_seen
+             , taglist
+             , description
         });
 
-        return user.save();
-    }
-
-    createHash(password) {
-        return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
-    }
-
-    verify(password, callback) {
-        bcrypt.compare(password, this.password, function (err, isMatch) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, isMatch);
-        });
+        return malware.save();
     }
 }
 
-export default mongoose.model('User', new User);
+export default mongoose.model('Malware', new Malware);
