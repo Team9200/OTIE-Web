@@ -2,7 +2,7 @@ import Malware from '../database/models/malware';
 import Block from '../database/models/block';
 import fs from 'fs';
 
-function parseMallist(filename){
+async function parseMallist(filename){
 
 	var Data = fs.readFileSync(filename,'UTF-8');
 	var jsonData = JSON.parse(Data);
