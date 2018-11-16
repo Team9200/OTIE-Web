@@ -62,12 +62,43 @@ app.get('/board', function (req, res) {
     });
 });
 
+app.get('/board/:id', function (req, res) {
+    request(API_URL + '/api/malware/get?page=' + req.params.id, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('board', {
+            result: body.message
+        });
+    });
+});
+
 app.get('/login', function (req, res) {
     res.render('user/login');
 });
 
 app.get('/register', function (req, res) {
     res.render('user/register');
+});
+
+app.get('/block/', function (req, res) {
+    res.render('block');
+});
+
+app.get('/status', function (req, res) {
+    res.render('status', {
+        data: {
+            
+        },
+        length: 3
+    });
+});
+
+app.get('/profile/:username', function (req, res) {
+    request(API_URL + '/api/malware/search?type=ana&query=' + req.params.username, function (err, response, body) {
+        body = JSON.stringify(body);
+        res.render('user/profile', {
+            result: body.message
+        });
+    });
 });
 
 app.listen(process.env.PORT, function () {

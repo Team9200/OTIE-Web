@@ -1,0 +1,178 @@
+<div class="ui text container">
+    <style type="text/css">
+        .selected {
+            font-size: 2em;
+        }
+
+        .size {
+            float: right;
+            font-family: sans-serif;
+        }
+
+        .lable {
+            color: blue;
+        }
+
+        .col-xs-12 {
+
+            width: 800px;
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+
+        }
+    </style>
+    <svg width="800" height="600"></svg>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        var storageData = {{ data }};
+        var nodesData = [];
+        var len = {{ length }};
+
+        console.log(storageData);
+
+        storageData.forEach(function (item) {
+
+            var r = 7;
+            var level = item.size / (1024 * 1024 * 1024 * 1024);
+            var color = "#CD7F32";
+
+            for (var i = 0; i < level - 1; i++) {
+
+                if (i < 25) r += 0.5;
+
+                if (25 <= i && i < 50) r += 0.4;
+
+                if (50 <= i && i < 75) r += 0.3;
+
+                if (75 <= i && i < 100) r += 0.2;
+
+                if (100 >= i) r += 0.1;
+
+            }
+
+            // if(r < 15) color="#CD7F32";
+
+            // if(15 <= r && r < 25 ) color="#C0C0C0";
+
+            // if(25 <= r && r < 35) color="#FFCC00";
+
+            // if(35 <= r && r < 45) color="#add7c3";
+
+            // if(45 <= r) color="#39CCCC";
+
+
+            nodesData.push({
+                "x": 800 * Math.random(),
+                "y": 600 * Math.random(),
+                "r": r,
+                "uuid": item.uuid,
+                "color": color
+            });
+
+        });
+
+        console.log(typeof (nodesData), nodesData);
+        // 2. svg
+        var node = d3.select("svg")
+            .selectAll("circle")
+            .data(nodesData)
+            .enter()
+            .append("circle")
+            .attr("r", function (d) {
+                return d.r
+            })
+            .attr("fill", function (d) {
+                return d.color
+            })
+            .attr("id", function (d) {
+                return d.uuid
+            })
+            .attr("stroke", "black")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended))
+            .on("click", function () {
+
+                selected(function (d) {
+                    return d
+                });
+
+            })
+
+        node
+            .append("text")
+            .attr("class", "lable")
+            .text(function (d) {
+                return d.uuid
+            });
+
+        var simulation = d3.forceSimulation()
+            // .force("link", d3.forceLink()) 
+            .force("collide",
+                d3.forceCollide()
+                .radius(function (d) {
+                    return d.r + 1.5
+                })
+                .strength(1.0)
+                .iterations(16))
+            .force("charge", d3.forceManyBody().strength(5))
+            .force("x", d3.forceX().strength(0.1).x(400))
+            .force("y", d3.forceY().strength(0.1).y(300));
+
+        // .force("center", d3.forceCenter(300, 200)); 
+
+        simulation
+            .nodes(nodesData)
+            .on("tick", ticked);
+
+        // 4. forceSimulation 
+        function ticked() {
+            node
+                .attr("cx", function (d) {
+                    return d.x;
+                })
+                .attr("cy", function (d) {
+                    return d.y;
+                });
+        }
+
+        function dragstarted(d) {
+            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        function dragended(d) {
+            if (!d3.event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        function selected(d) {
+
+            d3.selectAll('circle')
+                .on('click', function (d) {
+                    d3.select('.selected')
+                        .text("uuid: 123456879")
+                        .append('span')
+                        .attr('class', 'size')
+                        .text("size: " + d.uuid)
+
+                });
+        }
+    </script>
+    <div class="col-xs-12">
+
+        <div class="selected"></div>
+
+    </div>
+
+</div>
