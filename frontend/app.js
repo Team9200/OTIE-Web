@@ -5,6 +5,7 @@ import path from 'path';
 import 'dotenv/config';
 
 const app = express();
+const API_URL = "http://openti.info:5000";
 
 app.use(express.static(path.join(__dirname, '/public')));
 
@@ -53,7 +54,12 @@ app.get('/search', function (req, res) {
 });
 
 app.get('/board', function (req, res) {
-    res.render('board');
+    request(API_URL + '/api/malware/get', function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('board', {
+            result: body.message
+        });
+    });
 });
 
 app.get('/login', function (req, res) {
