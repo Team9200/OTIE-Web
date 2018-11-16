@@ -1,4 +1,6 @@
 import Malware from '../database/models/malware';
+import Block from '../database/models/block';
+import fs from 'fs';
 
 function parseMallist(filename){
 
@@ -14,7 +16,7 @@ function parseMallist(filename){
 	var taglist, description;
 	///////////////////////////////////
 
-	for (var i=0; i<Object.keys(jsonData.chain).length; i++) {
+	for (var i=1; i<Object.keys(jsonData.chain).length; i++) {
 
 		var malwaresList = jsonData.chain[i].malwaresList;
 
@@ -35,7 +37,7 @@ function parseMallist(filename){
 			taglist = malwaresList[j].taglist;
 			description = malwaresList[j].description;
 
-			Malware.create(azid, analyzer, collector, md5, sha1, sha256, filetype, tag_name_etc, filesize, behavior, date, first_seen, taglist, description)
+			await Malware.create(azid, analyzer, collector, md5, sha1, sha256, filetype, tag_name_etc, filesize, behavior, date, first_seen, taglist, description)
 			.then((malware) => {
 	                console.log({
 	                    success: true,
@@ -47,4 +49,35 @@ function parseMallist(filename){
 
 	}
 
+}
+
+
+async function parseBocklist(filename){
+
+
+	var Data = fs.readFileSync(filename,'UTF-8');
+	var jsonData = JSON.parse(Data);
+	var index, timestamp;
+	var transactionList, malwaresList;
+	var nonce, hash, previousBlockHash
+
+
+	for (var i=0; i<jsonData.chain.length; i++) {
+
+		index = jsonData.chain[i].index;
+		timestamp = jsonData.chain[i].timestamp;
+		transactionList = jsonData.chain[i].transactionList;
+		malwaresList = jsonData.chain[i].malwaresList;
+		nonce = jsonData.chain[i].nonce;
+		hash = jsonData.chain[i].hash;
+		previousBlockHash = jsonData.chain[i].previousBlockHash;
+
+		await Block.create(index, timestamp,transactionList, malwaresList,nonce, hash, previousBlockHash)
+			.then((malware) => {
+            console.log({
+                success: true,
+                message: 'success'
+            });
+        })
+	}
 }
