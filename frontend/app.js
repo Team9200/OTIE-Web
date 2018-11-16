@@ -54,18 +54,25 @@ app.get('/search', function (req, res) {
 });
 
 app.get('/board', function (req, res) {
-    request(API_URL + '/api/malware/get', function (err, response, body) {
+    request.get({
+        url: API_URL + '/api/malware/get'
+    }, function (err, response, body) {
         body = JSON.parse(body);
-        res.render('board', {
+        res.render('board/board', {
             result: body.message
         });
     });
 });
 
 app.get('/board/:id', function (req, res) {
-    request(API_URL + '/api/malware/get?page=' + req.params.id, function (err, response, body) {
+    request.get({
+        url: API_URL + '/api/malware/get',
+        qs: {
+            page: req.params.id
+        }
+    }, function (err, response, body) {
         body = JSON.parse(body);
-        res.render('board', {
+        res.render('board/board', {
             result: body.message
         });
     });
@@ -86,18 +93,34 @@ app.get('/block/', function (req, res) {
 app.get('/status', function (req, res) {
     res.render('status', {
         data: {
-            
+
         },
         length: 3
     });
 });
 
 app.get('/profile/:username', function (req, res) {
-    request(API_URL + '/api/malware/search?type=ana&query=' + req.params.username, function (err, response, body) {
-        body = JSON.stringify(body);
+    request.get({
+        url: API_URL + '/api/malware/search',
+        qs: {
+            type: 'ana',
+            query: req.params.username
+        }
+    }, function (err, response, body) {
+        // body = JSON.stringify(body);
         res.render('user/profile', {
-            result: body.message
+            result: body
         });
+    });
+});
+
+app.get('/malware/:azid', function (req, res) {
+    request.get({
+        url: API_URL + '/api/malware/search',
+        qs: {
+            type: 'azid',
+            query: req.params.azid
+        }
     });
 });
 
