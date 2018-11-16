@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import router from './routes';
 import database from './database';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 import 'dotenv/config';
 
@@ -16,6 +17,10 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 app.use('/', router);
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './app/index.html'));
+});
 
 app.listen(process.env.PORT, function () {
     database();
