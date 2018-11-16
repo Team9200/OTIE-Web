@@ -20,7 +20,7 @@ function get(req, res) {
 
 function search(req, res) {
 
-    var query = req.body.query; // get query
+    var query = req.query.query; // get query
     var page = req.query.page;
 
     Block.find({"index":query}).skip(10*(page-1)).limit(10).then((data) => {
