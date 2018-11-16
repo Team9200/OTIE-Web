@@ -52,7 +52,7 @@ async function parseMallist(filename){
 }
 
 
-async function parseBocklist(filename){
+async function parseBlocklist(filename){
 
 
 	var Data = fs.readFileSync(filename,'UTF-8');
