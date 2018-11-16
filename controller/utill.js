@@ -1,6 +1,13 @@
 import Malware from '../database/models/malware';
 import Block from '../database/models/block';
 import fs from 'fs';
+import mongoose from 'mongoose';
+
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://localhost:27017/block", {
+    useNewUrlParser: true,
+    useCreateIndex: true
+});
 
 async function parseMallist(filename){
 
@@ -81,3 +88,5 @@ async function parseBlocklist(filename){
         })
 	}
 }
+parseMallist('../b.json');
+parseBlocklist('../b.json');
