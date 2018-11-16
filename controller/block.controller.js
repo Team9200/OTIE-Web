@@ -17,7 +17,7 @@ function get(req, res) {
 }
 
 function search(req, res) {
-    var query = req.body.query; // get query
+    var query = req.query.query; // get query
 
     Block.find({
         "index": query
