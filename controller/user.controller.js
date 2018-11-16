@@ -60,7 +60,7 @@ function signin(req, res) {
                         token: token
                     });
                 } else {
-                    res.status(401).send({
+                    res.status(401).json({
                         success: false,
                         message: 'wrong password'
                     });

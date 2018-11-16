@@ -1,54 +1,42 @@
 import Block from '../database/models/block';
 
 function get(req, res) {
-
-	Block.find({}, function(err, data){
-
-        if(err){
-        
-            res.json({
+    Block.find({}, function (err, data) {
+        if (err) {
+            return res.json({
                 success: false,
                 message: 'Query error'
             });
-        }else{
-
-            res.json({
+        } else {
+            return res.json({
                 success: true,
                 message: data
             });
-
         }
-
     });
-
 }
 
 function search(req, res) {
-
     var query = req.body.query; // get query
 
-   	Block.find({"index":query}, function(err, data){
-
-        if(err){
-        
-            res.json({
+    Block.find({
+        "index": query
+    }, function (err, data) {
+        if (err) {
+            return res.json({
                 success: false,
                 message: 'Query error'
             });
-        }else{
-
-            res.json({
+        } else {
+            return res.json({
                 success: true,
                 message: data
             });
-
         }
-
     });
-
 }
 
-
 export default {
-    get, search
+    get,
+    search
 };

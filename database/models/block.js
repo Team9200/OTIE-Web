@@ -12,22 +12,19 @@ class Block extends mongoose.Schema {
             },
             transactionList: {
                 type: JSON
-
             },
             malwaresList: {
                 type: JSON
             },
             nonce: {
                 type: Number
-
             },
             hash: {
                 type: String
             },
             previousBlockHash: {
-                type : String
+                type: String
             }
-
         });
         block.statics.create = this.create;
 
@@ -35,15 +32,13 @@ class Block extends mongoose.Schema {
     }
     create(index, timestamp, transactionList, malwaresList, nonce, hash, previousBlockHash) {
         const block = new this({
-            
-            index, 
+            index,
             timestamp,
-            transactionList, 
+            transactionList,
             malwaresList,
-            nonce, 
-            hash, 
+            nonce,
+            hash,
             previousBlockHash
-        
         });
 
         return block.save();
