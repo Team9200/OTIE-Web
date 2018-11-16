@@ -14,7 +14,7 @@ function parseMallist(filename){
 	var taglist, description;
 	///////////////////////////////////
 
-	for (var i=1; i<Object.keys(jsonData.chain).length; i++) {
+	for (var i=0; i<Object.keys(jsonData.chain).length; i++) {
 
 		var malwaresList = jsonData.chain[i].malwaresList;
 
