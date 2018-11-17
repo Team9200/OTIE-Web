@@ -114,7 +114,16 @@ app.get('/register', function (req, res) {
 app.get('/block/', function (req, res) {
     request.get({url: API_URL + '/api/block/get'}, function (err, response, body) {
         body = JSON.parse(body);
-        res.render('block', {
+        res.render('block/block', {
+            result: body.message
+        });
+    });
+});
+
+app.get('/block/detail/:id', function (req, res) {
+    request.get({url: API_URL + '/api/block/search', qs: {query: req.params.id}}, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('block/detail', {
             result: body.message
         });
     });

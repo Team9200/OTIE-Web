@@ -36,9 +36,8 @@ function getPage(req, res) {
 function search(req, res) {
 
     var query = req.query.query; // get query
-    var page = req.query.page;
 
-    Block.find({"index":query}).skip(10*(page-1)).limit(10).then((data) => {
+    Block.findOne({"index":query}).then((data) => {
             res.json({
                 success: true,
                 message: data
@@ -46,8 +45,8 @@ function search(req, res) {
         })
     .catch((err) => {
         res.json({
-        success: false,
-        message: err
+            success: false,
+            message: err
         });
     });
 
