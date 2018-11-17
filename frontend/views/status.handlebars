@@ -1,178 +1,312 @@
-<div class="ui text container">
-    <style type="text/css">
-        .selected {
-            font-size: 2em;
+<style type="text/css">
+    .selected {
+        font-size: 2em;
+    }
+
+    .size {
+        float: right;
+        font-family: sans-serif;
+    }
+
+    .lable {
+        color: blue;
+    }
+
+    .col-xs-12 {
+
+        width: 800px;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+
+    }
+</style>
+
+<svg width="800" height="600"></svg>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+    function randomItem(a) {
+        return a[Math.floor(Math.random() * a.length)];
+    }
+    var storageData = [{
+        "fullSize": 29686813949952,
+        "leftSize": 14843406974976,
+        "uuid": "c2a0c01c-c133-c4ac-9f35-70864d473cb7"
+    }, {
+        "fullSize": 21990232555520,
+        "leftSize": 10995116277760,
+        "uuid": "ba6b11d3-6fa3-2526-318e-66adb37b864f"
+    }, {
+        "fullSize": 8796093022208,
+        "leftSize": 4398046511104,
+        "uuid": "a213077b-9aca-1923-97fb-c7616fee7182"
+    }, {
+        "fullSize": 5497558138880,
+        "leftSize": 2748779069440,
+        "uuid": "6d8ab8f2-b426-d21d-b442-046e23451d92"
+    }, {
+        "fullSize": 6597069766656,
+        "leftSize": 3298534883328,
+        "uuid": "4ff5c1a2-2cf9-da63-95b6-1e20597b0f59"
+    }, {
+        "fullSize": 8796093022208,
+        "leftSize": 4398046511104,
+        "uuid": "61e44e6d-20f1-ce7e-dd70-87383713e8e1"
+    }, {
+        "fullSize": 0,
+        "leftSize": 0,
+        "uuid": "89854777-b6b4-984a-059f-0d933d89a2a8"
+    }, {
+        "fullSize": 6597069766656,
+        "leftSize": 3298534883328,
+        "uuid": "d0d1994f-2b24-d313-2d5a-5a9e6e851373"
+    }, {
+        "fullSize": 26388279066624,
+        "leftSize": 13194139533312,
+        "uuid": "2aa56897-6141-3475-258b-7fdfe21daf03"
+    }, {
+        "fullSize": 17592186044416,
+        "leftSize": 8796093022208,
+        "uuid": "ca56cb87-2249-9890-1fb9-4f7fc1b7a939"
+    }, {
+        "fullSize": 13194139533312,
+        "leftSize": 6597069766656,
+        "uuid": "32de734d-8a9b-352e-5fd7-dccc8775a64c"
+    }, {
+        "fullSize": 15393162788864,
+        "leftSize": 7696581394432,
+        "uuid": "d931216c-19df-16bf-5fe5-5ca4b8bb8ead"
+    }, {
+        "fullSize": 2199023255552,
+        "leftSize": 1099511627776,
+        "uuid": "7240f5af-7193-73bd-e1f3-573b5d36c2eb"
+    }, {
+        "fullSize": 18691697672192,
+        "leftSize": 9345848836096,
+        "uuid": "8b4256a4-abca-9f7e-67f7-0edf93d88d54"
+    }, {
+        "fullSize": 19791209299968,
+        "leftSize": 9895604649984,
+        "uuid": "fa813bef-a2c1-fe50-447e-821f012721f7"
+    }, {
+        "fullSize": 20890720927744,
+        "leftSize": 10445360463872,
+        "uuid": "62aac164-0989-d22c-a9ad-04826b31e5f6"
+    }, {
+        "fullSize": 1099511627776,
+        "leftSize": 549755813888,
+        "uuid": "b88b6769-6076-d803-0296-166d52bb8029"
+    }, {
+        "fullSize": 20890720927744,
+        "leftSize": 10445360463872,
+        "uuid": "2abe01d7-bf53-b490-0f3a-d3807eda5858"
+    }, {
+        "fullSize": 4398046511104,
+        "leftSize": 2199023255552,
+        "uuid": "75ea6606-48bf-75be-e451-a7e69d8a09cf"
+    }, {
+        "fullSize": 26388279066624,
+        "leftSize": 13194139533312,
+        "uuid": "ac34c7f2-2504-b30a-1724-d8ddfefa8d47"
+    }, {
+        "fullSize": 23089744183296,
+        "leftSize": 11544872091648,
+        "uuid": "4e9443dd-e354-4b7e-e57d-de39ae44f113"
+    }, {
+        "fullSize": 29686813949952,
+        "leftSize": 14843406974976,
+        "uuid": "1ef864c9-4068-c3c5-4c87-3559c80dbf32"
+    }, {
+        "fullSize": 23089744183296,
+        "leftSize": 11544872091648,
+        "uuid": "1b3095ac-1aaa-f6a3-812c-6ffcc9d8356e"
+    }, {
+        "fullSize": 21990232555520,
+        "leftSize": 10995116277760,
+        "uuid": "df7955e7-4cb1-b250-9ee9-eb6a885413e7"
+    }, {
+        "fullSize": 10995116277760,
+        "leftSize": 5497558138880,
+        "uuid": "6529c9cc-7414-5a44-c7be-d4a9c1dd137c"
+    }, {
+        "fullSize": 4398046511104,
+        "leftSize": 2199023255552,
+        "uuid": "886211fb-7758-6f29-7fa6-236879155cc8"
+    }, {
+        "fullSize": 16492674416640,
+        "leftSize": 8246337208320,
+        "uuid": "ef156f08-6a7a-2bbb-7b10-3f5624ebf276"
+    }, {
+        "fullSize": 30786325577728,
+        "leftSize": 15393162788864,
+        "uuid": "15b2de5c-61e9-1159-ba12-c3baba5e44c7"
+    }, {
+        "fullSize": 13194139533312,
+        "leftSize": 6597069766656,
+        "uuid": "5a82bb59-72c7-8a2c-794b-2c03da6498c0"
+    }, {
+        "fullSize": 10995116277760,
+        "leftSize": 5497558138880,
+        "uuid": "35aef124-c4ba-5c4f-5891-1f8f762bcc89"
+    }, {
+        "fullSize": 28587302322176,
+        "leftSize": 14293651161088,
+        "uuid": "eebfe1be-4c3d-b633-86c2-3b3df7d89436"
+    }, {
+        "fullSize": 9895604649984,
+        "leftSize": 4947802324992,
+        "uuid": "a8c0ad6d-ada5-3137-ebd3-1af5464ca773"
+    }, {
+        "fullSize": 0,
+        "leftSize": 0,
+        "uuid": "67e4ceab-9261-2720-082b-f379052d96a7"
+    }, {
+        "fullSize": 13194139533312,
+        "leftSize": 6597069766656,
+        "uuid": "ce78adf8-9085-f594-c64e-7d2ec805f5dd"
+    }, {
+        "fullSize": 21990232555520,
+        "leftSize": 10995116277760,
+        "uuid": "8328d1c2-84a3-8e71-ede5-788e051fd8a9"
+    }];
+
+    var nodesData = [];
+    var len = 35;
+
+    console.log(storageData);
+
+    storageData.forEach(function (item) {
+
+        var r = 7;
+        var level = item.fullSize / (1024 * 1024 * 1024 * 1024);
+        var color = ["#03d6a8", "#8c25ea", "#2683ff"];
+
+        for (var i = 0; i < level - 1; i++) {
+
+            if (i < 25) r += 0.5;
+
+            if (25 <= i && i < 50) r += 0.4;
+
+            if (50 <= i && i < 75) r += 0.3;
+
+            if (75 <= i && i < 100) r += 0.2;
+
+            if (100 >= i) r += 0.1;
+
         }
 
-        .size {
-            float: right;
-            font-family: sans-serif;
-        }
 
-        .lable {
-            color: blue;
-        }
-
-        .col-xs-12 {
-
-            width: 800px;
-            position: relative;
-            min-height: 1px;
-            padding-right: 15px;
-            padding-left: 15px;
-
-        }
-    </style>
-    <svg width="800" height="600"></svg>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script>
-        var storageData = {{ data }};
-        var nodesData = [];
-        var len = {{ length }};
-
-        console.log(storageData);
-
-        storageData.forEach(function (item) {
-
-            var r = 7;
-            var level = item.size / (1024 * 1024 * 1024 * 1024);
-            var color = "#CD7F32";
-
-            for (var i = 0; i < level - 1; i++) {
-
-                if (i < 25) r += 0.5;
-
-                if (25 <= i && i < 50) r += 0.4;
-
-                if (50 <= i && i < 75) r += 0.3;
-
-                if (75 <= i && i < 100) r += 0.2;
-
-                if (100 >= i) r += 0.1;
-
-            }
-
-            // if(r < 15) color="#CD7F32";
-
-            // if(15 <= r && r < 25 ) color="#C0C0C0";
-
-            // if(25 <= r && r < 35) color="#FFCC00";
-
-            // if(35 <= r && r < 45) color="#add7c3";
-
-            // if(45 <= r) color="#39CCCC";
-
-
-            nodesData.push({
-                "x": 800 * Math.random(),
-                "y": 600 * Math.random(),
-                "r": r,
-                "uuid": item.uuid,
-                "color": color
-            });
-
+        nodesData.push({
+            "x": 800 * Math.random(),
+            "y": 600 * Math.random(),
+            "r": r,
+            "uuid": item.uuid,
+            "color": randomItem(color),
+            "fullSize": level,
+            "leftSize": item.leftSize / (1024 * 1024 * 1024 * 1024)
         });
 
-        console.log(typeof (nodesData), nodesData);
-        // 2. svg
-        var node = d3.select("svg")
-            .selectAll("circle")
-            .data(nodesData)
-            .enter()
-            .append("circle")
-            .attr("r", function (d) {
-                return d.r
-            })
-            .attr("fill", function (d) {
-                return d.color
-            })
-            .attr("id", function (d) {
-                return d.uuid
-            })
-            .attr("stroke", "black")
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended))
-            .on("click", function () {
+    });
 
-                selected(function (d) {
-                    return d
-                });
+    console.log(nodesData);
+    // 2. svg
+    var node = d3.select("svg")
+        .selectAll("circle")
+        .data(nodesData)
+        .enter()
+        .append("circle")
+        .attr("r", function (d) {
+            return d.r
+        })
+        .attr("fill", function (d) {
+            return d.color
+        })
+        .attr("id", function (d) {
+            return d.uuid
+        })
+        .attr("stroke", "black")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended))
+        .on("click", function () {
 
-            })
-
-        node
-            .append("text")
-            .attr("class", "lable")
-            .text(function (d) {
-                return d.uuid
+            selected(function (d) {
+                return d
             });
 
-        var simulation = d3.forceSimulation()
-            // .force("link", d3.forceLink()) 
-            .force("collide",
-                d3.forceCollide()
-                .radius(function (d) {
-                    return d.r + 1.5
-                })
-                .strength(1.0)
-                .iterations(16))
-            .force("charge", d3.forceManyBody().strength(5))
-            .force("x", d3.forceX().strength(0.1).x(400))
-            .force("y", d3.forceY().strength(0.1).y(300));
+        })
 
-        // .force("center", d3.forceCenter(300, 200)); 
+    node
+        .append("text")
+        .attr("class", "lable")
+        .text(function (d) {
+            return d.uuid
+        });
 
-        simulation
-            .nodes(nodesData)
-            .on("tick", ticked);
+    var simulation = d3.forceSimulation()
+        // .force("link", d3.forceLink()) 
+        .force("collide",
+            d3.forceCollide()
+            .radius(function (d) {
+                return d.r + 1.5
+            })
+            .strength(1.0)
+            .iterations(16))
+        .force("charge", d3.forceManyBody().strength(5))
+        .force("x", d3.forceX().strength(0.1).x(400))
+        .force("y", d3.forceY().strength(0.1).y(300));
 
-        // 4. forceSimulation 
-        function ticked() {
-            node
-                .attr("cx", function (d) {
-                    return d.x;
-                })
-                .attr("cy", function (d) {
-                    return d.y;
-                });
-        }
+    // .force("center", d3.forceCenter(300, 200)); 
 
-        function dragstarted(d) {
-            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        }
+    simulation
+        .nodes(nodesData)
+        .on("tick", ticked);
 
-        function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-        }
+    // 4. forceSimulation 
+    function ticked() {
+        node
+            .attr("cx", function (d) {
+                return d.x;
+            })
+            .attr("cy", function (d) {
+                return d.y;
+            });
+    }
 
-        function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
 
-        function selected(d) {
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
 
-            d3.selectAll('circle')
-                .on('click', function (d) {
-                    d3.select('.selected')
-                        .text("uuid: 123456879")
-                        .append('span')
-                        .attr('class', 'size')
-                        .text("size: " + d.uuid)
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
 
-                });
-        }
-    </script>
-    <div class="col-xs-12">
+    function selected(d) {
 
-        <div class="selected"></div>
+        d3.selectAll('circle')
+            .on('click', function (d) {
+                d3.select('.selected')
+                    .text(d.uuid)
+                    .append('span')
+                    .attr('class', 'size')
+                    .text(d.leftSize + "/" + d.fullSize)
 
-    </div>
+            });
+    }
+</script>
+<div class="col-xs-12">
+
+    <div class="selected"></div>
 
 </div>

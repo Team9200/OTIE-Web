@@ -2,7 +2,7 @@
     {{#each result}}
     <div style="overflow-y: auto;" class="ui fluid card">
         <div class="content">
-            <div class="header">{{this.sha256}}</div>
+            <a href="/board/detail/{{this.azid}}" class="header">{{this.sha256}}</a>
             <div class="meta">Analyzer: {{this.analyzer}} / Collector: {{this.collector}}</div>
             <div class="description">
                 <ul>

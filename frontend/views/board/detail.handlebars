@@ -1,0 +1,88 @@
+<div class="ui container">
+    <h2>SHA256: {{result.sha256}}</h2>
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            <div class="item">
+                <div class="content">
+                    <div class="header">Analyzer</div>
+                    {{result.analyzer}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">Collector</div>
+                    {{result.collector}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">SHA1</div>
+                    {{result.sha1}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">SHA256</div>
+                    {{result.sha256}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">File Type</div>
+                    {{result.filetype}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div style="padding-bottom: 10px;" class="header">Tag</div>
+                    {{#each result.tag_name_etc}}<div class="ui teal label"> {{this.tag}} </div> {{/each}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">File Size</div>
+                    {{result.filesize}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">Date</div>
+                    {{result.date}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">First Seen</div>
+                    {{result.first_seen}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{!-- "behavior":{"wxp_32_kor":{"date":"2018-11-13 13:31:34","detection":[],"security_level":3}} --}}
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            {{!-- {{#each result.behavior}} --}}
+            <div class="item">
+                <div class="content">
+                    <div class="header">{{#stringify result.behavior}}{{/stringify}}</div>
+                </div>
+            </div>
+            {{!-- {{/each}} --}}
+        </div>
+    </div>
+
+    {{#if result.description}}
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            {{!-- {{#each result.behavior}} --}}
+            <div class="item">
+                <div class="content">
+                    <div class="header">Description</div>
+                    {{result.description}}
+                </div>
+            </div>
+            {{!-- {{/each}} --}}
+        </div>
+    </div>
+    {{/if}}
+</div>

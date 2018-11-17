@@ -107,20 +107,25 @@ app.get('/profile/:username', function (req, res) {
             query: req.params.username
         }
     }, function (err, response, body) {
-        // body = JSON.stringify(body);
+        body = JSON.parse(body);
         res.render('user/profile', {
-            result: body
+            result: body.message
         });
     });
 });
 
-app.get('/malware/:azid', function (req, res) {
+app.get('/board/detail/:azid', function (req, res) {
     request.get({
         url: API_URL + '/api/malware/search',
         qs: {
             type: 'azid',
             query: req.params.azid
         }
+    }, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('board/detail', {
+            result: body.message
+        });
     });
 });
 
