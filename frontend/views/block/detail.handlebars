@@ -1,0 +1,50 @@
+<div class="ui container">
+    <h1>Block #{{result.index}}</h1>
+
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            <div class="item">
+                <div class="content">
+                    <div class="header">Timestamp</div>
+                    {{result.timestamp}}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">Nonce</div>
+                    {{result.nonce}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Transaction</h1>
+
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            <div class="item">
+                <div class="content">
+                    {{!-- <div class="header">Value</div> --}}
+                    {{#stringify result.transactionList}}{{/stringify}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Malware List</h1>
+
+    <div class="ui inverted segment">
+        <div class="ui inverted relaxed divided list">
+            {{#each result.malwaresList}}
+            <div class="item">
+                <div class="content">
+                    <div class="header">#{{ @index }} Malware</div>
+                    <a href="/board/detail/{{this.azid}}">{{this.sha256}}</a>
+               </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+<br><br><br>

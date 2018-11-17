@@ -73,7 +73,8 @@ app.get('/search/detail/:id', function (req, res) {
         body = JSON.parse(body);
         res.render('search/detail', {
             result: body.message,
-            query: query
+            type: type,
+            query: query,
         }); 
     });
 });
@@ -115,7 +116,9 @@ app.get('/block/', function (req, res) {
     request.get({url: API_URL + '/api/block/get'}, function (err, response, body) {
         body = JSON.parse(body);
         res.render('block/block', {
-            result: body.message
+            result: body.message,
+            type: req.query.type,
+            query: req.query.qwuery
         });
     });
 });
@@ -124,7 +127,9 @@ app.get('/block/detail/:id', function (req, res) {
     request.get({url: API_URL + '/api/block/search', qs: {query: req.params.id}}, function (err, response, body) {
         body = JSON.parse(body);
         res.render('block/detail', {
-            result: body.message
+            result: body.message,
+            type: req.query.type,
+            query: req.query.qwuery
         });
     });
 });
