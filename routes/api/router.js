@@ -16,6 +16,7 @@ router.route('/malware/get').get(malwareController.get);
 router.route('/malware/search').get(malwareController.search);
 
 router.route('/block/get').get(blockController.get);
+router.route('/block/get/page').get(blockController.getPage);
 router.route('/block/search').get(blockController.search);
 
 export default router;

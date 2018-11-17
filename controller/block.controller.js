@@ -1,6 +1,21 @@
 import Block from '../database/models/block';
 
 function get(req, res) {
+    Block.find({}).then((data) => {
+            res.json({
+                success: true,
+                message: data
+            });
+        })
+    .catch((err) => {
+        res.json({
+            success: false,
+            message: err
+        });
+    });
+}
+
+function getPage(req, res) {
 
     var page = req.query.page;
     Block.find({}).skip(10*(page-1)).limit(10).then((data) => {
@@ -11,8 +26,8 @@ function get(req, res) {
         })
     .catch((err) => {
         res.json({
-        success: false,
-        message: err
+            success: false,
+            message: err
         });
     });
 
@@ -40,5 +55,5 @@ function search(req, res) {
 
 
 export default {
-    get, search
+    get, getPage, search
 };

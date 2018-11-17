@@ -12,6 +12,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 var hbs = exphbs.create({
     defaultLayout: 'main',
     helpers: {
+        increment: function (val, options) {
+            return parseInt(val, 10) + 1;
+        },
         equal: function (a, b, options) {
             if (a === b) {
                 return options.fn(this);
@@ -49,8 +52,30 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
-app.get('/search', function (req, res) {
-    res.render('search');
+app.get('/search/detail', function (req, res) {
+    var type = req.query.type;
+    var query = req.query.query;
+
+    request.get({url: API_URL + '/api/malware/search', qs: {type: type, query: query}}, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('search/detail', {
+            result: body.message,
+            query: query
+        }); 
+    });
+});
+
+app.get('/search/detail/:id', function (req, res) {
+    var type = req.query.type;
+    var query = req.query.query;
+
+    request.get({url: API_URL + '/api/malware/search', qs: {type: type, query: query, page: req.params.id}}, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('search/detail', {
+            result: body.message,
+            query: query
+        }); 
+    });
 });
 
 app.get('/board', function (req, res) {
@@ -87,16 +112,16 @@ app.get('/register', function (req, res) {
 });
 
 app.get('/block/', function (req, res) {
-    res.render('block');
+    request.get({url: API_URL + '/api/block/get'}, function (err, response, body) {
+        body = JSON.parse(body);
+        res.render('block', {
+            result: body.message
+        });
+    });
 });
 
 app.get('/status', function (req, res) {
-    res.render('status', {
-        data: {
-
-        },
-        length: 3
-    });
+    res.render('status', {});
 });
 
 app.get('/profile/:username', function (req, res) {
@@ -109,7 +134,8 @@ app.get('/profile/:username', function (req, res) {
     }, function (err, response, body) {
         body = JSON.parse(body);
         res.render('user/profile', {
-            result: body.message
+            result: body.message,
+            username: req.params.username
         });
     });
 });

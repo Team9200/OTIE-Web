@@ -4,26 +4,32 @@
         <div class="ui inverted relaxed divided list">
             <div class="item">
                 <div class="content">
-                    <div class="header">Analyzer</div>
-                    {{result.analyzer}}
+                    <div style="padding-bottom: 10px;" class="header">Analyzer</div>
+                    <a class="ui teal label" href="/profile/{{result.analyzer}}">{{result.analyzer}}</a>
                 </div>
             </div>
             <div class="item">
                 <div class="content">
-                    <div class="header">Collector</div>
-                    {{result.collector}}
+                    <div style="padding-bottom: 10px;" class="header">Collector</div>
+                    <a class="ui teal label">{{result.collector}}</a>
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">MD5</div>
+                    <a href="/search/detail?type=hash&query={{result.md5}}">{{result.md5}}</a>
                 </div>
             </div>
             <div class="item">
                 <div class="content">
                     <div class="header">SHA1</div>
-                    {{result.sha1}}
+                    <a href="/search/detail?type=hash&query={{result.sha1}}">{{result.sha1}}</a>
                 </div>
             </div>
             <div class="item">
                 <div class="content">
                     <div class="header">SHA256</div>
-                    {{result.sha256}}
+                    <a href="/search/detail?type=hash&query={{result.sha256}}">{{result.sha256}}</a>
                 </div>
             </div>
             <div class="item">
@@ -35,7 +41,7 @@
             <div class="item">
                 <div class="content">
                     <div style="padding-bottom: 10px;" class="header">Tag</div>
-                    {{#each result.tag_name_etc}}<div class="ui teal label"> {{this.tag}} </div> {{/each}}
+                    {{#each result.tag_name_etc}}<a href="/search/detail?type=tag&query={{this.tag}}" class="ui teal label"> {{this.tag}} </a> {{/each}}
                 </div>
             </div>
             <div class="item">
@@ -47,13 +53,13 @@
             <div class="item">
                 <div class="content">
                     <div class="header">Date</div>
-                    {{result.date}}
+                    {{#date result.date}}{{/date}}
                 </div>
             </div>
             <div class="item">
                 <div class="content">
                     <div class="header">First Seen</div>
-                    {{result.first_seen}}
+                    {{#date result.first_seen}}{{/date}}
                 </div>
             </div>
         </div>
@@ -86,3 +92,5 @@
     </div>
     {{/if}}
 </div>
+
+<br><br>

@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 class Block extends mongoose.Schema {
     constructor() {
         const block = super({
-
             index: {
                 type: Number
             },

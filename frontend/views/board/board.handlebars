@@ -3,13 +3,15 @@
     <div style="overflow-y: auto;" class="ui fluid card">
         <div class="content">
             <a href="/board/detail/{{this.azid}}" class="header">{{this.sha256}}</a>
-            <div class="meta">Analyzer: {{this.analyzer}} / Collector: {{this.collector}}</div>
+            <div class="meta">Analyzer: <a href="/profile/{{this.analyzer}}">{{this.analyzer}}</a> / Collector:
+                {{this.collector}}</div>
             <div class="description">
                 <ul>
                     <li>File Type: {{this.filetype}}</li>
-                    <li>First seen: {{this.first_seen}}</li> 
-                    <li>Posted Date: {{this.date}}</li> 
-                    <li>Tag: {{#each this.tag_name_etc}} <div class="ui label">{{this.tag}}</div> {{/each}}</li>
+                    <li>First seen: {{this.first_seen}}</li>
+                    <li>Posted Date: {{this.date}}</li>
+                    <li>Tag: {{#each this.tag_name_etc}} <a href="/search/detail?type=tag&query={{this.tag}}" class="ui label">{{this.tag}}</a>
+                        {{/each}}</li>
                 </ul>
             </div>
         </div>
@@ -19,15 +21,13 @@
         </div>
     </div>
     {{/each}}
+    
     <div class="ui borderless menu">
-  <a class="item">1</a>
-  <a class="item">2</a>
-  <a class="item">3</a>
-  <a class="item">4</a>
-  <a class="item">5</a>
-  <a class="item">6</a>
-</div>
 
-<br><br>
+        {{!-- <a class="item">{{increment @index}}</a> --}}
+        
+    </div>
+
+    <br><br>
 
 </div>
