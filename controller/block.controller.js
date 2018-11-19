@@ -7,29 +7,29 @@ function get(req, res) {
                 message: data
             });
         })
-    .catch((err) => {
-        res.json({
-            success: false,
-            message: err
+        .catch((err) => {
+            res.json({
+                success: false,
+                message: err
+            });
         });
-    });
 }
 
 function getPage(req, res) {
 
     var page = req.query.page;
-    Block.find({}).skip(10*(page-1)).limit(10).then((data) => {
+    Block.find({}).skip(10 * (page - 1)).limit(10).then((data) => {
             res.json({
                 success: true,
                 message: data
             });
         })
-    .catch((err) => {
-        res.json({
-            success: false,
-            message: err
+        .catch((err) => {
+            res.json({
+                success: false,
+                message: err
+            });
         });
-    });
 
 }
 
@@ -37,22 +37,26 @@ function search(req, res) {
 
     var query = req.query.query; // get query
 
-    Block.findOne({"index":query}).then((data) => {
+    Block.findOne({
+            "index": query
+        }).then((data) => {
             res.json({
                 success: true,
                 message: data
             });
         })
-    .catch((err) => {
-        res.json({
-            success: false,
-            message: err
+        .catch((err) => {
+            res.json({
+                success: false,
+                message: err
+            });
         });
-    });
 
 }
 
 
 export default {
-    get, getPage, search
+    get,
+    getPage,
+    search
 };

@@ -5,31 +5,31 @@ import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/block", {
-    useNewUrlParser: true,
-    useCreateIndex: true
+	useNewUrlParser: true,
+	useCreateIndex: true
 });
 
-async function parseMallist(filename){
+async function parseMallist(filename) {
 
-	var Data = fs.readFileSync(filename,'UTF-8');
+	var Data = fs.readFileSync(filename, 'UTF-8');
 	var jsonData = JSON.parse(Data);
 
 	////////////////////////////////////
 	/////////Malwarelist///////////////
-	var azid,analyzer,collector;
-	var md5,sha1,sha256;
+	var azid, analyzer, collector;
+	var md5, sha1, sha256;
 	var filetype, tag_name_etc, filesize;
 	var behavior, date, first_seen;
 	var taglist, description;
 	///////////////////////////////////
 
-	for (var i=1; i<Object.keys(jsonData.chain).length; i++) {
+	for (var i = 1; i < Object.keys(jsonData.chain).length; i++) {
 
 		var malwaresList = jsonData.chain[i].malwaresList;
 
-		for (var j=0; j<Object.keys(malwaresList).length; j++) {
+		for (var j = 0; j < Object.keys(malwaresList).length; j++) {
 
-			azid= malwaresList[j].azid;
+			azid = malwaresList[j].azid;
 			analyzer = malwaresList[j].analyzer;
 			collector = malwaresList[j].collector;
 			md5 = malwaresList[j].md5;
@@ -45,12 +45,12 @@ async function parseMallist(filename){
 			description = malwaresList[j].description;
 
 			await Malware.create(azid, analyzer, collector, md5, sha1, sha256, filetype, tag_name_etc, filesize, behavior, date, first_seen, taglist, description)
-			.then((malware) => {
-	                console.log({
-	                    success: true,
-	                    message: 'success'
-	                });
-	            })
+				.then((malware) => {
+					console.log({
+						success: true,
+						message: 'success'
+					});
+				})
 
 		}
 
@@ -59,17 +59,17 @@ async function parseMallist(filename){
 }
 
 
-async function parseBlocklist(filename){
+async function parseBlocklist(filename) {
 
 
-	var Data = fs.readFileSync(filename,'UTF-8');
+	var Data = fs.readFileSync(filename, 'UTF-8');
 	var jsonData = JSON.parse(Data);
 	var index, timestamp;
 	var transactionList, malwaresList;
 	var nonce, hash, previousBlockHash
 
 
-	for (var i=0; i<jsonData.chain.length; i++) {
+	for (var i = 0; i < jsonData.chain.length; i++) {
 
 		index = jsonData.chain[i].index;
 		timestamp = jsonData.chain[i].timestamp;
@@ -79,13 +79,13 @@ async function parseBlocklist(filename){
 		hash = jsonData.chain[i].hash;
 		previousBlockHash = jsonData.chain[i].previousBlockHash;
 
-		await Block.create(index, timestamp,transactionList, malwaresList,nonce, hash, previousBlockHash)
+		await Block.create(index, timestamp, transactionList, malwaresList, nonce, hash, previousBlockHash)
 			.then((malware) => {
-            console.log({
-                success: true,
-                message: 'success'
-            });
-        })
+				console.log({
+					success: true,
+					message: 'success'
+				});
+			})
 	}
 }
 parseMallist('../b.json');
