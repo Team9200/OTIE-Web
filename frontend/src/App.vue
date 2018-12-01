@@ -4,7 +4,8 @@
       <v-list>
         <v-list-tile>
           <v-list-tile-title class="title">
-            OpenTI
+            <span>OPEN</span>
+            <span class="font-weight-light">TI</span>
           </v-list-tile-title>
         </v-list-tile>
 
@@ -22,7 +23,7 @@
       <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="headline text-uppercase">
         <span>Open</span>
-        <span class="font-weight-light">.TI</span>
+        <span class="font-weight-light">TI</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- <v-btn
@@ -52,7 +53,15 @@
       menus: [{
         icon: 'home',
         title: 'Home',
-        to: '/home'
+        to: '/'
+      }, {
+        icon: 'list',
+        title: 'Board',
+        to: '/board'
+      }, {
+        icon: 'info',
+        title: 'Block',
+        to: '/block'
       }]
     })
   }
