@@ -12,7 +12,7 @@
           </v-list-tile-title>
         </v-list-tile>
   
-        <v-list-tile ripple router :to="menu.to" v-for="(menu, i) in menus" :key="i">
+        <v-list-tile ripple router :to="menu.to" v-if="menu.visible" v-for="(menu, i) in menus" :key="i">
           <v-list-tile-action>
             <v-icon v-text="menu.icon"></v-icon>
           </v-list-tile-action>
@@ -57,24 +57,35 @@
       menus: [{
           icon: 'home',
           title: '홈',
-          to: '/'
+          to: '/',
+          visible: true
         }, {
           icon: 'list',
           title: '최신글',
-          to: '/recent'
+          to: '/recent',
+          visible: true
         },
         {
           icon: 'list',
           title: '인기글',
-          to: '/popular'
+          to: '/popular',
+          visible: true
         }, {
           icon: 'info',
           title: '블록',
-          to: '/block'
+          to: '/block',
+          visible: true
         }, {
           icon: 'info',
           title: '상태',
-          to: '/status'
+          to: '/status',
+          visible: true
+        },
+        {
+          icon: 'info',
+          title: '로그인',
+          to: '/login',
+          visible: false
         }
       ]
     }),
@@ -93,6 +104,11 @@
   
       if (this.isMobile) {
         this.drawer = false;
+        this.menus.forEach(element => {
+          if (element.title == '로그인') {
+            element.visible = true;
+          }
+        });
       } else if (this.isTablet) {
         this.drawer = false;
       } else {

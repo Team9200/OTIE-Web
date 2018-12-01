@@ -3,15 +3,17 @@
         <v-card>
             <v-card-text>
                 <h1>회원가입</h1>
-                <form>
-                    <v-text-field v-model="name" :error-messages="nameErrors" :counter="10" label="Name" required @input="$v.name.$touch()" @blur="$v.name.$touch()"></v-text-field>
-                    <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
-                    <v-select v-model="select" :items="items" :error-messages="selectErrors" label="Item" required @change="$v.select.$touch()" @blur="$v.select.$touch()"></v-select>
-                    <v-checkbox v-model="checkbox" :error-messages="checkboxErrors" label="이용약관 및 개인정보취급방침에 동의합니다." required @change="$v.checkbox.$touch()" @blur="$v.checkbox.$touch()"></v-checkbox>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-text-field v-model="name" :rules="nameRules" :counter="10" label="Username" required></v-text-field>
+                    <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
+                    <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item" required></v-select>
+                    <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox>
     
-                    <v-btn @click="submit">submit</v-btn>
+                    <v-btn :disabled="!valid" @click="submit">
+                        submit
+                    </v-btn>
                     <v-btn @click="clear">clear</v-btn>
-                </form>
+                </v-form>
             </v-card-text>
         </v-card>
     </v-container>
@@ -24,13 +26,13 @@
             valid: true,
             name: '',
             nameRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+                v => !!v || '사용자 아이디를 입력해주세요.',
+                v => (v && v.length <= 10) || '사용자 아이디는 10글자 이하이어야 합니다.'
             ],
             email: '',
             emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid'
+                v => !!v || '이메일을 입력해주세요.',
+                v => /.+@.+/.test(v) || '이메일이 올바르지 않습니다.'
             ],
             select: null,
             items: [
