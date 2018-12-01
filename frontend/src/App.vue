@@ -2,15 +2,15 @@
   <v-app>
     <v-navigation-drawer style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
       <v-list>
-        <!-- <v-list-tile v-if="device.mobile || device.tablet">
-            <v-btn icon @click.native.stop="drawer = !drawer">
-              <v-icon>menu</v-icon>
-            </v-btn>
-            <v-list-tile-title style="padding-top: 1.5px;" class="title">
-              <span>OPEN</span>
-              <span class="font-weight-light">TI</span>
-            </v-list-tile-title>
-          </v-list-tile> -->
+        <v-list-tile v-if="isMobile || isTablet">
+          <v-btn icon @click.native.stop="drawer = !drawer">
+            <v-icon>menu</v-icon>
+          </v-btn>
+          <v-list-tile-title style="padding-top: 1.5px;" class="title">
+            <span>OPEN</span>
+            <span class="font-weight-light">TI</span>
+          </v-list-tile-title>
+        </v-list-tile>
   
         <v-list-tile ripple router :to="menu.to" v-for="(menu, i) in menus" :key="i">
           <v-list-tile-action>
@@ -29,15 +29,14 @@
         <span class="font-weight-light">TI</span>
         <sup style="font-size: 15px;">&nbsp;Beta</sup>
       </v-toolbar-title>
-      <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="Search (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
-      <v-spacer></v-spacer>
-      <!-- <v-btn
-                            flat
-                            href="https://github.com/vuetifyjs/vuetify/releases/latest"
-                            target="_blank"
-                          >
-                            <span class="mr-2">Latest Release</span>
-                          </v-btn> -->
+      <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="검색 (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
+      <!-- <v-spacer></v-spacer> -->
+      <v-btn v-if="!isMobile" @click="$router.push('/login')" flat>
+        <span>로그인</span>
+      </v-btn>
+      <v-btn v-if="!isMobile" @click="$router.push('/register')" flat>
+        <span>회원가입</span>
+      </v-btn>
     </v-toolbar>
   
     <v-content>
@@ -53,69 +52,58 @@
     data: () => ({
       drawer: false,
       fixed: false,
-      device: {
-        mobile: false,
-        tablet: false,
-      },
+      isMobile: false,
+      isTablet: false,
       menus: [{
           icon: 'home',
-          title: 'Home',
+          title: '홈',
           to: '/'
         }, {
           icon: 'list',
-          title: 'Recently',
+          title: '최신글',
           to: '/recent'
         },
         {
           icon: 'list',
-          title: 'Popular',
+          title: '인기글',
           to: '/popular'
         }, {
           icon: 'info',
-          title: 'Block',
+          title: '블록',
           to: '/block'
         }, {
           icon: 'info',
-          title: 'Status',
+          title: '상태',
           to: '/status'
         }
       ]
     }),
     methods: {
-      isMobile() {
-        if (window.innerWidth <= 950) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      isTablet() {
-        if (window.innerWidth >= 950 && window.innerWidth <= 1263) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      setValue(drawer, mobile, tablet) {
-        this.drawer = drawer;
-        this.mobile = mobile;
-        this.tablet = tablet;
+      onResize() {
+        this.isMobile = window.innerWidth <= 950;
+        this.isTablet = window.innerWidth >= 950 && window.innerWidth <= 1263;
       }
     },
     created() {},
     mounted() {
-      if (this.isMobile()) {
-        this.setValue(false, true, false);
-        // this.drawer = false;
-        // this.device.mobile = true;
-      } else if (this.isTablet()) {
-        this.setValue(false, false, true);
-        // this.drawer = false;
-        // this.device.tablet = true;
+      this.onResize();
+      window.addEventListener('resize', this.onResize, {
+        passive: true
+      });
+  
+      if (this.isMobile) {
+        this.drawer = false;
+      } else if (this.isTablet) {
+        this.drawer = false;
       } else {
-        this.setValue(true, false, false);
-        // this.drawer = true;
-        // this.device.mobile = false;
+        this.drawer = true;
+      }
+    },
+    beforeDestroy() {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', this.onResize, {
+          passive: true
+        })
       }
     },
     watch: {}
