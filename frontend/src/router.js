@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HomeView from './components/HomeView.vue'
+
+import HomeView from './components/HomeView'
+import ErrorView from './components/ErrorView'
 
 Vue.use(Router)
 
@@ -12,6 +14,10 @@ export default new Router({
       path: '/',
       name: 'home-view',
       component: HomeView
+    }, {
+      path: '/*',
+      name: 'error-view',
+      component: ErrorView
     }
   ]
 })
