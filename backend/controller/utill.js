@@ -4,7 +4,7 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/block", {
+mongoose.connect("mongodb://localhost:27017/otie", {
 	useNewUrlParser: true,
 	useCreateIndex: true
 });
