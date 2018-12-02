@@ -1,4 +1,4 @@
 node_modules
 .production-env
 sampleChain.json
-code
+dist

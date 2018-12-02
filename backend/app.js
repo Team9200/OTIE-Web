@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use('/', router);
 
 app.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './code/index.html'));
+    res.sendFile(path.resolve(__dirname, './dist/index.html'));
 });
 
 app.listen(process.env.PORT, function () {
