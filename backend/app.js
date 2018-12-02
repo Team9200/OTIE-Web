@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.use(express.static('public'));
+app.use(express.static('dist'));
 app.use(cookieParser());
 
 app.use('/', router);
