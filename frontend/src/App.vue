@@ -3,12 +3,13 @@
     <v-navigation-drawer style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
       <v-list>
         <v-list-tile v-if="isMobile || isTablet">
-          <v-btn icon @click.native.stop="drawer = !drawer">
+          <!-- <v-btn icon @click.native.stop="drawer = !drawer">
             <v-icon>menu</v-icon>
-          </v-btn>
+          </v-btn> -->
           <v-list-tile-title style="padding-top: 1.5px;" class="title">
             <span>OPEN</span>
             <span class="font-weight-light">TI</span>
+            <sup style="font-size: 11px;">&nbsp;Beta</sup>
           </v-list-tile-title>
         </v-list-tile>
   
@@ -18,11 +19,28 @@
           </v-list-tile-action>
           <v-list-tile-title v-text="menu.title"></v-list-tile-title>
         </v-list-tile>
+
+        <v-divider v-if="isMobile"></v-divider>
+        <v-list-tile @click="$router.push('/login')" v-if="isMobile && !$store.getters.isAuthenticated" ripple>
+          <v-list-tile-action>
+            <!-- TODO: Add icon -->
+            <v-icon></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>로그인</v-list-tile-title>
+        </v-list-tile>
+
+        <v-list-tile @click="$router.push('/register')" v-if="isMobile && !$store.getters.isAuthenticated" ripple>
+          <v-list-tile-action>
+            <!-- TODO: Add icon -->
+            <v-icon></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>회원가입</v-list-tile-title>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
   
   
-    <v-toolbar dark color="green darken-3" :clipped-left="$vuetify.breakpoint.mdAndUp" app>
+    <v-toolbar color="white darken-3" :clipped-left="$vuetify.breakpoint.mdAndUp" app>
       <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title style="width: 240px;" class="headline text-uppercase">
         <span>Open</span>
@@ -31,11 +49,15 @@
       </v-toolbar-title>
       <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="검색 (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
       <!-- <v-spacer></v-spacer> -->
-      <v-btn v-if="!isMobile" @click="$router.push('/login')" flat>
+      <v-btn v-if="!isMobile && !$store.getters.isAuthenticated" @click="$router.push('/login')" flat>
         <span>로그인</span>
       </v-btn>
-      <v-btn v-if="!isMobile" @click="$router.push('/register')" flat>
+      <v-btn v-if="!isMobile && !$store.getters.isAuthenticated" @click="$router.push('/register')" flat>
         <span>회원가입</span>
+      </v-btn>
+
+      <v-btn v-if="!isMobile && $store.getters.isAuthenticated" @click="onClickLogout" flat>
+        <span>로그아웃</span>
       </v-btn>
     </v-toolbar>
   
@@ -93,6 +115,9 @@
       onResize() {
         this.isMobile = window.innerWidth <= 950;
         this.isTablet = window.innerWidth >= 950 && window.innerWidth <= 1263;
+      },
+      onClickLogout() {
+        this.$store.dispatch('LOGOUT').then(() => this.$router.push('/'))
       }
     },
     created() {},
@@ -104,11 +129,6 @@
   
       if (this.isMobile) {
         this.drawer = false;
-        this.menus.forEach(element => {
-          if (element.title == '로그인') {
-            element.visible = true;
-          }
-        });
       } else if (this.isTablet) {
         this.drawer = false;
       } else {

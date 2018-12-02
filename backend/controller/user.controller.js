@@ -41,14 +41,14 @@ function signin(req, res) {
         if (err) throw err;
 
         if (!user) {
-            res.status(401).send({
+            res.send({
                 success: false,
                 message: 'user not found'
             });
         } else {
             user.verify(req.body.password, function (err, isMatch) {
                 if (isMatch && !err) {
-                    var token = jwt.sign(JSON.stringify({
+                    var accessToken = jwt.sign(JSON.stringify({
                         authed: user.authed,
                         role: user.role,
                         _id: user._id,
@@ -57,10 +57,10 @@ function signin(req, res) {
                     }), process.env.JWT_SECRET);
                     res.json({
                         success: true,
-                        token: token
+                        accessToken: accessToken
                     });
                 } else {
-                    res.status(401).json({
+                    res.json({
                         success: false,
                         message: 'wrong password'
                     });
@@ -72,7 +72,7 @@ function signin(req, res) {
 
 function profile(req, res) {
     res.json({
-        req: req.decoded
+        profile: req.decoded
     });
 };
 
