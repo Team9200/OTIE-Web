@@ -36,6 +36,14 @@
           </v-list-tile-action>
           <v-list-tile-title>회원가입</v-list-tile-title>
         </v-list-tile>
+
+        <v-list-tile @click="onClickLogout" v-if="isMobile && $store.getters.isAuthenticated" ripple>
+          <v-list-tile-action>
+            <!-- TODO: Add icon -->
+            <v-icon></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>로그아웃</v-list-tile-title>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
   
