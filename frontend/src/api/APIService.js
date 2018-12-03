@@ -14,11 +14,13 @@ export class APIService {
 
     getMalwares() {
         const url = `${API_URL}/api/malware/get`
-        return axios.get(url).then(response => response.data);
+
+        return axios.get(url).then(response => response.data)
     }
 
     register(username, password, email) {
         const url = `${API_URL}/api/user/signup`
+
         return axios.post(url, {
             username: username,
             password: password,
@@ -28,6 +30,7 @@ export class APIService {
 
     login(username, password) {
         const url = `${API_URL}/api/user/signin`
+
         return axios.post(url, {
             username: username,
             password: password
@@ -36,6 +39,7 @@ export class APIService {
     
     getProfile() {
         const url = `${API_URL}/api/user/profile`
+        
         return axios.get(url).then(response => response.data)
     }
 }
