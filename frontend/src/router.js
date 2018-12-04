@@ -11,6 +11,8 @@ import LoginView from './components/User/LoginView'
 import RegisterView from './components/User/RegisterView'
 import MyPageView from './components/User/MyPageView'
 
+import StatusView from './components/StatusView'
+
 import ErrorView from './components/ErrorView'
 
 Vue.use(Router)
@@ -28,8 +30,8 @@ export default new Router({
       path: '/',
       name: 'home-view',
       component: HomeView
-    }, {
-      path: '/recent',
+    },{
+      path: '/recent',  
       name: 'recent-view',
       component: RecentView
     },{
@@ -44,6 +46,10 @@ export default new Router({
       path: '/register',
       name: 'register-view',
       component: RegisterView
+    },{
+      path: '/status',
+      name: 'status-view',
+      component: StatusView
     },{
       path: '/my',
       name: 'my-page-view',

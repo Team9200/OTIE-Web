@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <!-- TODO: Add fab button -->
     <v-navigation-drawer style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
       <v-list>
         <v-list-tile v-if="isMobile || isTablet">
@@ -55,8 +56,8 @@
         <span class="font-weight-light">TI</span>
         <sup style="font-size: 15px;">&nbsp;Beta</sup>
       </v-toolbar-title>
-      <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="검색 (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
-      <!-- <v-spacer></v-spacer> -->
+      <!-- <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="검색 (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field> -->
+      <v-spacer></v-spacer>
       <v-btn v-if="!isMobile && !$store.getters.isAuthenticated" @click="$router.push('/login')" flat>
         <span>로그인</span>
       </v-btn>

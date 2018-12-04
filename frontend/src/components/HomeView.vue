@@ -1,7 +1,8 @@
 <template>
-  <v-container>
+  <v-layout>
+    <v-container>
       <v-container>
-        <div v-for="(malware, i) in malwares" :key="i">
+        <!-- <div v-for="(malware, i) in malwares" :key="i">
           <v-card>
             <v-card-title>
               <v-item-group multiple>
@@ -14,16 +15,22 @@
                 <v-chip>{{ malware.filetype }}</v-chip>
                 <v-chip>{{ malware.collector }}</v-chip>
                 <v-chip>{{ getDate(malware.date) }}</v-chip>
-                <!-- <v-chip v-if="k !== 'result'" v-for="(behavior, k) in malware.behavior" :key="k">{{ k }}</v-chip> -->
                 <v-chip v-for="(tag, j) in malware.tag_name_etc" :key="j">#{{ tag.tag }}</v-chip>
                 <v-chip>Details..</v-chip>
               </v-item-group>
             </v-card-title>
           </v-card>
           <br>
+        </div> -->
+        <div style="text-align: center; font-size: 50px; padding-bottom: 10px;">
+          <span>OPEN</span>
+          <span class="font-weight-light">TI</span>
+          <sup style="font-size: 25px;">&nbsp;Beta</sup>
         </div>
+        <v-text-field flat solo-inverted prepend-icon="search" label="Search (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
       </v-container>
-  </v-container>
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
@@ -31,7 +38,7 @@
     APIService
   } from '../api/APIService'
   const apiService = new APIService();
-  
+
   export default {
     name: 'home-view',
     data: () => ({
@@ -54,16 +61,16 @@
       },
       getDate(value) {
         const date = new Date(value);
-        return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() 
-        + ' ' + date.getHours() + ':' + date.getMinutes() + ':'  + date.getSeconds();
+        return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
+          ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
       }
     },
     created() {
-      this.getMalwares();
+      // this.getMalwares();
     }
   }
 </script>
 
 <style>
-  
+
 </style>

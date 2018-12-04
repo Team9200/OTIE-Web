@@ -88,5 +88,5 @@ async function parseBlocklist(filename) {
 			})
 	}
 }
-parseMallist('../sampleChain.json');
-parseBlocklist('../sampleChain.json');
+parseMallist('./sampleChain.json');
+parseBlocklist('./sampleChain.json');

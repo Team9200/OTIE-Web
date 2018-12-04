@@ -18,6 +18,16 @@ export class APIService {
         return axios.get(url).then(response => response.data)
     }
 
+    getMalwares(page) {
+        const url = `${API_URL}/api/malware/get`
+
+        return axios.get(url, {
+            params: {
+                page: page
+            }
+        }).then(response => response.data)
+    }
+
     register(username, password, email) {
         const url = `${API_URL}/api/user/signup`
 
@@ -40,6 +50,12 @@ export class APIService {
     getProfile() {
         const url = `${API_URL}/api/user/profile`
         
+        return axios.get(url).then(response => response.data)
+    }
+
+    getBlock() {
+        const url = `${API_URL}/api/block/get`
+
         return axios.get(url).then(response => response.data)
     }
 }
