@@ -27,6 +27,19 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    
+    searchMalwares(type, query, page) {
+
+        const url = `${API_URL}/api/malware/search`
+        
+        return axios.get(url, {
+            params: {
+                type : type,
+                query : query,
+                page : page
+            }
+        }).then(response => response.data)
+    }
 
     register(username, password, email) {
         const url = `${API_URL}/api/user/signup`
