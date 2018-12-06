@@ -14,6 +14,7 @@ router.route('/user/profile').get(authMiddleware, UserController.profile);
 
 router.route('/malware/get').get(malwareController.get);
 router.route('/malware/search').get(malwareController.search);
+router.route('/malware/node').get(malwareController.searchNoPaging);
 
 router.route('/block/get').get(blockController.get);
 router.route('/block/get/page').get(blockController.getPage);
