@@ -27,3 +27,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Custom file.
+
+ path : OTIE-Web-master\frontend\node_modules\vuetify\es5\mixins
+ colorable2.js
