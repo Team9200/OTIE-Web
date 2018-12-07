@@ -6,16 +6,17 @@ import HomeView from './components/HomeView'
 
 import RecentView from './components/Post/RecentView'
 import PopularView from './components/Post/PopularView'
+import WriteView from './components/Post/WriteView'
+import PostView from './components/Post/PostView'
 
 import LoginView from './components/User/LoginView'
 import RegisterView from './components/User/RegisterView'
 import MyPageView from './components/User/MyPageView'
 
+import ProfileView from './components/ProfileView'
 import StatusView from './components/StatusView'
 
 import ErrorView from './components/ErrorView'
-
-import ProfileView from './components/ProfileView'
 
 Vue.use(Router)
 
@@ -40,6 +41,15 @@ export default new Router({
       path: '/popular',
       name: 'popular-view',
       component: PopularView
+    },{
+      path: '/write',
+      name: 'write-view',
+      component: WriteView,
+      beforeEnter: requireAuth('write')
+    },{
+      path: '/post/:azid',
+      name: 'post-view',
+      component: PostView
     },{
       path: '/profile',
       name: 'profile-view',

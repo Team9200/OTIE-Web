@@ -13,6 +13,7 @@ router.route('/user/signup').post(UserController.signup);
 router.route('/user/profile').get(authMiddleware, UserController.profile);
 
 router.route('/malware/get').get(malwareController.get);
+router.route('/malware/get/all').get(malwareController.getAll);
 router.route('/malware/search').get(malwareController.search);
 router.route('/malware/node').get(malwareController.searchNoPaging);
 

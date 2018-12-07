@@ -187,44 +187,7 @@
                 }
 
                 function nodeData(n) {
-                    var hash = window.location.hash.split("&");
-                    if (hash[0] == "") hash[0] = "#";
-
-                    if (hash.length == 1) {
-
-                        window.location = hash[0] + "&" + n.uuid;
-                        d3.select("svg").append("text")
-                            .attr("x", "50")
-                            .attr("y", "70")
-                            .text(n.type.charAt(0).toUpperCase() + n.type.slice(1) + "   " + n.uuid)
-                            .attr("font-family", "sans-serif")
-                            .attr("font-size", "20px");
-                        d3.select("svg").append("text")
-                            .attr("x", "50")
-                            .attr("y", "120")
-                            .text("All Rank 3/150")
-                            .attr("font-family", "sans-serif")
-                            .attr("font-size", "20px");
-                        d3.select("svg").append("text")
-                            .attr("x", "50")
-                            .attr("y", "140")
-                            .text("Node Rank   1/50")
-                            .attr("font-family", "sans-serif")
-                            .attr("font-size", "20px");
-                        d3.select("svg").append("text")
-                            .attr("x", "50")
-                            .attr("y", "170")
-                            .text("Contribution 8999")
-                            .attr("font-family", "sans-serif")
-                            .attr("font-size", "20px");
-                    } else if (hash.length == 2) {
-                        window.location = hash[0]
-                        d3.select("text").remove();
-                        d3.select("text").remove();
-                        d3.select("text").remove();
-                        d3.select("text").remove();
-                    }
-                    restart();
+                    location.href='profile?type=analyzer&name=김기홍';
                 }
 
                 function dragstarted(d) {

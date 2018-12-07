@@ -15,8 +15,13 @@
     "event-source-polyfill": "^1.0.4",
     "material-design-icons-iconfont": "^3.0.3",
     "roboto-fontface": "*",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "vue": "^2.5.17",
+    "vue-perfect-scrollbar": "^0.1.0",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
+    "vue-snotify": "^3.2.1",
     "vuetify": "^1.3.0",
     "vuex": "^3.0.1"
   },
