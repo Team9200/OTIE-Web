@@ -15,6 +15,8 @@ import StatusView from './components/StatusView'
 
 import ErrorView from './components/ErrorView'
 
+import ProfileView from './components/ProfileView'
+
 Vue.use(Router)
 
 const requireAuth = (returnPath) => (from, to, next) => {
@@ -38,6 +40,10 @@ export default new Router({
       path: '/popular',
       name: 'popular-view',
       component: PopularView
+    },{
+      path: '/profile',
+      name: 'profile-view',
+      component: ProfileView
     },{
       path: '/login',
       name: 'login-view',
