@@ -271,9 +271,9 @@ export default {
       
       malwareList.forEach(function (data, i) {
 
-        total += data.tag_name_etc.length;
+        total += data.body.tag_name_etc.length;
         
-        data.tag_name_etc.map(function (out) {
+        data.body.tag_name_etc.map(function (out) {
 
           const key = out.tag;
 
@@ -312,9 +312,12 @@ export default {
 
       });
 
-      let etc = { 'value': total - other, 'name': 'other' };
-      last.push(etc);
+      if (total - other >= 1) {
 
+        let etc = { 'value': total - other, 'name': 'other' };
+        last.push(etc);
+
+      }
       this.tag = last;
       console.log('Created Tag Chart.');
 
@@ -327,7 +330,7 @@ export default {
       malwareList.forEach(function (data) {
 
         let tmp = {};
-        let date = new Date(data.date);
+        let date = new Date(data.body.date);
 
         post[date.getMonth()] += 1;
 
@@ -354,7 +357,7 @@ export default {
       list.forEach(function (data, i) {
 
         let tmp = {};
-        const date = new Date(data.date).getTime();
+        const date = new Date(data.body.date).getTime();
         const lapse = Math.ceil((now - date) / 1000 / 60);   // min
 
         if (lapse < 1) {
@@ -389,10 +392,20 @@ export default {
         }
 
         tmp.color = color[i];       // 색
-        tmp.text = data.azid;       // 내용
+        tmp.text = data.title.slice(0,55)+'....';       // 내용
         result.push(tmp);
 
       });
+      if (result.length < 5) {
+
+        for(let i=result.length; i<5;i++){
+
+          result.push({'timeString':'ㅤ','color':color[i],'text':'ㅤ'});
+
+        }
+
+      }
+
 
       this.activity = result;
       console.log('created activity chart');
@@ -410,19 +423,37 @@ export default {
         let tmp2 = {};
 
         tmp1.id = i;
-        tmp1.subject = (data.azid).slice(0,30)+'...';
-        tmp1.date = new Date(data.date).toLocaleString();
+        tmp1.subject = (data.title).slice(0,30)+'...';
+        tmp1.date = new Date(data.body.date).toLocaleString();
         tmp1.progress = 25*i;
         tmp1.color = gradeColor[i];
       
         tmp2.id = i;
-        tmp2.subject = (data.azid).slice(0,20)+'...';
-        tmp2.date = new Date(data.date).toLocaleString();
+        tmp2.subject = (data.title).slice(0,20)+'...';
+        tmp2.date = new Date(data.body.date).toLocaleString();
 
         result1.push(tmp1)
         result2.push(tmp2);
 
       });
+
+      if( result1.length < 5 ){
+
+        for(var i=result1.length; i < 5; i++){
+
+          result1.push({});
+
+        }
+      }
+
+      if( result2.length < 5 ){
+
+        for(var i=result2.length; i < 5; i++){
+
+          result2.push({});
+
+        }
+      }
 
       this.listData1 = result1;
       this.listData2 = result2;

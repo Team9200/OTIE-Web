@@ -172,11 +172,12 @@ function searchNoPaging(req, res) {				// 페이징 없이
 
 	var query = req.query.query; // get query
 	var type = req.query.type; // get type
+
 	if (type === "collector") {
 
 		Post.find({
 				'body.collector': query
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			}).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -192,7 +193,7 @@ function searchNoPaging(req, res) {				// 페이징 없이
 	} else if (type === "analyzer") {
 		Post.find({
 				'body.analyzer': query
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			}).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -204,6 +205,13 @@ function searchNoPaging(req, res) {				// 페이징 없이
 					message: err
 				});
 			});
+
+	} else {
+
+		res.json({
+			success: false,
+			message: 'Query is NULL'
+		});
 
 	}
 }
