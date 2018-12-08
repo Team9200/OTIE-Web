@@ -2,3 +2,4 @@ node_modules
 .production-env
 sampleChain.json
 dist
+smallchain.json
