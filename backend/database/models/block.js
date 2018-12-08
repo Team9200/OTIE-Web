@@ -43,12 +43,14 @@ class Block extends mongoose.Schema {
 
         return block;
     }
-    create(index, timestamp, transactionList, malwaresList, nonce, hash, previousBlockHash) {
+    create(index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash) {
         const block = new this({
             index,
             timestamp,
+            postList,
+            replyList,
+            voteList,
             transactionList,
-            malwaresList,
             nonce,
             hash,
             previousBlockHash
