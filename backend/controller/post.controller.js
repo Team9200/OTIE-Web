@@ -1,4 +1,46 @@
 import Post from '../database/models/post';
+import Vote from '../database/models/vote';
+import Reply from '../database/models/reply';
+
+function post(req, res) {
+
+	let permlink = req.query.permlink;
+	let result = {};
+	Post.find({'permlink': permlink }).then((data) => {
+
+		if(data != '') {
+
+			result.post = data;
+			Vote.find({'refpermlink': permlink}).then((voteData) =>{
+
+				result.vote = voteData;
+				Reply.find({'refpermlink': permlink}).then((replyData) =>{
+					
+					result.reply = replyData;
+
+					res.json({
+						success: true,
+						message: result
+					});	
+				});
+			});
+		}
+		else{
+
+			res.json({
+				success: false,
+				message: 'Not found'
+			});
+		}
+
+	}).catch((err) => {
+
+		res.json({
+			success: false,
+			message: err
+		});
+	});
+}
 
 function get(req, res) {
 
@@ -217,6 +259,7 @@ function searchNoPaging(req, res) {				// 페이징 없이
 }
 
 export default {
+	post,
 	get,
 	getAll,
 	search,

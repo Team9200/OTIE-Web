@@ -15,6 +15,9 @@
 
     import * as d3 from 'd3';
     import data from '@/data';
+    import { APIService } from '../api/APIService';
+
+    const apiService = new APIService();
    
     let collector = [],
         analyzer = [],
@@ -50,15 +53,10 @@
             },
             init() {
 
-                data.forEach(function (node, i) {
-
-                    if (node.type == 'collector')
-                        collector.push(node);
-                    if (node.type == 'analyzer')
-                        analyzer.push(node);
-                    if (node.type == 'storage')
-                        storage.push(node);
-
+                apiService.getStorage().then(response => {
+          
+                    console.log(response.message);
+        
                 });
 
             },
