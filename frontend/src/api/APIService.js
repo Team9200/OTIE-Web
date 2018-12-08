@@ -13,19 +13,19 @@ export class APIService {
     }
 
     getMalwares() {
-        const url = `${API_URL}/api/malware/get`
+        const url = `${API_URL}/api/post/get`
 
         return axios.get(url).then(response => response.data)
     }
 
     getAllMalwares() {
-        const url = `${API_URL}/api/malware/get/all`
+        const url = `${API_URL}/api/post/get/all`
 
         return axios.get(url).then(response => response.data)
     }
 
     getMalwares(page) {
-        const url = `${API_URL}/api/malware/get`
+        const url = `${API_URL}/api/post/get`
 
         return axios.get(url, {
             params: {
@@ -35,7 +35,7 @@ export class APIService {
     }
 
     searchMalwares(type, query) {
-        const url = `${API_URL}/api/malware/search`
+        const url = `${API_URL}/api/post/search`
 
         return axios.get(url, {
             params: {
@@ -46,7 +46,7 @@ export class APIService {
     }
 
     searchMalwares(type, query, page) {
-        const url = `${API_URL}/api/malware/search`
+        const url = `${API_URL}/api/post/search`
 
         return axios.get(url, {
             params: {
@@ -58,7 +58,7 @@ export class APIService {
     }
 
     searchNode(type, query) {
-        const url = `${API_URL}/api/malware/node`
+        const url = `${API_URL}/api/post/node`
 
         return axios.get(url, {
             params: {

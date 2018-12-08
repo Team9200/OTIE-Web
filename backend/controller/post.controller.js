@@ -41,11 +41,9 @@ function search(req, res) {
 
 	if (type === "tag") { // tag \
 		Post.find({
-				tag_name_etc: {
-					$elemMatch: {
-						"tag": query
-					}
-				}
+
+				'body.tag_name_etc.tag' : query
+
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -64,7 +62,7 @@ function search(req, res) {
 		if (query.length === 32) { //md5
 
 			Post.find({
-					"md5": query
+					'body.md5': query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -81,7 +79,7 @@ function search(req, res) {
 		} else if (query.length === 40) { //sha1
 
 			Post.find({
-					"sha1": query
+					'body.sha1': query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -99,7 +97,7 @@ function search(req, res) {
 		} else if (query.length === 64) { //sha256
 
 			Post.find({
-					"sha256": query
+					'body.sha256': query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -118,7 +116,7 @@ function search(req, res) {
 	} else if (type === "collector") {
 
 		Post.find({
-				"collector": query
+				'body.collector': query
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -134,7 +132,7 @@ function search(req, res) {
 
 	} else if (type === "analyzer") {
 		Post.find({
-				"analyzer": query
+				'body.analyzer': query
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -148,19 +146,21 @@ function search(req, res) {
 				});
 			});
 
-	} else if (type === "azid") {
-		Post.findOne({
-			azid: query
-		}, function (err, data) {
-			if (err) return res.json({
-				success: false,
-				message: 'Query error'
+	} else if (type === "title") {
+		Post.find({
+			'title': query
+			}).skip(10 * (page - 1)).limit(10).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
 			});
-			return res.json({
-				success: true,
-				message: data
-			});
-		});
 	} else {
 		return res.json({
 			success: false,
@@ -175,8 +175,8 @@ function searchNoPaging(req, res) {				// 페이징 없이
 	if (type === "collector") {
 
 		Post.find({
-				"collector": query
-			}).then((data) => {
+				'body.collector': query
+			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -190,10 +190,9 @@ function searchNoPaging(req, res) {				// 페이징 없이
 			});
 
 	} else if (type === "analyzer") {
-
 		Post.find({
-				"analyzer": query
-			}).then((data) => {
+				'body.analyzer': query
+			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
 					message: data
