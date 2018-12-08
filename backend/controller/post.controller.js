@@ -1,9 +1,9 @@
-import Malware from '../database/models/malware';
+import Post from '../database/models/post';
 
 function get(req, res) {
 
 	var page = req.query.page;
-	Malware.find({}).skip(10 * (page - 1)).limit(10).then((data) => {
+	Post.find({}).skip(10 * (page - 1)).limit(10).then((data) => {
 			res.json({
 				success: true,
 				message: data
@@ -19,7 +19,7 @@ function get(req, res) {
 }
 
 function getAll(req, res) {
-	Malware.find({}).then((data) => {
+	Post.find({}).then((data) => {
 		res.json({
 			success: true,
 			message: data
@@ -40,7 +40,7 @@ function search(req, res) {
 	var page = req.query.page;
 
 	if (type === "tag") { // tag \
-		Malware.find({
+		Post.find({
 				tag_name_etc: {
 					$elemMatch: {
 						"tag": query
@@ -63,7 +63,7 @@ function search(req, res) {
 
 		if (query.length === 32) { //md5
 
-			Malware.find({
+			Post.find({
 					"md5": query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
@@ -80,7 +80,7 @@ function search(req, res) {
 
 		} else if (query.length === 40) { //sha1
 
-			Malware.find({
+			Post.find({
 					"sha1": query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
@@ -98,7 +98,7 @@ function search(req, res) {
 
 		} else if (query.length === 64) { //sha256
 
-			Malware.find({
+			Post.find({
 					"sha256": query
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
@@ -117,7 +117,7 @@ function search(req, res) {
 
 	} else if (type === "collector") {
 
-		Malware.find({
+		Post.find({
 				"collector": query
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
@@ -133,7 +133,7 @@ function search(req, res) {
 			});
 
 	} else if (type === "analyzer") {
-		Malware.find({
+		Post.find({
 				"analyzer": query
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
@@ -149,7 +149,7 @@ function search(req, res) {
 			});
 
 	} else if (type === "azid") {
-		Malware.findOne({
+		Post.findOne({
 			azid: query
 		}, function (err, data) {
 			if (err) return res.json({
@@ -174,7 +174,7 @@ function searchNoPaging(req, res) {				// 페이징 없이
 	var type = req.query.type; // get type
 	if (type === "collector") {
 
-		Malware.find({
+		Post.find({
 				"collector": query
 			}).then((data) => {
 				res.json({
@@ -191,7 +191,7 @@ function searchNoPaging(req, res) {				// 페이징 없이
 
 	} else if (type === "analyzer") {
 
-		Malware.find({
+		Post.find({
 				"analyzer": query
 			}).then((data) => {
 				res.json({
