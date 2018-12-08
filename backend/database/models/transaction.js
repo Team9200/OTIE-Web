@@ -28,9 +28,14 @@ class Transaction extends mongoose.Schema {
         return transaction;
     }
 
-    create() {
+    create(txid, version, inputCnt, vin, outputCnt, vout) {
         const transaction = new this({
-            
+            txid,
+            version,
+            inputCnt,
+            vin,
+            outputCnt,
+            vout
         });
 
         return transaction.save();
