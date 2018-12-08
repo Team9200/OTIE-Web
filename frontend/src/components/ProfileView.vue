@@ -2,6 +2,13 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
+        <v-flex v-if="activity.length >= 1" lg12 sm12 v-for="(item,index) in users" :key=" 'mini' + index">
+          <name-card
+            mini
+            v-bind="item"
+          >
+          </name-card>
+        </v-flex>
 
         <v-flex v-if="monthActivity.length >= 1" lg8 sm12 xs12>
           <v-widget title="Monthly activities" content-bg="white">
@@ -75,7 +82,7 @@
 
         <!-- Popular post start -->
 
-        <v-flex v-if="listData1.length >= 1" lg7 sm12 xs12>
+        <v-flex v-if="activity.length >= 1" lg7 sm12 xs12>
           <v-card>
             <v-toolbar card dense color="transparent">
               <v-toolbar-title>
@@ -163,6 +170,7 @@ import VWidget from './VWidget';                                 // used -> done
 import Material from 'vuetify/es5/util/colors';                             // used -> done
 import VCircle from './circle/VCircle';                          // used -> done
 import ChatWindow from './chat/ChatWindow';                      // used    
+import NameCard from './widgets/NameCard';
 
 const apiService = new APIService();
 
@@ -173,11 +181,23 @@ export default {
     ChatWindow,
     VCircle,
     EChart, 
+    NameCard
   },
   data: () => ({
 
     color: Material,
     selectedTab: 'tab-1',
+    users: [
+      {
+        jobTitle: 'Analyzer',
+        name: 'Michael Wang',
+        avatar: {
+          src: 'https://randomuser.me/api/portraits/men/1.jpg',
+          size: '36'
+        },
+        country: 'South korea',  
+      }
+    ],
     nodeType: [],
     monthActivity: [],
     tag: [], 
