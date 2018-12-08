@@ -3,8 +3,8 @@ const router = express.Router();
 
 import authMiddleware from '../../middleware/auth';
 import UserController from '../../controller/user.controller';
-import malwareController from '../../controller/malware.controller';
-import blockController from '../../controller/block.controller';
+import PostController from '../../controller/post.controller';
+import BlockController from '../../controller/block.controller';
 
 // UserController function: test, signup, signin, profile
 router.route('/user/test').get(UserController.test);
@@ -12,13 +12,13 @@ router.route('/user/signin').post(UserController.signin);
 router.route('/user/signup').post(UserController.signup);
 router.route('/user/profile').get(authMiddleware, UserController.profile);
 
-router.route('/malware/get').get(malwareController.get);
-router.route('/malware/get/all').get(malwareController.getAll);
-router.route('/malware/search').get(malwareController.search);
-router.route('/malware/node').get(malwareController.searchNoPaging);
+router.route('/post/get').get(PostController.get);
+router.route('/post/get/all').get(PostController.getAll);
+router.route('/post/search').get(PostController.search);
+router.route('/post/node').get(PostController.searchNoPaging);
 
-router.route('/block/get').get(blockController.get);
-router.route('/block/get/page').get(blockController.getPage);
-router.route('/block/search').get(blockController.search);
+router.route('/block/get').get(BlockController.get);
+router.route('/block/get/page').get(BlockController.getPage);
+router.route('/block/search').get(BlockController.search);
 
 export default router;

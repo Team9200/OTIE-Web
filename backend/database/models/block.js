@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import Transaction from './transaction'
+import Post from './post'
+import Reply from './reply'
+import Vote from './vote'
 
 class Block extends mongoose.Schema {
     constructor() {
@@ -9,12 +13,22 @@ class Block extends mongoose.Schema {
             timestamp: {
                 type: Number
             },
-            transactionList: {
-                type: JSON
-            },
-            malwaresList: {
-                type: JSON
-            },
+            postList: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Post'
+            }],
+            replyList: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Reply'
+            }],
+            voteList: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Vote'
+            }],
+            transactionList: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Transaction'
+            }],
             nonce: {
                 type: Number
             },
