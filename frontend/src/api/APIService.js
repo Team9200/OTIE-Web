@@ -67,6 +67,11 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    getStorage() {
+        const url = `http://211.193.58.164:29200/api/data`
+
+        return axios.get(url).then(response => response.data)
+    }
 
     register(username, password, email) {
         const url = `${API_URL}/api/user/signup`
