@@ -2,7 +2,7 @@
     <v-container>
         <v-card>
             <v-container>
-                <svg id="app" width="800" height="600"></svg>
+                <svg id="app" width="1050" height="530"></svg>
                 <div>
                     <h1>Nodes Counts <span id="nodeCount">0</span></h1>
                 </div>
@@ -12,11 +12,14 @@
 </template>
 
 <script>
-    import * as d3 from 'd3'
-    import data from '@/data'
-    var collector = [],
+
+    import * as d3 from 'd3';
+    import data from '@/data';
+   
+    let collector = [],
         analyzer = [],
         storage = [];
+
     export default {
         data() {
             return {
@@ -24,34 +27,47 @@
                 message: "hello",
                 collector: [],
                 analyzer: [],
-                storage: []
+                storage: [],
 
             }
         },
         created() {
-            this.init()
-            // this.setData()
+
+            this.init();
+
         },
         mounted() {
-            this.setData()
+
+            this.setData();
+
         },
         methods: {
+
             reversedMessage: function () {
-                return this.message.split('').reverse().join('')
+
+                return this.message.split('').reverse().join('');
+
             },
             init() {
+
                 data.forEach(function (node, i) {
+
                     if (node.type == 'collector')
                         collector.push(node);
                     if (node.type == 'analyzer')
                         analyzer.push(node);
                     if (node.type == 'storage')
                         storage.push(node);
+
                 });
 
             },
             setData() {
-                var format = d3.format(",d");
+
+                // Counting number
+
+                let format = d3.format(",d");
+
                 d3.select("#nodeCount")
                     .transition()
                     .duration(2500)
@@ -68,8 +84,11 @@
                             .delay(1500)
                             .on("start", repeat);
                     });
-                /////////////////////////////// create node
-                var node = d3.select("svg")
+
+
+                // Create Bubble.
+
+                let node = d3.select("svg")
                     .selectAll("circle")
                     .data(data)
                     .enter()
@@ -95,65 +114,105 @@
                         .on("end", dragended))
                     .on('click', function (d) {
                         nodeData(d);
-                    })
+                    });
+                // svg style.
+
                 d3.select("svg").style("opacity", 1e-6)
                     .transition()
                     .duration(1000)
                     .style("opacity", 1);
-                ///////////////////////////////////////////////////////////
 
-                var simulation = d3.forceSimulation()
+
+                // Bubble force
+
+                let simulation = d3.forceSimulation()
                     .force("collide",
                         d3.forceCollide()
                         .radius(function (d) {
-                            return d.r + 1.5
+                            return d.r + 1.5                                // 구의 척력 반경  
                         })
-                        .strength(1.0)
-                        .iterations(16))
-                    .force("charge", d3.forceManyBody().strength(5))
-                    .force("x", d3.forceX().strength(1).x(function (d) {
-                        var hash = window.location.hash.split("&");
-                        if (hash.length == 1) {
+                        .strength(1.0)                                      // 강도
+                        .iterations(16))                                    // 몰라 
+                    .force("charge", d3.forceManyBody().strength(5))        // 인력 
+                    .force("x", d3.forceX().strength(1.5).x(function (d) {    // 힘이 발생하는 위치.
+
+                        const hash = window.location.hash.split("&");
+
+                        if (hash.length == 1) {                       
 
                             if (hash[0] == "#sort") {
+
                                 return d.forcex;
+                            
                             } else if (hash[0] == "") {
-                                return 400;
+                             
+                                return 525;
+                            
                             }
-                        } else if (hash.length == 2) {
-                            if (hash[1] == d.uuid) {
-                                return d.movex;
-                            }
-                            if (hash[0] == "#sort") {
-                                return d.forcex + 1000;
-                            } else if (hash[0] == "#") {
-                                return 400 + 1000;
-                            }
+
                         }
                     }))
-                    .force("y", d3.forceY().strength(1).y(function (d) {
-                        var hash = window.location.hash.split("&");
+                    .force("y", d3.forceY().strength(1.5).y(function (d) {
+
+                        const hash = window.location.hash.split("&");
+
                         if (hash.length == 1) {
 
                             if (hash[0] == "#sort") {
+
                                 return d.forcey;
+
                             } else if (hash[0] == "") {
-                                return 300;
-                            }
-                        } else if (hash.length == 2) {
-                            if (hash[1] == d.uuid) {
-                                return d.movey;
-                            }
-                            if (hash[0] == "#sort") {
-                                return d.forcey + 1000;
-                            } else if (hash[0] == "#") {
-                                return 300 + 1000;
+
+                                return 265;
+
                             }
                         }
                     }));
+
+                // 도움말. 
+
+                let svg = d3.select("svg");
+
+                svg.append("circle")
+                    .attr("r", 9)
+                    .attr("cx", 930)
+                    .attr("cy", 30)
+                    .attr("strock", "black")
+                    .attr("fill", "#03d6a8")
+
+                svg.append("circle")
+                    .attr("r", 9)
+                    .attr("cx", 930)
+                    .attr("cy", 60)
+                    .attr("strock", "black")
+                    .attr("fill", "#8c25ea")
+                
+                svg.append("circle")
+                    .attr("r", 9)
+                    .attr("cx", 930)
+                    .attr("cy", 90)
+                    .attr("strock", "black")
+                    .attr("fill", "#2683ff")
+
+                svg.append("text")
+                    .text("Analyzer Node")
+                    .attr("x", "950")
+                    .attr("y", "64")
+
+                svg.append("text")
+                    .text("Stroage Node")
+                    .attr("x", "950")
+                    .attr("y", "94")
+
+                svg.append("text")
+                    .text("Collector Node")
+                    .attr("x", "950")
+                    .attr("y", "34")
+
+                // start
+
                 restart();
-                d3.select("svg")
-                    .on("wheel.zoom", changeMode);
 
                 function restart() {
                     simulation
@@ -163,15 +222,11 @@
 
                 }
 
-                function ticked() {
-                    node
-                        .attr("cx", function (d) {
-                            return d.x;
-                        })
-                        .attr("cy", function (d) {
-                            return d.y;
-                        });
-                }
+
+                // click event.
+
+                d3.select("svg")
+                    .on("wheel.zoom", changeMode);
 
                 function changeMode() {
                     var hash = window.location.hash.split("&");
@@ -186,9 +241,28 @@
                     }
                 }
 
-                function nodeData(n) {
-                    location.href='profile?type=analyzer&name=김기홍';
+
+                // 변경되는 좌표 적용.
+
+                function ticked() {
+                    node
+                        .attr("cx", function (d) {
+                            return d.x;
+                        })
+                        .attr("cy", function (d) {
+                            return d.y;
+                        });
                 }
+
+                // node click event
+
+                function nodeData(n) {
+
+                    location.href='profile?type=analyzer&name=김기홍';
+
+                }
+
+                // drag events
 
                 function dragstarted(d) {
                     if (!d3.event.active) {
