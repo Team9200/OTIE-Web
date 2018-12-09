@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node --presets env,stage-2 app.js",
-    "make": "nodemon --exec babel-node --presets env,stage-2 util/test.js",
+    "make": "nodemon --exec babel-node --presets env,stage-2 util/makeDB.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pm2": "pm2 start --interpreter babel-node app.js"
   },

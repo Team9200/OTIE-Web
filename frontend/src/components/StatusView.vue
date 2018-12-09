@@ -58,6 +58,7 @@
                     console.log(response.message);
         
                 });
+                
 
             },
             setData() {
@@ -256,7 +257,7 @@
 
                 function nodeData(n) {
 
-                    location.href='profile?type=analyzer&name=김기홍';
+                    location.href='profile?type=analyzer&name=5sX31bQbaVBS1XMHQDAHzqdW5H5tNTFu9N5TnFJB6hwzUN87U5';
 
                 }
 
