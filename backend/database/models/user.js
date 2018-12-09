@@ -17,6 +17,9 @@ class User extends mongoose.Schema {
                 type: String,
                 required: true
             },
+            publickey: {
+                type: String
+            },
             clientId: {
                 type: String
             },

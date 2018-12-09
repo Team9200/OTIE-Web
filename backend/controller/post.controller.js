@@ -2,7 +2,7 @@ import Post from '../database/models/post';
 import Vote from '../database/models/vote';
 import Reply from '../database/models/reply';
 
-function post(req, res) {
+function view(req, res) {
 
 	let permlink = req.query.permlink;
 	let result = {};
@@ -259,7 +259,7 @@ function searchNoPaging(req, res) {				// 페이징 없이
 }
 
 export default {
-	post,
+	view,
 	get,
 	getAll,
 	search,

@@ -50,12 +50,20 @@
   
   
     <v-toolbar color="white darken-3" :clipped-left="$vuetify.breakpoint.mdAndUp" app>
-      <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="isMobile || isTablet" @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title style="width: 240px;" class="headline text-uppercase">
         <span>Open</span>
         <span class="font-weight-light">TI</span>
         <sup style="font-size: 15px;">&nbsp;Beta</sup>
       </v-toolbar-title>
+
+      <v-btn router :to="menu.to" v-if="!isMobile && menu.visible" v-for="(menu, i) in menus" :key="i" flat>
+        <v-icon>{{ menu.icon }}</v-icon>
+        &nbsp;&nbsp;
+        <span>{{ menu.title }}</span>
+      </v-btn>
+
+
       <!-- <v-text-field flat solo-inverted prepend-icon="search" style="padding-top: 10px;" label="검색 (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field> -->
       <v-spacer></v-spacer>
       <v-btn v-if="!isMobile && !$store.getters.isAuthenticated" @click="$router.push('/login')" flat>
@@ -92,14 +100,8 @@
           visible: true
         }, {
           icon: 'list',
-          title: '최신글',
+          title: '글',
           to: '/recent',
-          visible: true
-        },
-        {
-          icon: 'list',
-          title: '인기글',
-          to: '/popular',
           visible: true
         }, {
           icon: 'info',
@@ -141,7 +143,7 @@
       } else if (this.isTablet) {
         this.drawer = false;
       } else {
-        this.drawer = true;
+        this.drawer = false;
       }
     },
     beforeDestroy() {
