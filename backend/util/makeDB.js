@@ -6,6 +6,7 @@ import Block from '../database/models/block';
 import User from '../database/models/user';
 import fs from 'fs';
 import mongoose from 'mongoose';
+import { forEach } from 'p-iteration';
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/otie", {
@@ -13,19 +14,17 @@ mongoose.connect("mongodb://localhost:27017/otie", {
 	useCreateIndex: true
 });
 
-function postList(filename) {
+function postLists(object){
 
-	const fileData = fs.readFileSync(filename, 'UTF-8');
-	const chainData = JSON.parse(fileData).chain;
-
-	let title, timestamp, body, hashtag, publickey, sign, permlink;
-
-	chainData.forEach(function (object) {
+	return new Promise(async function(resolve, reject) {
 
 		const postList = object.postList;
-		
-		postList.forEach(async function (list) {
+		let title, timestamp, body, hashtag, publickey, sign, permlink;
+		let array = [];
 
+		await forEach(postList, async (list) => {
+
+			
 			title = list.title;
 			timestamp = list.timestamp;
 			body = list.body;
@@ -34,31 +33,33 @@ function postList(filename) {
 			sign = list.sign;
 			permlink = list.permlink;
 
-			await Post.create(permlink, title, body, hashtag, publickey, sign, timestamp)
+			const oId = await Post.create(permlink, title, body, hashtag, publickey, sign, timestamp)
 				.then((post) => {
 					console.log({
 						success: true,
 						message: 'Post success'
 					});
+					return post._id;
 				}).catch((error) => {console.log(error)})
 
+			array.push(oId);
 
 		});
+		resolve(array);
+
 	});
+
 }
 
-function voteList(filename) {
+function voteLists(object) {
 
-	const fileData = fs.readFileSync(filename, 'UTF-8');
-	const chainData = JSON.parse(fileData).chain;
-
-	let voteid, refpermlink, timestamp, publickey, sign, weight;
-
-	chainData.forEach(function (object) {
+	return new Promise(async function(resolve, reject) {
 
 		const voteList = object.voteList;
-		
-		voteList.forEach(async function (list) {
+		let voteid, refpermlink, timestamp, publickey, sign, weight;
+		let array = [];
+
+		await forEach(voteList, async (list) => {
 
 			voteid = list.voteid;
 			refpermlink = list.refpermlink;
@@ -67,30 +68,32 @@ function voteList(filename) {
 			sign = list.sign;
 			weight = list.weight;
 
-			await Vote.create(voteid, refpermlink, timestamp, publickey, sign, weight)
+			const oId = await Vote.create(voteid, refpermlink, timestamp, publickey, sign, weight)
 				.then((vote) => {
 					console.log({
 						success: true,
 						message: 'vote success'
 					});
+					return vote._id;
 				}).catch((error) => {console.log(error)})
 
+			array.push(oId);
+
 		});
+		resolve(array);
 	});
+
 }
 
-function replyList(filename) {
+function replyLists(object) {
 
-	const fileData = fs.readFileSync(filename, 'UTF-8');
-	const chainData = JSON.parse(fileData).chain;
-
-	let permlink, refpermlink, timestamp, publickey, sign, text;
-
-	chainData.forEach(function (object) {
+	return new Promise(async function(resolve, reject) {
 
 		const replyList = object.replyList;
-		
-		replyList.forEach(async function (list) {
+		let permlink, refpermlink, timestamp, publickey, sign, text;
+		let array = [];		
+
+		await forEach(replyList, async (list) => {
 
 			permlink = list.permlink;
 			refpermlink = list.refpermlink;
@@ -99,50 +102,81 @@ function replyList(filename) {
 			sign = list.sign;
 			text = list.text;
 
-			await Reply.create(permlink, refpermlink, timestamp, publickey, sign, text)
+			const oId = await Reply.create(permlink, refpermlink, timestamp, publickey, sign, text)
 				.then((reply) => {
 					console.log({
 						success: true,
-						message: 'reply success'
+						message: 'Reply success'
 					});
+					return reply._id;
 				}).catch((error) => {console.log(error)})
 
+			array.push(oId);
 
 		});
+		resolve(array);
 	});
 }
 
-function transactionList(filename) {
+function transactionLists(object) {
 
-	const fileData = fs.readFileSync(filename, 'UTF-8');
-	const chainData = JSON.parse(fileData).chain;
-
-	let txid, version, inputCnt, vin, outputCnt, vout;
-
-	chainData.forEach(function (object) {
+	return new Promise(async function(resolve, reject) {
 
 		const transactionList = object.transactionList;
+		let txid, version, inputCnt, vin, outputCnt, vout;
+		let array = [];
 		
-		transactionList.forEach(async function (list) {
+		await forEach(transactionList,async (list) => {
+
 			txid = list.txid;
 			version = list.version;
 			inputCnt = list.inputCnt;
 			vin = list.vin;
 			outputCnt = list.outputCnt;
 			vout = list.vout;
-			await Transaction.create(txid, version, inputCnt, vin, outputCnt, vout)
+
+			const oId = await Transaction.create(txid, version, inputCnt, vin, outputCnt, vout)
 				.then((Transaction) => {
 					console.log({
 						success: true,
 						message: 'Transaction success'
 					});
+					return Transaction._id;
 				}).catch((error) => {console.log(error)})
 
+			array.push(oId);
 		});
+		resolve(array);
 	});
 }
 
-postList('./smallchain.json');
-voteList('./smallchain.json');
-replyList('./smallchain.json');
-transactionList('./smallchain.json');
+async function blockLists(filename) {
+
+	const fileData = fs.readFileSync(filename, 'UTF-8');
+	const chainData = JSON.parse(fileData).chain;
+
+	await forEach(chainData, async (object, idx) => {
+
+		let index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash;
+
+		index = object.index;
+		timestamp = object.timestamp;
+		postList = await postLists(object);
+		voteList = await voteLists(object);
+		replyList = await replyLists(object);
+		transactionList = await transactionLists(object);
+		nonce = object.nonce;
+		hash = object.hash;
+		previousBlockHash = object.previousBlockHash;
+
+		await Block.create(index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash)
+			.then((Transaction) => {
+				console.log({
+					success: true,
+					message: 'Transaction success'
+				});
+			}).catch((error) => {console.log(error)})
+	});
+}
+
+blockLists('./smallchain.json');
