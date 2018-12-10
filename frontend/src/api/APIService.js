@@ -115,4 +115,11 @@ export class APIService {
 
         return axios.get(url).then(response => response.data)
     }
+    getUser() {
+
+        const url = `${API_URL}/api/user/get`
+
+        return axios.get(url).then(response => response.data)
+
+    }
 }

@@ -7,6 +7,24 @@ function test(req, res) {
     });
 };
 
+function getUser(req, res) {
+
+    User.find({},{'publickey':true}).then((data) => {
+
+        res.json({
+            success: true,
+            message: data
+        }); 
+
+    }).catch((err) => {
+
+        res.json({
+            success: false,
+            message: err
+        });
+    });
+};
+
 function signup(req, res) {
 
     const username = req.body.username;
@@ -90,5 +108,6 @@ export default {
     test,
     signup,
     signin,
-    profile
+    profile,
+    getUser
 };
