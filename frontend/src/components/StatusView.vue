@@ -107,8 +107,8 @@
                         else if(node.nodetype == 'Analyzer'){
 
                             userTmp.color = '#8c25ea';
-                            userTmp.forcex = 788;
-                            userTmp.forcey = 398;
+                            userTmp.forcex = 525;
+                            userTmp.forcey = 265;
 
                         }  
                         console.log(userTmp);

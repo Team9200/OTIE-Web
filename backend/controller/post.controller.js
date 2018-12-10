@@ -84,7 +84,7 @@ function search(req, res) {
 	if (type === "tag") { // tag \
 		Post.find({
 
-				'body.tag_name_etc.tag' : query
+				'body.tag_name_etc.tag' : new RegExp(query, 'i')
 
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
@@ -104,7 +104,7 @@ function search(req, res) {
 		if (query.length === 32) { //md5
 
 			Post.find({
-					'body.md5': query
+					'body.md5': new RegExp(query, 'i')
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -121,7 +121,7 @@ function search(req, res) {
 		} else if (query.length === 40) { //sha1
 
 			Post.find({
-					'body.sha1': query
+					'body.sha1': new RegExp(query, 'i')
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -139,7 +139,7 @@ function search(req, res) {
 		} else if (query.length === 64) { //sha256
 
 			Post.find({
-					'body.sha256': query
+					'body.sha256': new RegExp(query, 'i')
 				}).skip(10 * (page - 1)).limit(10).then((data) => {
 					res.json({
 						success: true,
@@ -158,7 +158,7 @@ function search(req, res) {
 	} else if (type === "node") {
 
 		Post.find({
-			$or : [{ 'body.collector': query}, {'body.analyzer' : query }]
+			$or : [{ 'body.collector': new RegExp(query, 'i')}, {'body.analyzer' : new RegExp(query, 'i') }]
 		}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -174,7 +174,7 @@ function search(req, res) {
 
 	} else if (type === "title") {
 		Post.find({
-			'title': query
+			'title': new RegExp(query, 'i')
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -244,18 +244,126 @@ function searchNoPaging(req, res) {				// 페이징 없이
 
 function getBody(req, res) {				
 
-	Post.find({},{'body':true}).then((data) => {
-			res.json({
-				success: true,
-				message: data
+	var query = req.query.query; // get query
+	var type = req.query.type; // get type
+
+	if (type === "tag") { // tag \
+
+		Post.find({
+
+				'body.tag_name_etc.tag' : new RegExp(query, 'i')
+
+			},{'body':true}).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
 			});
-		})
-		.catch((err) => {
-			res.json({
-				success: false,
-				message: err
+
+	} else if (type === "hash") { // hash
+
+		if (query.length === 32) { //md5
+
+			Post.find({
+					'body.md5': new RegExp(query, 'i')
+				},{'body':true}).then((data) => {
+					res.json({
+						success: true,
+						message: data
+					});
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+
+		} else if (query.length === 40) { //sha1
+
+			Post.find({
+					'body.sha1': new RegExp(query, 'i')
+				},{'body':true}).then((data) => {
+					res.json({
+						success: true,
+						message: data
+					});
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+
+
+		} else if (query.length === 64) { //sha256
+
+			Post.find({
+					'body.sha256': new RegExp(query, 'i')
+				},{'body':true}).then((data) => {
+					res.json({
+						success: true,
+						message: data
+					});
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+
+		}
+
+	} else if (type === "node") {
+
+		Post.find({
+			$or : [{ 'body.collector': new RegExp(query, 'i')}, {'body.analyzer' : new RegExp(query, 'i') }]
+		},{'body':true}).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
 			});
+
+	} else if (type === "filetype") {
+
+		Post.find({
+			'body.filetype': new RegExp(query, 'i')
+			},{'body':true}).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
+			});
+
+	} else {
+
+		res.json({
+			success: false,
+			message: 'Query error'
 		});
+
+	}
 
 }
 
