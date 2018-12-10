@@ -31,14 +31,16 @@ function signup(req, res) {
     const password = req.body.secretkey;
     const email = req.body.email;
     const publickey = req.body.publickey;
+    const nodetype = req.body.nodetype;
+    const country = req.body.country;
 
-    if (!username || !password || !publickey || !email ) {
+    if (!username || !password || !publickey || !email || !nodetype || !country) {
         res.json({
             success: false,
             message: 'invalid input'
         });
     } else {
-        User.create(username, User.createHash(password), publickey, email)
+        User.create(username, User.createHash(password), publickey, email, nodetype, country)
             .then((user) => {
                 res.json({
                     success: true,

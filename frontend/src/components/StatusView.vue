@@ -73,6 +73,20 @@
                         
                     });
 
+                apiService.getUser().then(res => {
+          
+                    const data = res.message;
+
+                    data.forEach(function (node) {
+
+                        apiService.searchPosts('node',node.publickey).then(re => {
+                            const data = re.message;
+                            console.log(data.length);
+
+                        })
+                    });
+                });
+
                 this.setData(storages);
                 this.number(storages);
             });
@@ -101,8 +115,6 @@
                 });
         },
         setData(data) {
-
-//            console.log("asd",storages);
 
             // Create Bubble.
 

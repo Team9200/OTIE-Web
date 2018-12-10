@@ -13,6 +13,28 @@
 
                     <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
 
+                   <v-flex xs6>
+                    <v-autocomplete
+                        label="nodetype"
+                            :items="nodeType"
+                            v-model="nodetype"
+                            item-text="Nodetype"
+                            item-value="Type"
+                            :rules="nodetypeRules"                           
+                        ></v-autocomplete>
+                    </v-flex>
+
+                    <v-flex xs6>
+                    <v-autocomplete
+                        label="country"
+                            :items="countries"
+                            v-model="country"
+                            item-text="country"
+                            item-value="abbr"  
+                            :rules="countryRules"                         
+                        ></v-autocomplete>
+                    </v-flex>
+
                     <v-checkbox color="green" v-model="checkbox" :rules="[v => !!v || '동의하지 않을 경우 가입이 불가능합니다.']" label="이용약관 및 개인정보취급방침 동의" required></v-checkbox>
     
                     <v-btn :disabled="!valid" @click="submit">
@@ -26,14 +48,18 @@
 </template>
 
 <script>
-    import {
-        APIService
-    } from '../../api/APIService'
+    import Countries  from '../../api/country';
+    import { APIService } from '../../api/APIService'
     const apiService = new APIService();
     
     export default {
         name: 'register-view',
         data: () => ({
+            countries: Countries,
+            country:'',
+            countryRules: [
+                v => !!v || '나라를 선택해주세요.'
+            ],   
             valid: true,
             username: '',
             usernameRules: [
@@ -52,13 +78,23 @@
                 v => !!v || '이메일을 입력해주세요.',
                 v => /.+@.+/.test(v) || '이메일이 올바르지 않습니다.'
             ],
-            checkbox: false
+            checkbox: false,
+            nodetype: '',
+            nodeType: [
+                {Nodetype: 'Collector', type: 'collector'},
+                {Nodetype: 'Analyzer', type: 'analyzer'},
+                {Nodetype: 'Storage', type: 'storage'}
+            ],
+            nodetypeRules: [
+                v => !!v || '노드를 선택해주세요.'
+            ],  
         }),
     
         methods: {
             submit() {
                 if (this.$refs.form.validate()) {
-                    apiService.register(this.username, this.publickey, this.password, this.email)
+                    console.log(this.username, this.nodetype);
+                    apiService.register(this.username, this.publickey, this.password, this.email, this.nodetype, this.country)
                         .then(response => {
                             if (response.success === true) {
                                 alert('회원가입에 성공하셨습니다. 로그인해주십시요.');

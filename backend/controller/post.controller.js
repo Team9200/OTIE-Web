@@ -155,27 +155,11 @@ function search(req, res) {
 
 		}
 
-	} else if (type === "collector") {
+	} else if (type === "node") {
 
 		Post.find({
-				'body.collector': query
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
-				res.json({
-					success: true,
-					message: data
-				});
-			})
-			.catch((err) => {
-				res.json({
-					success: false,
-					message: err
-				});
-			});
-
-	} else if (type === "analyzer") {
-		Post.find({
-				'body.analyzer': query
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			$or : [{ 'body.collector': query}, {'body.analyzer' : query }]
+		}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
 					message: data

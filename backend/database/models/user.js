@@ -20,6 +20,12 @@ class User extends mongoose.Schema {
             publickey: {
                 type: String
             },
+            nodetype: {
+                type: String
+            },
+            country: {
+                type: String
+            },
             clientId: {
                 type: String
             },
@@ -41,12 +47,14 @@ class User extends mongoose.Schema {
         return user;
     }
 
-    create(username,password, publickey ,email) {
+    create(username,password, publickey ,email, nodetype, country) {
         const user = new this({
             username,
             password,
             email,
-            publickey
+            publickey,
+            nodetype,
+            country
         });
 
         return user.save();

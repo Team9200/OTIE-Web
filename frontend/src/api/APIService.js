@@ -84,14 +84,18 @@ export class APIService {
         return axios.get(url).then(response => response.data)
     }
 
-    register(username, publickey, secretkey, email) {
+    register(username, publickey, secretkey, email, nodetype, country) {
         const url = `${API_URL}/api/user/signup`
 
         return axios.post(url, {
+            
             username: username,
             publickey: publickey,
             secretkey: secretkey,
-            email: email
+            email: email,
+            nodetype: nodetype,
+            country: country
+
         }).then(response => response.data)
     }
 
