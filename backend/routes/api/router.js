@@ -18,6 +18,7 @@ router.route('/post/get').get(PostController.get);
 router.route('/post/get/all').get(PostController.getAll);
 router.route('/post/search').get(PostController.search);
 router.route('/post/node').get(PostController.searchNoPaging);
+router.route('/post/get/body').get(PostController.getBody);
 
 router.route('/block/get').get(BlockController.get);
 router.route('/block/get/page').get(BlockController.getPage);

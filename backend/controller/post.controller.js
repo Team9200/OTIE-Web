@@ -242,10 +242,28 @@ function searchNoPaging(req, res) {				// 페이징 없이
 	}
 }
 
+function getBody(req, res) {				
+
+	Post.find({},{'body':true}).then((data) => {
+			res.json({
+				success: true,
+				message: data
+			});
+		})
+		.catch((err) => {
+			res.json({
+				success: false,
+				message: err
+			});
+		});
+
+}
+
 export default {
 	view,
 	get,
 	getAll,
 	search,
-	searchNoPaging
+	searchNoPaging,
+	getBody
 };
