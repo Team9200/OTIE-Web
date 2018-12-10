@@ -41,12 +41,12 @@ class User extends mongoose.Schema {
         return user;
     }
 
-    create(username,publickey ,password, email) {
+    create(username,password, publickey ,email) {
         const user = new this({
             username,
-            publickey,
             password,
-            email
+            email,
+            publickey
         });
 
         return user.save();

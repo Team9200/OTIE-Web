@@ -8,17 +8,19 @@ function test(req, res) {
 };
 
 function signup(req, res) {
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
 
-    if (!username || !password || !email) {
+    const username = req.body.username;
+    const password = req.body.secretkey;
+    const email = req.body.email;
+    const publickey = req.body.publickey;
+
+    if (!username || !password || !publickey || !email ) {
         res.json({
             success: false,
             message: 'invalid input'
         });
     } else {
-        User.create(username, User.createHash(password), email)
+        User.create(username, User.createHash(password), publickey, email)
             .then((user) => {
                 res.json({
                     success: true,
