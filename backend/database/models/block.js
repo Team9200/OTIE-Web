@@ -58,6 +58,7 @@ class Block extends mongoose.Schema {
 
         return block.save();
     }
+    
 }
 
 export default mongoose.model('Block', new Block);

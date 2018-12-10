@@ -4,9 +4,15 @@
             <v-card-text>
                 <h1>회원가입</h1>
                 <v-form ref="form" v-model="valid" lazy-validation>
+
                     <v-text-field v-model="username" :rules="usernameRules" :counter="10" label="Username" required></v-text-field>
+
+                    <v-text-field v-model="publickey" :rules="publickeyRules" label="Public key" required></v-text-field>
+
+                    <v-text-field type="password" v-model="secretkey" :rules="secretkeyRules" label="Secret Key" required></v-text-field>
+
                     <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
-                    <v-text-field type="password" v-model="password" :rules="passwordRules" label="Password" required></v-text-field>
+
                     <v-checkbox color="green" v-model="checkbox" :rules="[v => !!v || '동의하지 않을 경우 가입이 불가능합니다.']" label="이용약관 및 개인정보취급방침 동의" required></v-checkbox>
     
                     <v-btn :disabled="!valid" @click="submit">
@@ -39,9 +45,13 @@
                 v => !!v || '이메일을 입력해주세요.',
                 v => /.+@.+/.test(v) || '이메일이 올바르지 않습니다.'
             ],
-            password: '',
-            passwordRules: [
-                v => !!v || '비밀번호를 입력해주세요.'
+            secretkey: '',
+            secretkeyRules: [
+                v => !!v || '비밀키를 입력해주세요.'
+            ],
+            publickey: '',
+            publickeyRules: [
+                v => !!v || '공개키를 입력해주세요.'
             ],
             checkbox: false
         }),

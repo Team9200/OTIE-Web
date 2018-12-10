@@ -35,34 +35,7 @@
           </v-widget>  
         </v-flex>
 
-        <v-flex v-if="tag.length >= 1" lg4 sm12 xs12>
-          <v-widget title="Tag" content-bg="white">
-            <div slot="widget-content">
-                <e-chart 
-                :path-option="[
-                  ['dataset.source', tag],
-                  ['legend.bottom', '0'],
-                  ['color', [color.lightBlue.base, color.indigo.base, color.pink.base, color.green.base, color.cyan.base, color.teal.base]],
-                  ['xAxis.show', false],
-                  ['yAxis.show', false],
-                  ['series[0].type', 'pie'],
-                  ['series[0].avoidLabelOverlap', true],         
-                  ['series[0].radius', ['50%', '70%']],                      
-                ]"
-                height="400px"
-                width="100%"
-                >
-                </e-chart>     
-            </div>
-          </v-widget>  
-        </v-flex>
-
-        <!-- acitivity/chat widget -->
-
-        <v-flex v-if="activity.length >= 1" lg6 sm12 xs12>
-          <chat-window height="308px"></chat-window>
-        </v-flex>
-        <v-flex v-if="activity.length >= 1" lg6 sm12 xs12>
+         <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
           <v-widget title="Activities" contentBg="white">
             <div slot="widget-content">
               <ol class="timeline timeline-activity timeline-point-sm timeline-content-right">
@@ -78,6 +51,34 @@
               </ol>              
             </div>
           </v-widget>          
+        </v-flex>
+
+        <!-- acitivity/chat widget -->
+
+        <v-flex v-if="activity.length >= 1" lg6 sm12 xs12>
+          <chat-window height="308px"></chat-window>
+        </v-flex>
+        <v-flex v-if="tag.length >= 1" lg6 sm12 xs12>
+          <v-widget title="Category" content-bg="white">
+            <div slot="widget-content">
+                <e-chart 
+                :path-option="[
+                  ['dataset.source', tag],
+                  ['legend.bottom', '0'],
+                  ['color', [color.lightBlue.base, color.indigo.base, color.pink.base, color.green.base, color.cyan.base, color.teal.base]],
+                  ['xAxis.show', false],
+                  ['yAxis.show', false],
+                  ['series[0].type', 'pie'],
+                  ['series[0].avoidLabelOverlap', true],         
+                  ['series[0].radius', ['50%', '70%']],                      
+                ]"
+                height="367px"
+                width="100%"
+                class="center"
+                >
+                </e-chart>     
+            </div>
+          </v-widget>  
         </v-flex>
 
         <!-- Popular post start -->
