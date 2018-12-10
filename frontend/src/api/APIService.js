@@ -12,7 +12,7 @@ export class APIService {
 
     }
 
-    getMalwares() {
+    getPosts() {
         const url = `${API_URL}/api/post/get`
 
         return axios.get(url).then(response => response.data)
@@ -24,7 +24,17 @@ export class APIService {
         return axios.get(url).then(response => response.data)
     }
 
-    getMalwares(page) {
+    viewPost(permlink) {
+        const url = `${API_URL}/api/post/view`
+
+        return axios.get(url, {
+            params: {
+                permlink: permlink
+            }
+        }).then(response => response.data)
+    }
+
+    getPosts(page) {
         const url = `${API_URL}/api/post/get`
 
         return axios.get(url, {
@@ -34,7 +44,7 @@ export class APIService {
         }).then(response => response.data)
     }
 
-    searchMalwares(type, query) {
+    searchPosts(type, query) {
         const url = `${API_URL}/api/post/search`
 
         return axios.get(url, {
@@ -45,7 +55,7 @@ export class APIService {
         }).then(response => response.data)
     }
 
-    searchMalwares(type, query, page) {
+    searchPosts(type, query, page) {
         const url = `${API_URL}/api/post/search`
 
         return axios.get(url, {
@@ -67,8 +77,9 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    
     getStorage() {
-        const url = `http://211.193.58.164:29200/api/data`
+        const url = `http://openti.info:29200/api/data`
 
         return axios.get(url).then(response => response.data)
     }

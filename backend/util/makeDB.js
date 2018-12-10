@@ -168,10 +168,13 @@ async function blockLists(filename) {
 		nonce = object.nonce;
 		hash = object.hash;
 		previousBlockHash = object.previousBlockHash;
+<<<<<<< HEAD
 		console.log('2',voteList);
 		console.log('3',postList);
 		console.log('4', replyList);
 		console.log('5',transactionList);
+=======
+>>>>>>> 4ae61c0b2d60c17774685c3f3df931df950b4ee7
 
 		await Block.create(index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash)
 			.then((Transaction) => {
@@ -183,4 +186,8 @@ async function blockLists(filename) {
 	});
 }
 
+<<<<<<< HEAD
 blockLists('./smallchain.json');
+=======
+blockLists('./smallchain.json');
+>>>>>>> 4ae61c0b2d60c17774685c3f3df931df950b4ee7

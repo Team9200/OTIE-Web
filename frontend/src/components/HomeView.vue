@@ -2,31 +2,14 @@
   <v-layout>
     <v-container>
       <v-container>
-        <!-- <div v-for="(malware, i) in malwares" :key="i">
-          <v-card>
-            <v-card-title>
-              <v-item-group multiple>
-                <v-chip color="green" text-color="white">
-                  <v-avatar>
-                    <v-icon>account_circle</v-icon>
-                  </v-avatar>
-                  {{ malware.analyzer }}
-                </v-chip>
-                <v-chip>{{ malware.filetype }}</v-chip>
-                <v-chip>{{ malware.collector }}</v-chip>
-                <v-chip>{{ getDate(malware.date) }}</v-chip>
-                <v-chip v-for="(tag, j) in malware.tag_name_etc" :key="j">#{{ tag.tag }}</v-chip>
-                <v-chip>Details..</v-chip>
-              </v-item-group>
-            </v-card-title>
-          </v-card>
-          <br>
-        </div> -->
+        <br><br>
         <div style="text-align: center; font-size: 50px; padding-bottom: 10px;">
           <span>OPEN</span>
           <span class="font-weight-light">TI</span>
           <sup style="font-size: 25px;">&nbsp;Beta</sup>
         </div>
+
+        <br><br><br><br>
         <v-text-field flat solo-inverted prepend-icon="search" label="Search (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
       </v-container>
     </v-container>

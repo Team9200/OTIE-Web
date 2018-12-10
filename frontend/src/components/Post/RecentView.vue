@@ -11,19 +11,19 @@
             <v-divider></v-divider>
             <v-card-text class="pa-0">
                 <ul class="post--list flex-list vertical">
-                    <li class="post--item" v-for="(malware, i) in malwares" :key="i">
-                        <a @click="go(malware)" class="post--link pa-4 layout row ma-0 text--primary">
+                    <li class="post--item" v-for="(post, i) in posts" :key="i">
+                        <a @click="go(post)" class="post--link pa-4 layout row ma-0 text--primary">
                             <div class="post--content ml-3">
                                 <h3 class="title post--title">
-                                    {{malware.sha256}}
+                                    {{ post.title }}
                                 </h3>
                                 <div class="post--desc py-2 text--secondary">
-                                    {{ malware.description }}
+                                    {{ post.description }}
                                 </div>
                                 <div class="post--meta o-flex justify-space-between">
                                     <div class="post--author caption grey--text text--darken-1">
-                                        <span>{{malware.analyzer}}</span>
-                                        <time class="px-2">{{getDate(malware.date)}}</time>
+                                        <span>{{post.body.analyzer}}</span>
+                                        <time class="px-2">{{getDate(post.timestamp)}}</time>
                                     </div>
                                     <div class="social">
                                         <a @click="handleThumb" class="grey--text text--darken-1">
@@ -63,14 +63,14 @@
     export default {
         name: 'recent-view',
         data: () => ({
-            malwares: [],
+            posts: [],
             page: 1
         }),
         methods: {
-            getMalwares(page) {
-                apiService.getMalwares(page)
+            getPosts(page) {
+                apiService.getPosts(page)
                     .then(response => {
-                        this.malwares = response.message
+                        this.posts = response.message
                     })
                     .catch(err => {
                         if (err) throw err
@@ -81,8 +81,8 @@
                 return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
                     ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
             },
-            go(malware) {
-                const string = '/post/' + malware.azid
+            go(post) {
+                const string = '/post/' + post.permlink
                 window.location.href = string
             },
             handleThumb() {
@@ -91,13 +91,13 @@
         },
         mounted() {
             // TODO: Add url routing & router.js
-            this.getMalwares(1)
+            this.getPosts(1)
 
         },
         watch: {
             page: {
                 handler(val) {
-                    this.getMalwares(val)
+                    this.getPosts(val)
                 }
             }
         }

@@ -47,7 +47,7 @@ export default new Router({
       component: WriteView,
       beforeEnter: requireAuth('write')
     },{
-      path: '/post/:azid',
+      path: '/post/:permlink',
       name: 'post-view',
       component: PostView
     },{
