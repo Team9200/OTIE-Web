@@ -17,6 +17,8 @@
     import * as d3 from 'd3';
    //import data from '@/data';
     import { APIService } from '../api/APIService';
+    import { forEach } from 'p-iteration';
+
 
     const apiService = new APIService();
    
@@ -52,45 +54,72 @@
             },
             async init() {
 
-                let storages = [];
-                await apiService.getStorage().then(response => {
+                let nodeDatas = [];
+
+                await apiService.getStorage().then(async (response) => {
           
                     const data = response.message;
 
-                    data.forEach(function (storage) {
+                    await forEach(data, async (storage) => {
 
                         let tmp = {};
                         tmp.publicKey = storage.id;
                         tmp.color = "#2683ff";
-                        tmp.r = storage.storageSize + 5;
+                        tmp.r = storage.storageSize + 10;
                         tmp.x = 825;
                         tmp.y = 365;
                         tmp.forcex = 788;
                         tmp.forcey = 398;
                         tmp.type = storage.nodeType;
 
-                        storages.push(tmp);
-                        
-                    });
-
-                apiService.getUser().then(res => {
-          
-                    const data = res.message;
-
-                    data.forEach(function (node) {
-
-                        apiService.searchPosts('node',node.publickey).then(re => {
-                            const data = re.message;
-                            console.log(data.length);
-
-                        })
+                        nodeDatas.push(tmp);
+                        console.log("storage",tmp);
                     });
                 });
 
-                this.setData(storages);
-                this.number(storages);
-            });
-        
+                await apiService.getUser().then(async (response) => {
+          
+                    const data = response.message;
+
+                    await forEach(data, async (node) => {
+
+                        let userTmp = {};
+                        let att = await apiService.searchPosts('node',node.publickey).then(re => {
+
+                            const data = re.message;
+                            return data.length;
+
+                        })
+
+                        console.log(userTmp);
+                        userTmp.publickey = node.publickey;
+                        userTmp.type = node.nodetype;
+                        userTmp.x = 825;
+                        userTmp.y = 365;                       
+                        userTmp.r = 10 + att;
+                        if(node.nodetype == 'Collector'){
+
+                            userTmp.color = '#03d6a8';
+                            userTmp.forcex = 262;
+                            userTmp.forcey = 132;
+
+                        }                 
+                        else if(node.nodetype == 'Analyzer'){
+
+                            userTmp.color = '#8c25ea';
+                            userTmp.forcex = 788;
+                            userTmp.forcey = 398;
+
+                        }  
+                        console.log(userTmp);
+                        nodeDatas.push(userTmp);  
+
+                    });
+
+                });
+
+                this.setData(nodeDatas);
+                this.number(nodeDatas);
         },
         number(data){
 
@@ -117,7 +146,7 @@
         setData(data) {
 
             // Create Bubble.
-
+            //console.log("data",data);
             let node = d3.select("svg")
                 .selectAll("circle")
                 .data(data)
