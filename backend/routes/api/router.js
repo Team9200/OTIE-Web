@@ -22,6 +22,6 @@ router.route('/post/get/body').get(PostController.getBody);
 
 router.route('/block/get').get(BlockController.get);
 router.route('/block/get/page').get(BlockController.getPage);
-router.route('/block/search').get(BlockController.search);
+// router.route('/block/search').get(BlockController.search);
 
 export default router;

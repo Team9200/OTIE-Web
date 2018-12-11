@@ -77,7 +77,7 @@ export class APIService {
             }
         }).then(response => response.data)
     }
-    
+
     getStorage() {
         const url = `http://openti.info:29200/api/data`
 
@@ -114,10 +114,14 @@ export class APIService {
         return axios.get(url).then(response => response.data)
     }
 
-    getBlock() {
+    getBlock(index) {
         const url = `${API_URL}/api/block/get`
 
-        return axios.get(url).then(response => response.data)
+        return axios.get(url, {
+            params: {
+                index: index
+            }
+        }).then(response => response.data)
     }
     getUser() {
 

@@ -13,6 +13,8 @@ import LoginView from './components/User/LoginView'
 import RegisterView from './components/User/RegisterView'
 import MyPageView from './components/User/MyPageView'
 
+import BlockView from './components/Block/BlockView'
+
 import ProfileView from './components/ProfileView'
 import StatusView from './components/StatusView'
 
@@ -62,6 +64,10 @@ export default new Router({
       path: '/register',
       name: 'register-view',
       component: RegisterView
+    },{
+      path: '/block',
+      name: 'block-view',
+      component: BlockView
     },{
       path: '/status',
       name: 'status-view',

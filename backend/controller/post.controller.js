@@ -250,9 +250,7 @@ function getBody(req, res) {
 	if (type === "tag") { // tag \
 
 		Post.find({
-
 				'body.tag_name_etc.tag' : new RegExp(query, 'i')
-
 			},{'body':true}).then((data) => {
 				res.json({
 					success: true,
