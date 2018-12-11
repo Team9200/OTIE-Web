@@ -5,7 +5,7 @@
                 <div>
                     <h1>Nodes Counts <span id="nodeCount">0</span></h1>
                 </div>
-                <svg id="app" width="1050" height="530"></svg>
+                <svg id="app" width="1100" height="530"></svg>
             </v-container>
         </v-card>
     </v-container>
@@ -28,11 +28,9 @@
     export default {
         data() {
             return {
-                route: window.location.hash,
-                message: "hello",
-                collector: [],
-                analyzer: [],
-                storage: [],
+                collector: 0,
+                analyzer: 0,
+                storage: 0,
 
             }
         },
@@ -55,6 +53,26 @@
 
                 let nodeDatas = [];
 
+                /*await apiService.getStorage().then(async (response) => {
+          
+                    const data = response.message;
+
+                    await forEach(data, async (storage) => {
+
+                        let tmp = {};
+                        tmp.publicKey = storage.id;
+                        tmp.color = "#2683ff";
+                        tmp.r = storage.storageSize + 10;
+                        tmp.x = 825;
+                        tmp.y = 365;
+                        tmp.forcex = 788;
+                        tmp.forcey = 398;
+                        tmp.type = storage.nodeType;
+
+                        nodeDatas.push(tmp);
+                        this.storage += 1;
+                    });
+                });*/
 
 
                 await apiService.getUser().then(async (response) => {
@@ -82,6 +100,7 @@
                             userTmp.color = '#03d6a8';
                             userTmp.forcex = 262;
                             userTmp.forcey = 132;
+                            this.collector += 1;
 
                         }                 
                         else if(node.nodetype == 'Analyzer'){
@@ -89,7 +108,7 @@
                             userTmp.color = '#8c25ea';
                             userTmp.forcex = 525;
                             userTmp.forcey = 265;
-
+                            this.analyzer += 1;
                         }  
                         nodeDatas.push(userTmp);  
 
@@ -237,39 +256,61 @@
 
             svg.append("circle")
                 .attr("r", 9)
-                .attr("cx", 930)
+                .attr("cx", 910)
                 .attr("cy", 10)
                 .attr("strock", "black")
                 .attr("fill", "#03d6a8")
+                .on("mouseover",function () {
+
+                    console.log(4);
+
+                })
 
             svg.append("circle")
                 .attr("r", 9)
-                .attr("cx", 930)
+                .attr("cx", 910)
                 .attr("cy", 40)
                 .attr("strock", "black")
                 .attr("fill", "#8c25ea")
             
             svg.append("circle")
                 .attr("r", 9)
-                .attr("cx", 930)
+                .attr("cx", 910)
                 .attr("cy", 70)
                 .attr("strock", "black")
                 .attr("fill", "#2683ff")
             
             svg.append("text")
                 .text("Collector Node")
-                .attr("x", "950")
+                .attr("x", "930")
                 .attr("y", "14")
 
             svg.append("text")
                 .text("Analyzer Node")
-                .attr("x", "950")
+                .attr("x", "930")
                 .attr("y", "44")
+
 
             svg.append("text")
                 .text("Stroage Node")
-                .attr("x", "950")
+                .attr("x", "930")
                 .attr("y", "74")
+
+            svg.append("text")
+                .text(this.collector)
+                .attr("x", "1030")
+                .attr("y","14")
+
+
+            svg.append("text")
+                .text(this.analyzer)
+                .attr("x", "1030")
+                .attr("y","44")
+
+            svg.append("text")
+                .text(this.storage)
+                .attr("x", "1030")
+                .attr("y","74")
 
             // start
 

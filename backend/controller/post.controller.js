@@ -171,7 +171,23 @@ function search(req, res) {
 					message: err
 				});
 			});
+	} else if (type === "filetype") {
 
+		Post.find({
+			'body.filetype': new RegExp(query, 'i')
+			},{'body':true}).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
+			});
+						
 	} else if (type === "title") {
 		Post.find({
 			'title': new RegExp(query, 'i')
@@ -306,6 +322,22 @@ function getBody(req, res) {
 			Post.find({
 					'body.sha256': new RegExp(query, 'i')
 				},{'body':true}).then((data) => {
+					res.json({
+						success: true,
+						message: data
+					});
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+
+		}
+		else {
+
+			Post.find({},{'body':true}).then((data) => {
 					res.json({
 						success: true,
 						message: data
