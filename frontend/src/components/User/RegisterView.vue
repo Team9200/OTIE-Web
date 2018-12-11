@@ -7,9 +7,9 @@
 
                     <v-text-field v-model="username" :rules="usernameRules" :counter="10" label="Username" required></v-text-field>
 
-                    <v-text-field v-model="publickey" :rules="publickeyRules" label="Public key" required></v-text-field>
+                    <v-text-field v-model="publickey" :rules="publickeyRules" label="Publickey" required></v-text-field>
 
-                    <v-text-field type="password" v-model="privatekey" :rules="privatekeyRules" label="Secret Key" required></v-text-field>
+                    <v-text-field type="password" v-model="privatekey" :rules="privatekeyRules" label="Privatekey" required></v-text-field>
 
                     <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
 

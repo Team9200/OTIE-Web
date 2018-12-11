@@ -5,7 +5,7 @@
                 <h1>로그인</h1>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field v-model="username" :rules="usernameRules" label="Username" required></v-text-field>
-                    <v-text-field type="password" v-model="password" :rules="passwordRules" label="Password" required></v-text-field>
+                    <v-text-field type="password" v-model="password" :rules="passwordRules" label="Privatekey" required></v-text-field>
     
                     <v-btn :disabled="!valid" @click="submit">
                         submit
