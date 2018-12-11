@@ -37,7 +37,7 @@
 
          <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
           <v-widget title="Activities" contentBg="white">
-            <div slot="widget-content">
+            <div slot="widget-content" style="height:385px;">
               <ol class="timeline timeline-activity timeline-point-sm timeline-content-right">
                 <li class="timeline-block" v-for="(item, index) in activity" :key="index">
                   <div class="timeline-point">
@@ -393,7 +393,7 @@ export default {
         }
 
         tmp.color = color[i];       // 색
-        tmp.text = data.title.slice(0,55)+'....';       // 내용
+        tmp.text = data.title.slice(0,40)+'....';       // 내용
         result.push(tmp);
 
       });
