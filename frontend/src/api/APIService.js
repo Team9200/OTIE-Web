@@ -18,6 +18,12 @@ export class APIService {
         return axios.get(url).then(response => response.data)
     }
 
+    getPostsCount() {
+        const url = `${API_URL}/api/post/count`
+
+        return axios.get(url).then(response => response.data)
+    }
+
     getAllMalwares() {
         const url = `${API_URL}/api/post/get/all`
 
@@ -123,11 +129,16 @@ export class APIService {
             }
         }).then(response => response.data)
     }
-    getUser() {
 
+    getBlockCount() {
+        const url = `${API_URL}/api/block/count`
+
+        return axios.get(url).then(response => response.data)
+    }
+
+    getUser() {
         const url = `${API_URL}/api/user/get`
 
         return axios.get(url).then(response => response.data)
-
     }
 }

@@ -1,7 +1,9 @@
 <template>
     <v-layout>
         <v-container>
-            <v-pagination class="text-center" style="padding-bottom: 20px;" circle v-model="page" :length="500"></v-pagination>
+            <v-layout justify-center>
+                <v-pagination style="padding-bottom: 20px;" circle v-model="page" :length="length"></v-pagination>
+            </v-layout>
             <v-card>
                 <v-card-title>
                     <h1>Block #{{ page }}</h1>
@@ -84,6 +86,7 @@
         name: 'block-view',
         data: () => ({
             page: 1,
+            length: 0,
             hash: '',
             timestamp: '',
             postList: [],
@@ -108,9 +111,19 @@
                 return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
                     ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
             },
+            getCount() {
+                apiService.getBlockCount()
+                    .then(response => {
+                        this.length = response.count
+                    })
+                    .catch(err => {
+                        if (err) throw err
+                    })
+            }
         },
         mounted() {
             this.getBlock(1)
+            this.getCount()
         },
         watch: {
             page: {

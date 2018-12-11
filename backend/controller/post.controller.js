@@ -403,11 +403,19 @@ function getBody(req, res) {
 	}
 }
 
+function count(req, res) {
+    Post.count({}, function (err, count) {
+        return res.json({count: Math.ceil((count / 10))})
+    })
+}
+
+
 export default {
 	view,
 	get,
 	getAll,
 	search,
 	searchNoPaging,
-	getBody
+	getBody,
+	count
 };

@@ -58,9 +58,16 @@ function getPage(req, res) {
 
 }
 
+function count(req, res) {
+    Block.count({}, function (err, count) {
+        return res.json({count: count})
+    })
+}
+
 
 
 export default {
     get,
-    getPage
+    getPage,
+    count
 };
