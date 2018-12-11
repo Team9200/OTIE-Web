@@ -31,11 +31,18 @@ function getUser(req, res) {
 
 function checkKey(pub, priv){
 
-    const pubKey = secp256k1.publicKeyCreate(bs58check.decode(priv));
+    try{
+        
+        const key = bs58check.decode(priv);
+    
+    }
+    catch(err){
+
+        return false;
+
+    }
+    const pubKey = secp256k1.publicKeyCreate(key);
     pub = bs58check.decode(pub);
-    console.log("maked: ",pubKey);
-    console.log("pub: ",pub);
-    console.log(pub.compare(pubKey));
 
     if( pub.compare(pubKey) === 0){
 
@@ -67,7 +74,6 @@ function signup(req, res) {
     }
     else if(!checkKey(publickey, privatekey)){
             
-        console.log('no');
         return res.json({
             success: false,
             message: 'key is not verified'
