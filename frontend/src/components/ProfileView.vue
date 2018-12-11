@@ -30,7 +30,7 @@
                 height="400px"
                 width="100%"
                 >
-                </e-chart>     
+                </e-chart> 
             </div>
           </v-widget>  
         </v-flex>

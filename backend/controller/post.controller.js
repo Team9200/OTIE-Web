@@ -1,6 +1,7 @@
 import Post from '../database/models/post';
 import Vote from '../database/models/vote';
 import Reply from '../database/models/reply';
+import User from '../database/models/user'
 
 function view(req, res) {
 
@@ -211,6 +212,147 @@ function search(req, res) {
 	}
 
 }
+function search1(req, res) {
+
+	const query = req.query.query; // get query
+
+	const init = query.slice(0,1);
+
+	if(init ==='#' || init ==='@' || init ==='!'){
+
+		if (init === "#") { // tag \
+			Post.find({
+
+					'body.tag_name_etc.tag' : new RegExp(query, 'i')
+
+				}).then((data) => {
+					res.json({
+						success: true,
+						message: data
+					});
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+		}
+		else if (init === "@") { // hash
+
+			if (query.length === 32) { //md5
+
+				Post.find({
+						'body.md5': new RegExp(query, 'i')
+					}).then((data) => {
+						res.json({
+							success: true,
+							message: data
+						});
+					})
+					.catch((err) => {
+						res.json({
+							success: false,
+							message: err
+						});
+					});
+
+			} else if (query.length === 40) { //sha1
+
+				Post.find({
+						'body.sha1': new RegExp(query, 'i')
+					}).then((data) => {
+						res.json({
+							success: true,
+							message: data
+						});
+					})
+					.catch((err) => {
+						res.json({
+							success: false,
+							message: err
+						});
+					});
+
+
+			} else if (query.length === 64) { //sha256
+
+				Post.find({
+						'body.sha256': new RegExp(query, 'i')
+					}).then((data) => {
+						res.json({
+							success: true,
+							message: data
+						});
+					})
+					.catch((err) => {
+						res.json({
+							success: false,
+							message: err
+						});
+					});
+
+			}
+
+		} else if (init === "!") {
+
+			User.find({
+					'username': new RegExp(query, 'i')
+				}).then((data) => {
+
+					data.forEach(function(result) {
+
+						const pub = result.publickey
+
+						Post.find({
+							$or : [{ 'body.collector': new RegExp(pub, 'i')}, {'body.analyzer' : new RegExp(pub, 'i') }]
+						}).then((data) => {
+								res.json({
+									success: true,
+									message: data
+								});
+							})
+							.catch((err) => {
+								res.json({
+									success: false,
+									message: err
+								});
+							});
+
+					});
+				
+				})
+				.catch((err) => {
+					res.json({
+						success: false,
+						message: err
+					});
+				});
+
+
+	}
+	else{
+	
+
+		Post.find({
+			$or : [{ 'title': new RegExp(query, 'i')}, {'body.description' : new RegExp(query, 'i') }
+			}).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
+			});
+
+
+	}
+}
+
 
 function searchNoPaging(req, res) {				// 페이징 없이
 
