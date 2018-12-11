@@ -73,6 +73,10 @@
         <span>회원가입</span>
       </v-btn>
 
+      <v-btn v-if="!isMobile && $store.getters.isAuthenticated" @click="$router.push('/mypage')" flat>
+        <span>마이페이지</span>
+      </v-btn>
+
       <v-btn v-if="!isMobile && $store.getters.isAuthenticated" @click="onClickLogout" flat>
         <span>로그아웃</span>
       </v-btn>
@@ -81,6 +85,19 @@
     <v-content>
       <router-view />
     </v-content>
+
+    <v-fab-transition>
+      <v-btn
+        @click="$router.push('/write')"
+        color="green"
+        key="share"
+        fab
+        fixed
+        bottom
+        right
+      >
+      </v-btn>
+    </v-fab-transition>
   </v-app>
 </template>
 
@@ -153,7 +170,14 @@
         })
       }
     },
-    watch: {}
+    watch: {
+      // isMobile: {
+      //   handler(val) {
+      //     if (!val) return
+      //     if (val === false) this.drawer = false
+      //   }
+      // }
+    }
   }
 </script>
 

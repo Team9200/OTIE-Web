@@ -1,15 +1,15 @@
 <template>
     <v-container>
 
-        <v-card class="post-card">
-            <!-- <v-toolbar color="transparent" flat dense card>
+        <v-card style="overflow-y: auto;" class="post-card">
+            <v-toolbar color="transparent" flat dense card>
                 <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon>
                     <v-icon class="text--secondary">more_vert</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-divider></v-divider> -->
+            <v-divider></v-divider>
             <v-card-text class="pa-0">
                 <ul class="post--list flex-list vertical">
                     <li class="post--item" v-for="(post, i) in posts" :key="i">

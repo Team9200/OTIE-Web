@@ -24,6 +24,7 @@ Vue.use(Router)
 
 const requireAuth = (returnPath) => (from, to, next) => {
   if (store.getters.isAuthenticated) return next()
+  alert('로그인이 필요합니다')
   next(`/login?returnPath=${returnPath}`)
 }
 
@@ -73,10 +74,10 @@ export default new Router({
       name: 'status-view',
       component: StatusView
     },{
-      path: '/my',
+      path: '/mypage',
       name: 'my-page-view',
       component: MyPageView,
-      beforeEnter: requireAuth('my')
+      beforeEnter: requireAuth('mypage')
     },{
       path: '/*',
       name: 'error-view',

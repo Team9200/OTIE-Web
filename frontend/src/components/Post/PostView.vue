@@ -4,9 +4,9 @@
             <v-card-title>
                 <h2>{{ post.title }}</h2>
             </v-card-title>
-            <v-card-action>
+            <v-card-actions>
                 <v-container>
-                    <ul>
+                    <ul v-if="post.body !== undefined">
                         <li>md5: {{ post.body.md5 }}</li>
                         <li>sha1: {{ post.body.sha1 }}</li>
                         <li>sha256: {{ post.body.sha256 }}</li>
@@ -15,39 +15,39 @@
                         <li>first_seen: {{ post.body.first_seen }}</li>
                     </ul>
                 </v-container>
-            </v-card-action>
+            </v-card-actions>
         </v-card>
         <br>
         <v-card>
             <v-card-title>
                 <h2>Content</h2>
             </v-card-title>
-            <v-card-action>
-                <v-container>
+            <v-card-actions>
+                <v-container v-if="post.body !== undefined">
                     {{ post.body.description }}
                 </v-container>
-            </v-card-action>
+            </v-card-actions>
         </v-card>
         <br>
         <v-card>
             <v-card-title>
                 <h2>Reply</h2>
             </v-card-title>
-            <v-card-action>
+            <v-card-actions>
                 <v-container>
                     <v-card v-for="(reply, i) in replies" :key="i">
                         <v-card-title>
                             {{ reply.text }}
                         </v-card-title>
-                        <v-card-action>
+                        <v-card-actions>
                             <v-btn icon>
                                 <v-icon>favorite</v-icon>
                             </v-btn>
                             140
-                        </v-card-action>
+                        </v-card-actions>
                     </v-card>
                 </v-container>
-            </v-card-action>
+            </v-card-actions>
         </v-card>
     </v-container>
 </template>
