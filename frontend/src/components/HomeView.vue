@@ -10,13 +10,18 @@
         </div>
 
         <br><br><br><br>
-        <v-text-field flat solo-inverted prepend-icon="search" label="Search (ex. #tag, @analyzer, !hash)" class="hidden-sm-and-down"></v-text-field>
+        <v-text-field flat solo-inverted prepend-icon="search" @keyup.enter.native="enterKey" label="Search (ex. #tag, @node, !hash, title, contents)" class="hidden-sm-and-down"></v-text-field>
+
       </v-container>
     </v-container>
   </v-layout>
 </template>
 
 <script>
+
+
+
+ 
   import {
     APIService
   } from '../api/APIService'
@@ -46,6 +51,12 @@
         const date = new Date(value);
         return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
           ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+      },
+      enterKey() {
+        if (window.event.keyCode == 13) {
+ 
+             console.log(1);
+        }
       }
     },
     created() {

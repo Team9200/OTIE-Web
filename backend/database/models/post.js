@@ -24,7 +24,7 @@ class Post extends mongoose.Schema {
                 type: Buffer
             },
             timestamp: {
-                type: Number,
+                type: String,
                 required: true
             }
         });

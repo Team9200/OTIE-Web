@@ -11,7 +11,7 @@ class Block extends mongoose.Schema {
                 type: Number
             },
             timestamp: {
-                type: Number
+                type: String
             },
             postList: [{
                 type: mongoose.Schema.Types.ObjectId,

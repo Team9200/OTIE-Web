@@ -12,7 +12,7 @@ class Vote extends mongoose.Schema {
                 required: true
             },
             timestamp: {
-                type: Number
+                type: String
             },
             publickey: {
                 type: String,
