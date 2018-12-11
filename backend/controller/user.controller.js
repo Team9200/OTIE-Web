@@ -71,7 +71,6 @@ function checkKey(pub, priv){
     }
         catch(err){
 
-        console.log(err);
         return false;
 
     }

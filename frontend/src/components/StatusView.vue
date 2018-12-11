@@ -44,11 +44,6 @@
         },
         methods: {
 
-            reversedMessage: function () {
-
-                return this.message.split('').reverse().join('');
-
-            },
             async init() {
 
                 let nodeDatas = [];
@@ -271,11 +266,6 @@
                 .attr("cy", 10)
                 .attr("strock", "black")
                 .attr("fill", "#03d6a8")
-                .on("mouseover",function () {
-
-                    console.log(4);
-
-                })
 
             svg.append("circle")
                 .attr("r", 9)

@@ -80,7 +80,6 @@ function search(req, res) {
 	var query = req.query.query; // get query
 	var type = req.query.type; // get type
 	var page = req.query.page;
-	console.log(query);
 
 	if (type === "tag") { // tag \
 		Post.find({

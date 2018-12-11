@@ -14,6 +14,18 @@ mongoose.connect("mongodb://localhost:27017/otie", {
 	useCreateIndex: true
 });
 
+function getFileSize(filename) {					// get File Name / return File Size
+
+	return new Promise(function(resolve, reject){
+
+	    const stats = fs.statSync(filename);
+	    const fileSizeInBytes = stats.size;
+	    resolve(fileSizeInBytes);
+
+    })
+
+}
+
 function postLists(object){
 
 	return new Promise(async function(resolve, reject) {
@@ -150,11 +162,43 @@ function transactionLists(object) {
 	});
 }
 
-async function blockLists(filename) {
+async function blockLists(fileName) {
 
-	const fileData = fs.readFileSync(filename, 'UTF-8');
-	const chainData = JSON.parse(fileData).chain;
+	const fullSize = await getFileSize(fileName);
+	const lastSize = await fs.readFileSync('./lastSize','UTF-8');
+	const updateSize = fullSize - lastSize;
+	const chain = await fs.openSync(fileName,'r+');
+	let count;
+	let last;
 
+	count = Math.floor(updateSize / (1024*1024*512));
+
+	if( count === 0){
+
+		last = updateSize;
+	}
+	else{
+
+		last = updateSize - (1024*1024*512*count);
+
+	}
+
+	let buffer = new Buffer(last);
+	await fs.readSync(chain, buffer, 0, buffer.length, parseInt(lastSize,10));
+	
+	let parseData;
+	if(lastSize === '0'){
+
+		parseData = buffer.toString();
+	
+	}else{
+
+		parseData = '{"chain" : ['+buffer.toString();
+
+	}
+
+	let chainData = JSON.parse(parseData).chain;
+	
 	await forEach(chainData, async (object, idx) => {
 
 		let index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash;
@@ -178,7 +222,11 @@ async function blockLists(filename) {
 				});
 			}).catch((error) => {console.log(error)})
 	});
+
+	await fs.closeSync(chain);
+	fs.writeFile('./lastSize', fullSize-136, 'utf8');
+
 }
 
-blockLists('./smallchain.json');
+blockLists('./smallchain.json')
 
