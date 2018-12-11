@@ -5,7 +5,6 @@
                 <div>
                     <h1>Nodes Counts <span id="nodeCount">0</span></h1>
                 </div>
-
                 <svg id="app" width="1050" height="530"></svg>
             </v-container>
         </v-card>
@@ -56,48 +55,29 @@
 
                 let nodeDatas = [];
 
-                await apiService.getStorage().then(async (response) => {
-          
-                    const data = response.message;
 
-                    await forEach(data, async (storage) => {
-
-                        let tmp = {};
-                        tmp.publicKey = storage.id;
-                        tmp.color = "#2683ff";
-                        tmp.r = storage.storageSize + 10;
-                        tmp.x = 825;
-                        tmp.y = 365;
-                        tmp.forcex = 788;
-                        tmp.forcey = 398;
-                        tmp.type = storage.nodeType;
-
-                        nodeDatas.push(tmp);
-                        console.log("storage",tmp);
-                    });
-                });
 
                 await apiService.getUser().then(async (response) => {
           
                     const data = response.message;
-
                     await forEach(data, async (node) => {
 
                         let userTmp = {};
-                        let att = await apiService.searchPosts('node',node.publickey).then(re => {
+                        let cot = await apiService.searchPosts('node',node.publickey).then(re => {
 
                             const data = re.message;
                             return data.length;
 
                         })
 
-                        console.log(userTmp);
                         userTmp.publickey = node.publickey;
                         userTmp.type = node.nodetype;
                         userTmp.x = 825;
                         userTmp.y = 365;                       
-                        userTmp.r = 10 + att;
-                        if(node.nodetype == 'Collector'){
+                        userTmp.r = 10 + cot;
+                        userTmp.name = node.username;
+
+                        if(node.nodetype == 'Collector') {
 
                             userTmp.color = '#03d6a8';
                             userTmp.forcex = 262;
@@ -111,7 +91,6 @@
                             userTmp.forcey = 265;
 
                         }  
-                        console.log(userTmp);
                         nodeDatas.push(userTmp);  
 
                     });
@@ -145,8 +124,22 @@
         },
         setData(data) {
 
+
+            var tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .style("display","none")
+                .style("color", "white")
+                .style("padding", "8px")
+                .style("text-align", "center")
+                .style("background-color", "rgba(0, 0, 0, 0.75)")
+                .style("border-radius", "6px")
+                .style("font", "12px sans-serif")
+                .text("tooltip");
+
             // Create Bubble.
-            //console.log("data",data);
             let node = d3.select("svg")
                 .selectAll("circle")
                 .data(data)
@@ -159,7 +152,7 @@
                     return d.color
                 })
                 .attr("id", function (d) {
-                    return d.publicKey
+                    return d.publickey
                 })
                 .attr("type", function (d) {
                     return d.type
@@ -171,7 +164,17 @@
                     .on("end", dragended))
                 .on('click', function (d) {
                     nodeData(d);
-                });
+                })
+                .on("mouseover", function(d) {
+
+                    tooltip.html(d.type + "<br>Username: "+d.name +"<br>Contribution: 123");
+                    tooltip.style("visibility", "visible");
+                    tooltip.style("display","inline");
+                }).on("mousemove", function() {
+                    return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+       
 
             // svg style.
 
@@ -316,7 +319,7 @@
 
             function nodeData(n) {
 
-                location.href='profile?type=analyzer&name=5sX31bQbaVBS1XMHQDAHzqdW5H5tNTFu9N5TnFJB6hwzUN87U5';
+                location.href='profile?type='+n.type.toLowerCase()+'&name='+n.publickey;
 
             }
 
