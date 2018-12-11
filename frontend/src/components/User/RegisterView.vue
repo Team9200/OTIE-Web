@@ -9,7 +9,7 @@
 
                     <v-text-field v-model="publickey" :rules="publickeyRules" label="Public key" required></v-text-field>
 
-                    <v-text-field type="password" v-model="password" :rules="passwordRules" label="Secret Key" required></v-text-field>
+                    <v-text-field type="password" v-model="privatekey" :rules="privatekeyRules" label="Secret Key" required></v-text-field>
 
                     <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
 
@@ -63,8 +63,8 @@
             publickeyRules: [
                 v => !!v || '공개키를 입력해주세요.'
             ],
-            password: '',
-            passwordRules: [
+            privatekey: '',
+            privatekeyRules: [
                 v => !!v || '비밀키를 입력해주세요.'
             ],
             email: '',
@@ -95,15 +95,23 @@
         methods: {
             submit() {
                 if (this.$refs.form.validate()) {
-                    console.log(this.username, this.nodetype);
-                    apiService.register(this.username, this.publickey, this.password, this.email, this.nodetype, this.country)
+
+                    apiService.register(this.username, this.publickey, this.privatekey, this.email, this.nodetype, this.country)
                         .then(response => {
                             if (response.success === true) {
                                 alert('회원가입에 성공하셨습니다. 로그인해주십시요.');
                                 this.$router.push('/');
                             } else {
-                                alert('회원가입에 문제가 있습니다.');
-                                console.log(response);
+
+                                if(response.message === 'invalid input')
+                                    alert('모든정보를 입력해주세요.');
+
+                                 if(response.message === 'key is not verified')
+                                    alert('검증되지 않은 키입니다.');
+
+                                 if(response.message === 'username already exists')
+                                    alert('아이디 또는 키가 이미 존제합니다.');
+
                             }
                         })
                         .catch(err => {

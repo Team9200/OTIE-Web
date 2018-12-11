@@ -1,7 +1,11 @@
 import jwt from 'jsonwebtoken';
 import User from '../database/models/user';
+import { randomBytes } from 'crypto';
+import secp256k1 from 'secp256k1';
+import bs58check from 'bs58check';
 
 function test(req, res) {
+
     res.json({
         req: getToken(req.headers)
     });
@@ -25,22 +29,53 @@ function getUser(req, res) {
     });
 };
 
+function checkKey(pub, priv){
+
+    const pubKey = secp256k1.publicKeyCreate(bs58check.decode(priv));
+    pub = bs58check.decode(pub);
+    console.log("maked: ",pubKey);
+    console.log("pub: ",pub);
+    console.log(pub.compare(pubKey));
+
+    if( pub.compare(pubKey) === 0){
+
+        return true;
+
+    }
+    else{
+
+        return false;
+    
+    }
+}
+
 function signup(req, res) {
 
     const username = req.body.username;
-    const password = req.body.secretkey;
+    const privatekey = req.body.privatekey;
     const email = req.body.email;
     const publickey = req.body.publickey;
     const nodetype = req.body.nodetype;
     const country = req.body.country;
 
-    if (!username || !password || !publickey || !email || !nodetype || !country) {
+
+    if (!username || !privatekey || !publickey || !email || !nodetype || !country) {
         res.json({
             success: false,
             message: 'invalid input'
         });
-    } else {
-        User.create(username, User.createHash(password), publickey, email, nodetype, country)
+    }
+    else if(!checkKey(publickey, privatekey)){
+            
+        console.log('no');
+        return res.json({
+            success: false,
+            message: 'key is not verified'
+        });
+    }
+    else {
+
+        User.create(username, User.createHash(privatekey), publickey, email, nodetype, country)
             .then((user) => {
                 res.json({
                     success: true,

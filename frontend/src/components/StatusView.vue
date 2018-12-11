@@ -356,6 +356,14 @@
                     });
             }
 
+            //
+
+            function highlight(){
+
+
+
+            }
+
             // node click event
 
             function nodeData(n) {
@@ -396,5 +404,10 @@
     div text {
         font: 500 50x/500px "Helvetica Neue";
         margin: 0;
+    }
+</style>
+<style>
+    circle:hover {
+      opacity: 0.4;
     }
 </style>
