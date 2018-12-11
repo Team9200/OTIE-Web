@@ -12,6 +12,7 @@ router.route('/user/signin').post(UserController.signin);
 router.route('/user/signup').post(UserController.signup);
 router.route('/user/profile').get(authMiddleware, UserController.profile);
 router.route('/user/get').get(UserController.getUser);
+router.route('/user/search').get(UserController.searchUser);
 
 router.route('/post/view').get(PostController.view);
 router.route('/post/get').get(PostController.get);

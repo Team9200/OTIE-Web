@@ -53,16 +53,24 @@
 
                 let nodeDatas = [];
 
-                /*await apiService.getStorage().then(async (response) => {
+                await apiService.getStorage().then(async (response) => {
           
                     const data = response.message;
 
                     await forEach(data, async (storage) => {
 
                         let tmp = {};
-                        tmp.publicKey = storage.id;
+
+                        const username = await apiService.searchUser(storage.id).then(re => {
+
+                            const data = re.message;
+                            return data[0].username;
+                            
+                        })
+                        tmp.name = username;
+                        tmp.publickey = storage.id;
                         tmp.color = "#2683ff";
-                        tmp.r = storage.storageSize + 10;
+                        tmp.r = storage.storageSize/1000 + 10;
                         tmp.x = 825;
                         tmp.y = 365;
                         tmp.forcex = 788;
@@ -72,45 +80,48 @@
                         nodeDatas.push(tmp);
                         this.storage += 1;
                     });
-                });*/
-
+                });
 
                 await apiService.getUser().then(async (response) => {
           
                     const data = response.message;
                     await forEach(data, async (node) => {
 
-                        let userTmp = {};
-                        let cot = await apiService.searchPosts('node',node.publickey).then(re => {
 
-                            const data = re.message;
-                            return data.length;
+                        if(node.nodetype == 'Collector' || node.nodetype == 'Analyzer'){
 
-                        })
+                            let userTmp = {};
+                            let cot = await apiService.searchPosts('node',node.publickey).then(re => {
 
-                        userTmp.publickey = node.publickey;
-                        userTmp.type = node.nodetype;
-                        userTmp.x = 825;
-                        userTmp.y = 365;                       
-                        userTmp.r = 10 + cot;
-                        userTmp.name = node.username;
+                                const data = re.message;
+                                return data.length;
 
-                        if(node.nodetype == 'Collector') {
+                            })
 
-                            userTmp.color = '#03d6a8';
-                            userTmp.forcex = 262;
-                            userTmp.forcey = 132;
-                            this.collector += 1;
+                            userTmp.publickey = node.publickey;
+                            userTmp.type = node.nodetype;
+                            userTmp.x = 825;
+                            userTmp.y = 365;                       
+                            userTmp.r = 10 + cot;
+                            userTmp.name = node.username;
 
-                        }                 
-                        else if(node.nodetype == 'Analyzer'){
+                            if(node.nodetype == 'Collector') {
 
-                            userTmp.color = '#8c25ea';
-                            userTmp.forcex = 525;
-                            userTmp.forcey = 265;
-                            this.analyzer += 1;
-                        }  
-                        nodeDatas.push(userTmp);  
+                                userTmp.color = '#03d6a8';
+                                userTmp.forcex = 262;
+                                userTmp.forcey = 132;
+                                this.collector += 1;
+
+                            }                 
+                            else if(node.nodetype == 'Analyzer'){
+
+                                userTmp.color = '#8c25ea';
+                                userTmp.forcex = 525;
+                                userTmp.forcey = 265;
+                                this.analyzer += 1;
+                            }  
+                            nodeDatas.push(userTmp);  
+                        }
 
                     });
 
@@ -155,7 +166,7 @@
                 .style("text-align", "center")
                 .style("background-color", "rgba(0, 0, 0, 0.75)")
                 .style("border-radius", "6px")
-                .style("font", "12px sans-serif")
+                .style("font", "14px sans-serif")
                 .text("tooltip");
 
             // Create Bubble.
@@ -354,14 +365,6 @@
                     .attr("cy", function (d) {
                         return d.y;
                     });
-            }
-
-            //
-
-            function highlight(){
-
-
-
             }
 
             // node click event

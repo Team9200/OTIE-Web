@@ -29,6 +29,26 @@ function getUser(req, res) {
     });
 };
 
+function searchUser(req, res) {
+
+    const publickey = req.query.publickey;
+
+    User.find({'publickey':publickey},{'publickey':true,'nodetype':true, 'username':true}).then((data) => {
+
+        res.json({
+            success: true,
+            message: data
+        }); 
+
+    }).catch((err) => {
+
+        res.json({
+            success: false,
+            message: err
+        });
+    });
+};
+
 function checkKey(pub, priv){
 
 
@@ -153,5 +173,6 @@ export default {
     signup,
     signin,
     profile,
-    getUser
+    getUser,
+    searchUser
 };
