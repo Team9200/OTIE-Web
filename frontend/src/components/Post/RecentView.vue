@@ -1,14 +1,15 @@
 <template>
     <v-container>
+
         <v-card class="post-card">
-            <v-toolbar color="transparent" flat dense card>
+            <!-- <v-toolbar color="transparent" flat dense card>
                 <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon>
                     <v-icon class="text--secondary">more_vert</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-divider></v-divider>
+            <v-divider></v-divider> -->
             <v-card-text class="pa-0">
                 <ul class="post--list flex-list vertical">
                     <li class="post--item" v-for="(post, i) in posts" :key="i">
@@ -48,7 +49,7 @@
         </v-card>
         <br>
         <div class="text-xs-center">
-            <v-pagination v-model="page" :length="30" total-visible="10"></v-pagination>
+            <v-pagination v-model="page" :length="length" total-visible="10"></v-pagination>
         </div>
 
     </v-container>
@@ -64,13 +65,23 @@
         name: 'recent-view',
         data: () => ({
             posts: [],
-            page: 1
+            page: 1,
+            length: 0
         }),
         methods: {
             getPosts(page) {
                 apiService.getPosts(page)
                     .then(response => {
                         this.posts = response.message
+                    })
+                    .catch(err => {
+                        if (err) throw err
+                    })
+            },
+            getCount() {
+                apiService.getPostsCount()
+                    .then(response => {
+                        this.length = response.count
                     })
                     .catch(err => {
                         if (err) throw err
@@ -92,7 +103,7 @@
         mounted() {
             // TODO: Add url routing & router.js
             this.getPosts(1)
-
+            this.getCount()
         },
         watch: {
             page: {
