@@ -11,14 +11,17 @@ class User extends mongoose.Schema {
             },
             password: {
                 type: String,
-                required: true
+                required: true,
+                unique: true
             },
             email: {
                 type: String,
-                required: true
+                required: true,
+                unique: true
             },
             publickey: {
-                type: String
+                type: String,
+                unique: true,
             },
             nodetype: {
                 type: String
@@ -57,7 +60,7 @@ class User extends mongoose.Schema {
             country
         });
 
-        return user.save();
+        return user.save({unique:true});
     }
 
     createHash(password) {

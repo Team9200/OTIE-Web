@@ -31,28 +31,29 @@ function getUser(req, res) {
 
 function checkKey(pub, priv){
 
+
     try{
         
         const key = bs58check.decode(priv);
-    
-    }
-    catch(err){
+        const pubKey = secp256k1.publicKeyCreate(key);
+        pub = bs58check.decode(pub);
 
+        if( pub.compare(pubKey) === 0){
+
+            return true;
+
+        }
+        else{
+
+            return false;
+        
+        }
+    }
+        catch(err){
+
+        console.log(err);
         return false;
 
-    }
-    const pubKey = secp256k1.publicKeyCreate(key);
-    pub = bs58check.decode(pub);
-
-    if( pub.compare(pubKey) === 0){
-
-        return true;
-
-    }
-    else{
-
-        return false;
-    
     }
 }
 
