@@ -187,7 +187,7 @@ function search(req, res) {
 					message: err
 				});
 			});
-						
+
 	} else if (type === "title") {
 		Post.find({
 			'title': new RegExp(query, 'i')
@@ -209,7 +209,9 @@ function search(req, res) {
 			message: 'Query error'
 		});
 	}
+
 }
+
 function searchNoPaging(req, res) {				// 페이징 없이
 
 	var query = req.query.query; // get query
@@ -258,16 +260,18 @@ function searchNoPaging(req, res) {				// 페이징 없이
 	}
 }
 
-function getBody(req, res) {				
+function getBody(req, res) {
 
 	var query = req.query.query; // get query
 	var type = req.query.type; // get type
+	var page = req.query.page;
 
 	if (type === "tag") { // tag \
-
 		Post.find({
+
 				'body.tag_name_etc.tag' : new RegExp(query, 'i')
-			},{'body':true}).then((data) => {
+
+			}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -286,7 +290,7 @@ function getBody(req, res) {
 
 			Post.find({
 					'body.md5': new RegExp(query, 'i')
-				},{'body':true}).then((data) => {
+				}).skip(5 * (page - 1)).limit(5).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -303,7 +307,7 @@ function getBody(req, res) {
 
 			Post.find({
 					'body.sha1': new RegExp(query, 'i')
-				},{'body':true}).then((data) => {
+				}).skip(5* (page - 1)).limit(5).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -321,7 +325,7 @@ function getBody(req, res) {
 
 			Post.find({
 					'body.sha256': new RegExp(query, 'i')
-				},{'body':true}).then((data) => {
+				}).skip(5 * (page - 1)).limit(5).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -335,28 +339,19 @@ function getBody(req, res) {
 				});
 
 		}
-		else {
+		else{
 
-			Post.find({},{'body':true}).then((data) => {
-					res.json({
-						success: true,
-						message: data
-					});
-				})
-				.catch((err) => {
-					res.json({
-						success: false,
-						message: err
-					});
+				res.json({
+					success: false,
+					message: "query error"
 				});
-
 		}
 
 	} else if (type === "node") {
 
 		Post.find({
 			$or : [{ 'body.collector': new RegExp(query, 'i')}, {'body.analyzer' : new RegExp(query, 'i') }]
-		},{'body':true}).then((data) => {
+		}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -368,12 +363,11 @@ function getBody(req, res) {
 					message: err
 				});
 			});
-
 	} else if (type === "filetype") {
 
 		Post.find({
 			'body.filetype': new RegExp(query, 'i')
-			},{'body':true}).then((data) => {
+			},{'body':true}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -385,16 +379,28 @@ function getBody(req, res) {
 					message: err
 				});
 			});
-
+						
+	} else if (type === "title") {
+		Post.find({
+			'title': new RegExp(query, 'i')
+			}).skip(5 * (page - 1)).limit(5).then((data) => {
+				res.json({
+					success: true,
+					message: data
+				});
+			})
+			.catch((err) => {
+				res.json({
+					success: false,
+					message: err
+				});
+			});
 	} else {
-
-		res.json({
+		return res.json({
 			success: false,
 			message: 'Query error'
 		});
-
 	}
-
 }
 
 export default {
