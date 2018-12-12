@@ -58,7 +58,7 @@
                     await forEach(data, async (storage) => {
 
                         let tmp = {};
-
+                        const id = storage.id;
                         const username = await apiService.searchUser(storage.id).then(re => {
 
                             const data = re.message;
@@ -68,7 +68,7 @@
 
                             } else {
 
-                                tmp.name = "Not yet";
+                                tmp.name = id;
 
                             }
                         })
@@ -93,35 +93,41 @@
 
 
                         if (node.nodetype == 'Collector' || node.nodetype == 'Analyzer') {
-
+                            let vote;
                             let userTmp = {};
                             let cot = await apiService.searchPosts('node', node.publickey).then(
-                                re => {
+                                async (re) => {
 
+                                    vote = await apiService.userVote(node.publickey).then(re =>{
+                                        return re.message*5;
+                                    })
                                     const data = re.message;
                                     return data.length;
 
                                 })
-
                             userTmp.publickey = node.publickey;
                             userTmp.type = node.nodetype;
                             userTmp.x = 825;
                             userTmp.y = 365;
-                            userTmp.r = 10 + cot;
+
                             userTmp.name = node.username;
 
                             if (node.nodetype == 'Collector') {
-
+                                
+                                userTmp.r = 10 + (cot/18) + (vote/20);
                                 userTmp.color = '#03d6a8';
                                 userTmp.forcex = 262;
                                 userTmp.forcey = 132;
+                                userTmp.cont = cot/2 + vote/5;
                                 this.collector += 1;
 
                             } else if (node.nodetype == 'Analyzer') {
 
+                                userTmp.r = 10 + (cot/9)+ (vote/10);
                                 userTmp.color = '#8c25ea';
                                 userTmp.forcex = 525;
                                 userTmp.forcey = 265;
+                                userTmp.cont = cot + vote;
                                 this.analyzer += 1;
                             }
                             nodeDatas.push(userTmp);
@@ -201,7 +207,7 @@
                     })
                     .on("mouseover", function (d) {
 
-                        tooltip.html(d.type + "<br>Username: " + d.name + "<br>Contribution: 123");
+                        tooltip.html(d.type + "<br>Username: " + d.name + "<br>Contribution: "+d.cont);
                         tooltip.style("visibility", "visible");
                         tooltip.style("display", "inline");
                     }).on("mousemove", function () {

@@ -5,6 +5,7 @@ import authMiddleware from '../../middleware/auth';
 import UserController from '../../controller/user.controller';
 import PostController from '../../controller/post.controller';
 import BlockController from '../../controller/block.controller';
+import VoteController from '../../controller/vote.controller';
 
 // UserController function: test, signup, signin, profile
 router.route('/user/test').get(UserController.test);
@@ -27,6 +28,7 @@ router.route('/post/count').get(PostController.count)
 router.route('/block/get').get(BlockController.get);
 router.route('/block/get/page').get(BlockController.getPage);
 router.route('/block/count').get(BlockController.count);
-// router.route('/block/search').get(BlockController.search);
+
+router.route('/vote/user').get(VoteController.userVote);
 
 export default router;
