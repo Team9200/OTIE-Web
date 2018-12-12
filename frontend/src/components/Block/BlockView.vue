@@ -2,7 +2,7 @@
     <v-layout>
         <v-container>
             <v-layout justify-center>
-                <v-pagination style="padding-bottom: 20px;" circle v-model="page" :length="length"></v-pagination>
+                <v-pagination total-visible="10" style="padding-bottom: 20px;" circle v-model="page" :length="length"></v-pagination>
             </v-layout>
             <v-card>
                 <v-card-title>
