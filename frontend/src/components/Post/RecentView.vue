@@ -1,7 +1,19 @@
 <template>
     <v-container>
+        <div v-for="(post, i) in posts" :key="i">
+            <v-card style="overflow-y: auto;">
+                <v-card-title>
+                    <h3 @click="go(post)">{{ post.title }}</h3>
+                </v-card-title>
+                <v-card-text>
+                    Analyzer: {{ post.body.analyzer }} / Date: {{ getDate(post.timestamp) }}
+                </v-card-text>
+            </v-card>
+            <br>
+        </div>
 
-        <v-card style="overflow-y: auto;" class="post-card">
+
+        <!-- <v-card style="overflow-y: auto;" class="post-card">
             <v-toolbar color="transparent" flat dense card>
                 <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -31,14 +43,6 @@
                                             <v-icon small>thumb_up</v-icon>
                                             <small>100+</small>
                                         </a>
-                                        <!-- <a @click="handleComment" class="grey--text text--darken-1 mx-3">
-                                            <v-icon small>mode_comment</v-icon>
-                                            <small>12+</small>
-                                        </a>
-                                        <a @click="handleFavorite" class="grey--text text--darken-1">
-                                            <v-icon small>favorite</v-icon>
-                                            <small>50+</small>
-                                        </a> -->
                                     </div>
                                 </div>
                             </div>
@@ -46,7 +50,7 @@
                     </li>
                 </ul>
             </v-card-text>
-        </v-card>
+        </v-card> -->
         <br>
         <div class="text-xs-center">
             <v-pagination v-model="page" :length="length" total-visible="10"></v-pagination>

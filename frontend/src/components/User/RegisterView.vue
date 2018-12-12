@@ -110,7 +110,7 @@
                                     alert('검증되지 않은 키입니다.');
 
                                  if(response.message === 'username already exists')
-                                    alert('아이디 or 이메일 or 키가 이미 존제합니다.');
+                                    alert('아이디 or 이메일 or 키가 이미 존재합니다.');
                                 console.log(response.message);
 
                             }

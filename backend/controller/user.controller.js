@@ -154,9 +154,22 @@ function signin(req, res) {
 };
 
 function profile(req, res) {
-    res.json({
-        profile: req.decoded
-    });
+    User.findOne({username: req.decoded.username}, function (err, user) {
+        return res.json({
+            profile: {
+                authed: user.authed,
+                role: user.role,
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                publickey: user.publickey,
+                nodetype: user.nodetype,
+                country: user.country
+            }
+        })
+    }).catch(err => {
+        if (err) throw err
+    })
 };
 
 function getToken(headers) {

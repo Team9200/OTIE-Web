@@ -118,7 +118,7 @@
           visible: true
         }, {
           icon: 'list',
-          title: '글',
+          title: '보고서',
           to: '/recent',
           visible: true
         }, {
