@@ -59,10 +59,17 @@
                         const username = await apiService.searchUser(storage.id).then(re => {
 
                             const data = re.message;
-                            return data[0].username;
+                            if(data.length !== 0){
+                               
+                                tmp.name = data[0].username;
+                               
+                            }
+                            else{
+
+                                tmp.name = "Not yet";
                             
+                            }
                         })
-                        tmp.name = username;
                         tmp.publickey = storage.id;
                         tmp.color = "#2683ff";
                         tmp.r = storage.storageSize/1000 + 10;
