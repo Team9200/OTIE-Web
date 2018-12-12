@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <!-- TODO: Add fab button -->
     <v-navigation-drawer style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
       <v-list>
         <v-list-tile v-if="isMobile || isTablet">

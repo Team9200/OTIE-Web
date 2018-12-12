@@ -18,19 +18,19 @@
         </v-card>
         <br>
         <v-card>
-            <v-card-title>
+            <!-- <v-card-title>
                 <h2>Content</h2>
-            </v-card-title>
-            <v-card-actions>
-                <v-container v-if="post.body !== undefined">
+            </v-card-title> -->
+            <v-card-text v-if="post.body !== undefined">
+                <!-- <v-container v-if="post.body !== undefined"> -->
                     <vue-markdown>{{ post.body.description }}</vue-markdown>
-                </v-container>
-            </v-card-actions>
+                <!-- </v-container> -->
+            </v-card-text>
         </v-card>
         <br>
         <v-card>
             <v-card-title>
-                <h2>Reply</h2>
+                <h2>댓글</h2>
             </v-card-title>
             <v-card-actions>
                 <v-container>

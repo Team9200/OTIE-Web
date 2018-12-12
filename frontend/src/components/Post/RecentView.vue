@@ -65,7 +65,6 @@
             }
         },
         mounted() {
-            // TODO: Add url routing & router.js
             this.getPosts(this.$route.params.page)
             this.page = Number(this.$route.params.page)
             this.getCount()
