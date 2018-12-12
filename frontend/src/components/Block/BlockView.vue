@@ -6,7 +6,7 @@
             </v-layout>
             <v-card>
                 <v-card-title>
-                    <h1>{{ page }}번 블록</h1>
+                    <h1>{{ this.$route.params.index }}번 블록</h1>
                 </v-card-title>
 
                 <v-container>
@@ -142,13 +142,15 @@
             }
         },
         mounted() {
-            this.getBlock(1)
+            this.getBlock(this.$route.params.index)
+            this.page = Number(this.$route.params.index)
             this.getCount()
         },
         watch: {
             page: {
                 handler(val) {
                     this.getBlock(val)
+                    this.$router.push(`/block/${val}`)
                 }
             }
         }

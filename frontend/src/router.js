@@ -72,6 +72,9 @@ export default new Router({
       component: RegisterView
     },{
       path: '/block',
+      redirect: '/block/1'
+    },{
+      path: '/block/:index',
       name: 'block-view',
       component: BlockView
     },{

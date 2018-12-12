@@ -124,7 +124,7 @@
         }, {
           icon: 'info',
           title: '블록',
-          to: '/block',
+          to: '/block/1',
           visible: true
         }, {
           icon: 'info',
