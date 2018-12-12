@@ -2,13 +2,16 @@
     <v-container>
 
         <v-card style="overflow-y: auto;" class="post-card">
-            <v-toolbar color="transparent" flat dense card>
+            <!-- <v-toolbar color="transparent" flat dense card>
                 <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon>
                     <v-icon class="text--secondary">more_vert</v-icon>
                 </v-btn>
-            </v-toolbar>
+            </v-toolbar> -->
+            <v-card-title>
+                <h1>Search of "{{ $route.query.query }}"</h1>
+            </v-card-title>
             <v-divider></v-divider>
             <v-card-text class="pa-0">
                 <ul class="post--list flex-list vertical">

@@ -90,12 +90,13 @@
       <v-btn
         @click="$router.push('/write')"
         color="green"
-        key="share"
+        key="edit"
         fab
         fixed
         bottom
         right
       >
+      <v-icon color="white">edit</v-icon>
       </v-btn>
     </v-fab-transition>
   </v-app>

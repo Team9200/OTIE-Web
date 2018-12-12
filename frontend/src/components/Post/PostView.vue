@@ -24,7 +24,7 @@
             </v-card-title>
             <v-card-actions>
                 <v-container v-if="post.body !== undefined">
-                    {{ post.body.description }}
+                    <vue-markdown>{{ post.body.description }}</vue-markdown>
                 </v-container>
             </v-card-actions>
         </v-card>
@@ -57,6 +57,7 @@
         APIService
     } from '../../api/APIService'
     const apiService = new APIService()
+    import VueMarkdown from 'vue-markdown'
 
     export default {
         name: 'post-view',
@@ -65,6 +66,9 @@
             votes: [],
             replies: []
         }),
+        components: {
+            VueMarkdown
+        },
         methods: {
             viewPost() {
                 apiService.viewPost(this.$route.params.permlink)
