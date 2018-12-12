@@ -228,5 +228,5 @@ async function blockLists(fileName) {
 
 }
 
-blockLists('./smallchain.json')
+blockLists('./sample.json')
 

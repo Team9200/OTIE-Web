@@ -56,7 +56,7 @@
       enterKey() {
         if (window.event.keyCode == 13) {
  
-          location.href='/search?query='+this.query
+          location.href='/search?query='+encodeURIComponent(this.query);
         }
       }
     },

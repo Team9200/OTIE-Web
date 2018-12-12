@@ -2,6 +2,7 @@ import Post from '../database/models/post';
 import Vote from '../database/models/vote';
 import Reply from '../database/models/reply';
 import User from '../database/models/user';
+import { forEach as ForEach} from 'p-iteration';
 
 function view(req, res) {
 
@@ -224,10 +225,11 @@ function search(req, res) {
 
 }
 
-function searchTest(req, res) {
+async function searchTest(req, res) {
 
 	let query = req.query.query; // get query
 	var page = req.query.page;
+
 
 	if(typeof(query) == 'undefined'){
 				
@@ -236,72 +238,183 @@ function searchTest(req, res) {
 			message: "Query is null",
 		});
 
-	}else{
+	}
+	else{
 
-		const init = query.slice(0, 1);
+		const and = query.split("&&");
+		const or = query.split("||");
 
-		if (init === '#' || init === '@' || init === '!') {
+		if(and.length == 2 && or.length == 1){		// and 
 
-			query = query.replace("#","");
+			let type = [];
+			let json = {"$and": []};
 
-			if (init === "#") { // tag \
+			await ForEach(and,async (init) =>{
 
-				Post.find({
+				if(init.slice(0,1) == '!') {
 
-						'body.tag_name_etc.tag': new RegExp(query, 'i')
+					const q = init.replace("!","");
 
-					}).skip(10 * (page - 1))
-					.limit(10)
-					.exec(function(err, posts) {
-						Post.count({'body.tag_name_etc.tag': new RegExp(query, 'i')}).exec(function(err, count) {
-							
-							res.json({
-								success: true,
-								message: posts,
-								count: count
-							});							
+					if(q.length === 32){
 
-						})
+						type.push({'body.md5': new RegExp(init.replace("!",""), 'i')});
+
+					}
+					else if(q.length === 40){
+
+						type.push({'body.sha1': new RegExp(init.replace("!",""), 'i')});
+
+					}
+					else if(q.length === 64){
+
+						type.push({'body.sha256': new RegExp(init.replace("!",""), 'i')});
+
+					}
+
+				}
+				else if(init.slice(0,1) == '@') {
+
+					await User.find({username: init.replace("@","")})
+						.then(async (data) => {
+
+							await type.push({"$or": [{"body.analyzer": data[0].publickey},{"body.collector": data[0].publickey}]});
+
+						});
+					
+				}	
+				else if(init.slice(0,1) == '#') 
+
+					type.push({'body.tag_name_etc.tag': new RegExp(init.replace("#",""), 'i')});
+
+				else 
+
+					type.push({ "$or": [{ 'title': '/'+init+'/'}, {'body.description': new RegExp(init, 'i')}] });
+
+			});
+			json["$and"].push(type[0],type[1]);
+
+			Post.find(json)
+				.skip(10 * (page - 1))
+				.limit(10)
+				.exec(function(err, posts) {
+					Post.count(json).exec(function(err, count) {
+						
+						res.json({
+							success: true,
+							message: posts,
+							count: count
+						});							
+
 					})
-			} else if (init === "!") { // hash
+				})
 
-				query = query.replace("!","");
+		}
+		else if(or.length == 2 && and.length == 1){		// or
 
-				if (query.length === 32) { //md5
+			let type = [];
+			let json = {"$or": []};
+
+			await ForEach(or,async (init) =>{
+
+				if(init.slice(0,1) == '!') {
+
+					const q = init.replace("!","");
+
+					if(q.length === 32){
+
+						type.push({'body.md5': new RegExp(init.replace("!",""), 'i')});
+
+					}
+					else if(q.length === 40){
+
+						type.push({'body.sha1': new RegExp(init.replace("!",""), 'i')});
+
+					}
+					else if(q.length === 64){
+
+						type.push({'body.sha256': new RegExp(init.replace("!",""), 'i')});
+
+					}
+
+				}
+				else if(init.slice(0,1) == '@') {
+
+					await User.find({username: init.replace("@","")})
+						.then(async (data) => {
+
+							await type.push({"$or": [{"body.analyzer": data[0].publickey},{"body.collector": data[0].publickey}]});
+
+						});
+					
+				}	
+				else if(init.slice(0,1) == '#') 
+
+					type.push({'body.tag_name_etc.tag': new RegExp(init.replace("#",""), 'i')});
+
+				else 
+
+					type.push({ "$or": [{ 'title': '/'+init+'/'}, {'body.description': new RegExp(init, 'i')}] });
+
+			});
+			json["$or"].push(type[0],type[1]);
+
+			Post.find(json)
+				.skip(10 * (page - 1))
+				.limit(10)
+				.exec(function(err, posts) {
+					Post.count(json).exec(function(err, count) {
+						
+						res.json({
+							success: true,
+							message: posts,
+							count: count
+						});							
+
+					})
+				})
+
+
+		}
+		else if(or.length == 1 && and.length == 1){
+
+			const init = query.slice(0, 1);
+
+			if (init === '#' || init === '@' || init === '!') {
+
+				query = query.replace("#","");
+
+				if (init === "#") { // tag \
 
 					Post.find({
-							'body.md5': new RegExp(query, 'i')
+
+							'body.tag_name_etc.tag': new RegExp(query, 'i')
+
 						}).skip(10 * (page - 1))
 						.limit(10)
 						.exec(function(err, posts) {
-						Post.count({ 'body.md5': new RegExp(query, 'i') }).exec(function(err, count) {
-							
-							if(err){
-								return res.json({
-									success: false,
-									message: err,
-									count: 0
-								})
-							}
-							res.json({
-								success: true,
-								message: posts,
-								count: count
-							});							
+							Post.count({'body.tag_name_etc.tag': new RegExp(query, 'i')}).exec(function(err, count) {
+								
+								res.json({
+									success: true,
+									message: posts,
+									count: count
+								});							
 
+							})
 						})
-					})
+				} else if (init === "!") { // hash
 
-				} else if (query.length === 40) { //sha1
+					query = query.replace("!","");
 
-					Post.find({
-							'body.sha1': new RegExp(query, 'i')
-						})
-						.skip(10 * (page - 1))
-						.limit(10)
-						.exec(function(err, posts) {
-							Post.count({ 'body.sha1': new RegExp(query, 'i') }).exec(function(err, count) {
-							
+					if (query.length === 32) { //md5
+
+						Post.find({
+								'body.md5': new RegExp(query, 'i')
+							}).skip(10 * (page - 1))
+							.limit(10)
+							.exec(function(err, posts) {
+							Post.count({ 'body.md5': new RegExp(query, 'i') }).exec(function(err, count) {
+								
 								if(err){
 									return res.json({
 										success: false,
@@ -313,119 +426,145 @@ function searchTest(req, res) {
 									success: true,
 									message: posts,
 									count: count
-							});							
+								});							
 
+							})
 						})
-					})
 
-				} else if (query.length === 64) { //sha256
+					} else if (query.length === 40) { //sha1
 
-					Post.find({
-							'body.sha256': new RegExp(query, 'i')
+						Post.find({
+								'body.sha1': new RegExp(query, 'i')
+							})
+							.skip(10 * (page - 1))
+							.limit(10)
+							.exec(function(err, posts) {
+								Post.count({ 'body.sha1': new RegExp(query, 'i') }).exec(function(err, count) {
+								
+									if(err){
+										return res.json({
+											success: false,
+											message: err,
+											count: 0
+										})
+									}
+									res.json({
+										success: true,
+										message: posts,
+										count: count
+								});							
+
+							})
 						})
-						.skip(10 * (page - 1))
-						.limit(10)
-						.exec(function(err, posts) {
-							Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
-							
-								if(err){
-									return res.json({
-										success: false,
-										message: err,
-										count: 0
-									})
-								}
-								res.json({
-									success: true,
-									message: posts,
-									count: count
-							});							
 
+					} else if (query.length === 64) { //sha256
+
+						Post.find({
+								'body.sha256': new RegExp(query, 'i')
+							})
+							.skip(10 * (page - 1))
+							.limit(10)
+							.exec(function(err, posts) {
+								Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
+								
+									if(err){
+										return res.json({
+											success: false,
+											message: err,
+											count: 0
+										})
+									}
+									res.json({
+										success: true,
+										message: posts,
+										count: count
+								});							
+
+							})
 						})
-					})
-				}
+					}
 
-			} else if (init === "@") {
+				} else if (init === "@") {
 
-				query = query.replace("@","");
+					query = query.replace("@","");
+					User.find({
+							username: new RegExp(query, 'i')
+						}).then((data) => {
 
-				User.find({
-						'username': new RegExp(query, 'i')
-					}).then((data) => {
+							data.forEach(function (result) {
 
-						data.forEach(function (result) {
+								const pub = result.publickey
 
-							const pub = result.publickey
-
-							Post.find({
-									$or: [{
-										'body.collector': new RegExp(pub, 'i')
-									}, {
-										'body.analyzer': new RegExp(pub, 'i')
-									}]
-								})
-								.skip(10 * (page - 1))
-								.limit(10)
-								.exec(function(err, posts) {
-									Post.count({ 
+								Post.find({
 										$or: [{
 											'body.collector': new RegExp(pub, 'i')
 										}, {
 											'body.analyzer': new RegExp(pub, 'i')
-										}] }).exec(function(err, count) {
-									
-										if(err){
-											return res.json({
-												success: false,
-												message: err,
-												count: 0
-											})
-										}
-										res.json({
-											success: true,
-											message: posts,
-											count: count
-									});							
-
-								})
-							})
-
-						});
-
-					})
-					.catch((err) => {
-						res.json({
-							success: false,
-							message: err
-						});
-					});
-			} 
-		}
-		else {
-
-			console.log(query);
-			Post.find({ $or: [{ 'title': new RegExp(query, 'i')}, {'body.description': new RegExp(query, 'i')}] })
-			.skip(10 * (page - 1))
-						.limit(10)
-						.exec(function(err, posts) {
-							Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
-							
-								if(err){
-									return res.json({
-										success: false,
-										message: err,
-										count: 0
+										}]
 									})
-								}
-								res.json({
-									success: true,
-									message: posts,
-									count: count
-							});							
+									.skip(10 * (page - 1))
+									.limit(10)
+									.exec(function(err, posts) {
+										Post.count({ 
+											$or: [{
+												'body.collector': new RegExp(pub, 'i')
+											}, {
+												'body.analyzer': new RegExp(pub, 'i')
+											}] }).exec(function(err, count) {
+										
+											if(err){
+												return res.json({
+													success: false,
+													message: err,
+													count: 0
+												})
+											}
+											res.json({
+												success: true,
+												message: posts,
+												count: count
+										});							
+
+									})
+								})
+
+							});
 
 						})
-					})
-			
+						.catch((err) => {
+							res.json({
+								success: false,
+								message: err
+							});
+						});
+				} 
+			}
+			else {
+
+				console.log(query);
+				Post.find({ $or: [{ 'title': new RegExp(query, 'i')}, {'body.description': new RegExp(query, 'i')}] })
+				.skip(10 * (page - 1))
+							.limit(10)
+							.exec(function(err, posts) {
+								Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
+								
+									if(err){
+										return res.json({
+											success: false,
+											message: err,
+											count: 0
+										})
+									}
+									res.json({
+										success: true,
+										message: posts,
+										count: count
+								});							
+
+							})
+						})
+				
+			}
 		}
 	}
 }

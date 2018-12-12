@@ -11,7 +11,7 @@
         </v-flex>
 
         <v-flex v-if="monthActivity.length >= 1" lg8 sm12 xs12>
-          <v-widget title="Monthly activities" content-bg="white">
+          <v-widget title="Monthly activities" content-bg="white">n
             <div slot="widget-content">
                 <e-chart 
                 :path-option="[
@@ -27,6 +27,7 @@
                   ['series[0].areaStyle', {}],
                   ['series[0].smooth', true],
                 ]"
+
                 height="400px"
                 width="100%"
                 >
@@ -72,6 +73,7 @@
                   ['series[0].avoidLabelOverlap', true],         
                   ['series[0].radius', ['50%', '70%']],                      
                 ]"
+                onclick="a = this.innerHTML.split('</span>')[1];tag=a.split(':')[0];console.log(tag)"
                 height="367px"
                 width="100%"
                 class="center"
@@ -253,17 +255,36 @@ export default {
       this.nodeType = type;
       console.log(this.nodeType);
 
-      apiService.searchNode(type, name)
-        .then(response => {
-          
-          const malwareList = response.message;
-          this.init_tagChart(malwareList);
-          this.init_mActive(malwareList);
-          this.init_Active(malwareList);
-          this.init_List(malwareList);
-        
-        });
+      if(type === 'Storage'){
+
+      }
+      else{
       
+        apiService.searchNode(type, name)
+          .then(response => {
+            
+            const malwareList = response.message;
+            this.init_tagChart(malwareList);
+            this.init_mActive(malwareList);
+            this.init_Active(malwareList);
+            this.init_List(malwareList);
+          
+          });
+      }
+    },
+    init_user (type){
+
+      if(type === 'storage'){
+
+        apiService.getStorage()
+
+      }
+      else{
+
+
+      }
+
+
     },
     init_tagChart (malwareList) {
 
