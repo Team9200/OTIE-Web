@@ -6,7 +6,7 @@
                     <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
                 <v-card-text>
-                    Analyzer: {{ post.body.analyzer }} / Date: {{ getDate(post.timestamp) }}
+                    분석가: {{ post.body.analyzer }} / 날짜: {{ getDate(post.timestamp) }}
                 </v-card-text>
             </v-card>
             <br>
