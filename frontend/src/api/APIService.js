@@ -61,12 +61,11 @@ export class APIService {
         }).then(response => response.data)
     }
 
-    searchPosts(type, query, page) {
-        const url = `${API_URL}/api/post/search`
+    searchPost(page,query) {
+        const url = `${API_URL}/api/post/searchTest`
 
         return axios.get(url, {
             params: {
-                type: type,
                 query: query,
                 page: page
             }

@@ -8,6 +8,7 @@ import RecentView from './components/Post/RecentView'
 import PopularView from './components/Post/PopularView'
 import WriteView from './components/Post/WriteView'
 import PostView from './components/Post/PostView'
+import SearchView from './components/Post/SearchView'
 
 import LoginView from './components/User/LoginView'
 import RegisterView from './components/User/RegisterView'
@@ -40,6 +41,10 @@ export default new Router({
       path: '/recent',  
       name: 'recent-view',
       component: RecentView
+    },,{
+      path: '/search',
+      name: 'search-view',
+      component: SearchView
     },{
       path: '/popular',
       name: 'popular-view',

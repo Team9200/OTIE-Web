@@ -18,6 +18,7 @@ router.route('/post/view').get(PostController.view);
 router.route('/post/get').get(PostController.get);
 router.route('/post/get/all').get(PostController.getAll);
 router.route('/post/search').get(PostController.search);
+router.route('/post/searchTest').get(PostController.searchTest);
 router.route('/post/node').get(PostController.searchNoPaging);
 router.route('/post/get/body').get(PostController.getBody);
 router.route('/post/count').get(PostController.count)

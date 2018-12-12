@@ -10,7 +10,7 @@
         </div>
 
         <br><br><br><br>
-        <v-text-field flat solo-inverted prepend-icon="search" @keyup.enter.native="enterKey" label="Search (ex. #tag, @node, !hash, title, contents)" class="hidden-sm-and-down"></v-text-field>
+        <v-text-field flat solo-inverted prepend-icon="search" @keyup.enter.native="enterKey" v-model="query" label="Search (ex. #tag, @node, !hash, title, contents)" class="hidden-sm-and-down"></v-text-field>
 
       </v-container>
     </v-container>
@@ -30,7 +30,8 @@
   export default {
     name: 'home-view',
     data: () => ({
-      malwares: []
+      malwares: [],
+      query: ''
     }),
     methods: {
       getMalwares() {
@@ -55,7 +56,7 @@
       enterKey() {
         if (window.event.keyCode == 13) {
  
-             console.log(1);
+          location.href='/search?query='+this.query
         }
       }
     },

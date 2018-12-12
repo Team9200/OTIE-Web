@@ -1,7 +1,7 @@
 import Post from '../database/models/post';
 import Vote from '../database/models/vote';
 import Reply from '../database/models/reply';
-import User from '../database/models/user'
+import User from '../database/models/user';
 
 function view(req, res) {
 
@@ -224,144 +224,208 @@ function search(req, res) {
 
 }
 
-function search1(req, res) {
+function searchTest(req, res) {
 
-	const query = req.query.query; // get query
+	let query = req.query.query; // get query
+	var page = req.query.page;
 
-	const init = query.slice(0, 1);
+	if(typeof(query) == 'undefined'){
+				
+		return res.json({
+			success: false,
+			message: "Query is null",
+		});
 
-	if (init === '#' || init === '@' || init === '!') {
+	}else{
 
-		if (init === "#") { // tag \
-			Post.find({
+		const init = query.slice(0, 1);
 
-					'body.tag_name_etc.tag': new RegExp(query, 'i')
+		if (init === '#' || init === '@' || init === '!') {
 
-				}).then((data) => {
-					res.json({
-						success: true,
-						message: data
-					});
-				})
-				.catch((err) => {
-					res.json({
-						success: false,
-						message: err
-					});
-				});
-		} else if (init === "@") { // hash
+			query = query.replace("#","");
 
-			if (query.length === 32) { //md5
+			if (init === "#") { // tag \
 
 				Post.find({
-						'body.md5': new RegExp(query, 'i')
-					}).then((data) => {
-						res.json({
-							success: true,
-							message: data
-						});
+
+						'body.tag_name_etc.tag': new RegExp(query, 'i')
+
+					}).skip(10 * (page - 1))
+					.limit(10)
+					.exec(function(err, posts) {
+						Post.count({'body.tag_name_etc.tag': new RegExp(query, 'i')}).exec(function(err, count) {
+							
+							res.json({
+								success: true,
+								message: posts,
+								count: count
+							});							
+
+						})
 					})
-					.catch((err) => {
-						res.json({
-							success: false,
-							message: err
-						});
-					});
+			} else if (init === "@") { // hash
 
-			} else if (query.length === 40) { //sha1
+				query = query.replace("@","");
 
-				Post.find({
-						'body.sha1': new RegExp(query, 'i')
-					}).then((data) => {
-						res.json({
-							success: true,
-							message: data
-						});
+				if (query.length === 32) { //md5
+
+					Post.find({
+							'body.md5': new RegExp(query, 'i')
+						}).skip(10 * (page - 1))
+						.limit(10)
+						.exec(function(err, posts) {
+						Post.count({ 'body.md5': new RegExp(query, 'i') }).exec(function(err, count) {
+							
+							if(err){
+								return res.json({
+									success: false,
+									message: err,
+									count: 0
+								})
+							}
+							res.json({
+								success: true,
+								message: posts,
+								count: count
+							});							
+
+						})
 					})
-					.catch((err) => {
-						res.json({
-							success: false,
-							message: err
-						});
-					});
 
+				} else if (query.length === 40) { //sha1
 
-			} else if (query.length === 64) { //sha256
-
-				Post.find({
-						'body.sha256': new RegExp(query, 'i')
-					}).then((data) => {
-						res.json({
-							success: true,
-							message: data
-						});
-					})
-					.catch((err) => {
-						res.json({
-							success: false,
-							message: err
-						});
-					});
-
-			}
-
-		} else if (init === "!") {
-
-			User.find({
-					'username': new RegExp(query, 'i')
-				}).then((data) => {
-
-					data.forEach(function (result) {
-
-						const pub = result.publickey
-
-						Post.find({
-								$or: [{
-									'body.collector': new RegExp(pub, 'i')
-								}, {
-									'body.analyzer': new RegExp(pub, 'i')
-								}]
-							}).then((data) => {
+					Post.find({
+							'body.sha1': new RegExp(query, 'i')
+						})
+						.skip(10 * (page - 1))
+						.limit(10)
+						.exec(function(err, posts) {
+							Post.count({ 'body.sha1': new RegExp(query, 'i') }).exec(function(err, count) {
+							
+								if(err){
+									return res.json({
+										success: false,
+										message: err,
+										count: 0
+									})
+								}
 								res.json({
 									success: true,
-									message: data
-								});
-							})
-							.catch((err) => {
+									message: posts,
+									count: count
+							});							
+
+						})
+					})
+
+				} else if (query.length === 64) { //sha256
+
+					Post.find({
+							'body.sha256': new RegExp(query, 'i')
+						})
+						.skip(10 * (page - 1))
+						.limit(10)
+						.exec(function(err, posts) {
+							Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
+							
+								if(err){
+									return res.json({
+										success: false,
+										message: err,
+										count: 0
+									})
+								}
 								res.json({
-									success: false,
-									message: err
-								});
-							});
+									success: true,
+									message: posts,
+									count: count
+							});							
 
-					});
+						})
+					})
+				}
 
-				})
-				.catch((err) => {
-					res.json({
-						success: false,
-						message: err
-					});
-				});
-		} else {
-			Post.find({
-				$or: [{
-						'title': new RegExp(query, 'i')
-					}, {
-						'body.description': new RegExp(query, 'i')
-					}].then((data) => {
-						res.json({
-							success: true,
-							message: data
+			} else if (init === "!") {
+
+				query = query.replace("!","");
+
+				User.find({
+						'username': new RegExp(query, 'i')
+					}).then((data) => {
+
+						data.forEach(function (result) {
+
+							const pub = result.publickey
+
+							Post.find({
+									$or: [{
+										'body.collector': new RegExp(pub, 'i')
+									}, {
+										'body.analyzer': new RegExp(pub, 'i')
+									}]
+								})
+								.skip(10 * (page - 1))
+								.limit(10)
+								.exec(function(err, posts) {
+									Post.count({ 
+										$or: [{
+											'body.collector': new RegExp(pub, 'i')
+										}, {
+											'body.analyzer': new RegExp(pub, 'i')
+										}] }).exec(function(err, count) {
+									
+										if(err){
+											return res.json({
+												success: false,
+												message: err,
+												count: 0
+											})
+										}
+										res.json({
+											success: true,
+											message: posts,
+											count: count
+									});							
+
+								})
+							})
+
 						});
+
 					})
 					.catch((err) => {
 						res.json({
 							success: false,
 							message: err
 						});
+					});
+			} 
+		}
+		else {
+
+			console.log(query);
+			Post.find({ $or: [{ 'title': new RegExp(query, 'i')}, {'body.description': new RegExp(query, 'i')}] })
+			.skip(10 * (page - 1))
+						.limit(10)
+						.exec(function(err, posts) {
+							Post.count({ 'body.sha256': new RegExp(query, 'i') }).exec(function(err, count) {
+							
+								if(err){
+									return res.json({
+										success: false,
+										message: err,
+										count: 0
+									})
+								}
+								res.json({
+									success: true,
+									message: posts,
+									count: count
+							});							
+
+						})
 					})
-			})
+			
 		}
 	}
 }
@@ -578,5 +642,6 @@ export default {
 	search,
 	searchNoPaging,
 	getBody,
-	count
+	count,
+	searchTest
 };
