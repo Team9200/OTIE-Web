@@ -140,12 +140,23 @@ export class APIService {
 
         return axios.get(url).then(response => response.data)
     }
+
     searchUser(pub) {
         const url = `${API_URL}/api/user/search`
 
         return axios.get(url, {
             params: {
                 publickey: pub
+            }
+        }).then(response => response.data)
+    }
+
+    getMalware(query) {
+        const url = `${API_URL}/api/post/get/malware`
+
+        return axios.get(url, {
+            params: {
+                query: query
             }
         }).then(response => response.data)
     }

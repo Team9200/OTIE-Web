@@ -4,16 +4,17 @@
             <v-card-title>
                 <h2>{{ post.title }}</h2>
             </v-card-title>
-            <v-card-text>
-                <ul v-if="post.body !== undefined">
-                    <li>md5: {{ post.body.md5 }}</li>
+            <v-card-text v-if="post.body !== undefined">
+                    <!-- <li>md5: {{ post.body.md5 }}</li>
                     <li>sha1: {{ post.body.sha1 }}</li>
-                    <li>sha256: {{ post.body.sha256 }}</li>
-                    <li>collector: {{ post.body.collector }}</li>
-                    <li>analyzer: {{ post.body.analyzer }}</li>
-                    <li>date: {{ getDate(post.timestamp) }}</li>
-                    <li>first_seen: {{ post.body.first_seen }}</li>
-                </ul>
+                    <li>sha256: {{ post.body.sha256 }}</li> -->
+                    <!-- <li>collector: {{ post.body.collector }}</li> -->
+                    <div class="post-text">분석가: {{ post.body.analyzer }}</div>
+                    <v-divider></v-divider>
+                    <div class="post-text">날짜: {{ getDate(post.timestamp) }}</div>
+                    <v-divider></v-divider>
+                    <v-btn @click="go(post)" style="color: white;" color="green">Malware Info ({{ post.body.sha256 }})</v-btn>
+                    <!-- <li>first_seen: {{ post.body.first_seen }}</li> -->
             </v-card-text>
         </v-card>
         <br>
@@ -82,6 +83,10 @@
                 return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
                     ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
             },
+            go(post) {
+                const string = '/malware/' + post.body.sha256
+                window.location.href = string
+            }
         },
         created() {
             this.viewPost()
@@ -90,5 +95,9 @@
 </script>
 
 <style>
-
+    .post-text {
+        font-size: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
 </style>

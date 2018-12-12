@@ -16,6 +16,7 @@ router.route('/user/search').get(UserController.searchUser);
 
 router.route('/post/view').get(PostController.view);
 router.route('/post/get').get(PostController.get);
+router.route('/post/get/malware').get(PostController.getMalware);
 router.route('/post/get/all').get(PostController.getAll);
 router.route('/post/search').get(PostController.search);
 router.route('/post/searchTest').get(PostController.searchTest);

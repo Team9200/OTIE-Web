@@ -19,6 +19,8 @@ import BlockView from './components/Block/BlockView'
 import ProfileView from './components/ProfileView'
 import StatusView from './components/StatusView'
 
+import MalwareView from './components/Malware/MalwareView'
+
 import ErrorView from './components/ErrorView'
 
 Vue.use(Router)
@@ -44,6 +46,10 @@ export default new Router({
       path: '/recent/:page',
       name: 'recent-view',
       component: RecentView
+    },{
+      path: '/malware/:hash',
+      name: 'malware-view',
+      component: MalwareView
     },{
       path: '/search',
       name: 'search-view',
