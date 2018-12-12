@@ -7,26 +7,31 @@ function view(req, res) {
 
 	let permlink = req.query.permlink;
 	let result = {};
-	Post.find({'permlink': permlink }).then((data) => {
+	Post.find({
+		'permlink': permlink
+	}).then((data) => {
 
-		if(data != '') {
+		if (data != '') {
 
 			result.post = data;
-			Vote.find({'refpermlink': permlink}).then((voteData) =>{
+			Vote.find({
+				'refpermlink': permlink
+			}).then((voteData) => {
 
 				result.vote = voteData;
-				Reply.find({'refpermlink': permlink}).then((replyData) =>{
-					
+				Reply.find({
+					'refpermlink': permlink
+				}).then((replyData) => {
+
 					result.reply = replyData;
 
 					res.json({
 						success: true,
 						message: result
-					});	
+					});
 				});
 			});
-		}
-		else{
+		} else {
 
 			res.json({
 				success: false,
@@ -63,17 +68,17 @@ function get(req, res) {
 
 function getAll(req, res) {
 	Post.find({}).then((data) => {
-		res.json({
-			success: true,
-			message: data
+			res.json({
+				success: true,
+				message: data
+			});
+		})
+		.catch((err) => {
+			res.json({
+				success: false,
+				message: err
+			});
 		});
-	})
-	.catch((err) => {
-		res.json({
-			success: false,
-			message: err
-		});
-	});
 }
 
 function search(req, res) {
@@ -85,7 +90,7 @@ function search(req, res) {
 	if (type === "tag") { // tag \
 		Post.find({
 
-				'body.tag_name_etc.tag' : new RegExp(query, 'i')
+				'body.tag_name_etc.tag': new RegExp(query, 'i')
 
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
@@ -159,8 +164,12 @@ function search(req, res) {
 	} else if (type === "node") {
 
 		Post.find({
-			$or : [{ 'body.collector': new RegExp(query, 'i')}, {'body.analyzer' : new RegExp(query, 'i') }]
-		}).skip(10 * (page - 1)).limit(10).then((data) => {
+				$or: [{
+					'body.collector': new RegExp(query, 'i')
+				}, {
+					'body.analyzer': new RegExp(query, 'i')
+				}]
+			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -175,8 +184,10 @@ function search(req, res) {
 	} else if (type === "filetype") {
 
 		Post.find({
-			'body.filetype': new RegExp(query, 'i')
-			},{'body':true}).then((data) => {
+				'body.filetype': new RegExp(query, 'i')
+			}, {
+				'body': true
+			}).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -191,7 +202,7 @@ function search(req, res) {
 
 	} else if (type === "title") {
 		Post.find({
-			'title': new RegExp(query, 'i')
+				'title': new RegExp(query, 'i')
 			}).skip(10 * (page - 1)).limit(10).then((data) => {
 				res.json({
 					success: true,
@@ -212,18 +223,19 @@ function search(req, res) {
 	}
 
 }
+
 function search1(req, res) {
 
 	const query = req.query.query; // get query
 
-	const init = query.slice(0,1);
+	const init = query.slice(0, 1);
 
-	if(init ==='#' || init ==='@' || init ==='!'){
+	if (init === '#' || init === '@' || init === '!') {
 
 		if (init === "#") { // tag \
 			Post.find({
 
-					'body.tag_name_etc.tag' : new RegExp(query, 'i')
+					'body.tag_name_etc.tag': new RegExp(query, 'i')
 
 				}).then((data) => {
 					res.json({
@@ -237,8 +249,7 @@ function search1(req, res) {
 						message: err
 					});
 				});
-		}
-		else if (init === "@") { // hash
+		} else if (init === "@") { // hash
 
 			if (query.length === 32) { //md5
 
@@ -300,13 +311,17 @@ function search1(req, res) {
 					'username': new RegExp(query, 'i')
 				}).then((data) => {
 
-					data.forEach(function(result) {
+					data.forEach(function (result) {
 
 						const pub = result.publickey
 
 						Post.find({
-							$or : [{ 'body.collector': new RegExp(pub, 'i')}, {'body.analyzer' : new RegExp(pub, 'i') }]
-						}).then((data) => {
+								$or: [{
+									'body.collector': new RegExp(pub, 'i')
+								}, {
+									'body.analyzer': new RegExp(pub, 'i')
+								}]
+							}).then((data) => {
 								res.json({
 									success: true,
 									message: data
@@ -320,7 +335,7 @@ function search1(req, res) {
 							});
 
 					});
-				
+
 				})
 				.catch((err) => {
 					res.json({
@@ -328,34 +343,31 @@ function search1(req, res) {
 						message: err
 					});
 				});
-
-
-	}
-	else{
-	
-
-		Post.find({
-			$or : [{ 'title': new RegExp(query, 'i')}, {'body.description' : new RegExp(query, 'i') }
-			}).then((data) => {
-				res.json({
-					success: true,
-					message: data
-				});
+		} else {
+			Post.find({
+				$or: [{
+						'title': new RegExp(query, 'i')
+					}, {
+						'body.description': new RegExp(query, 'i')
+					}].then((data) => {
+						res.json({
+							success: true,
+							message: data
+						});
+					})
+					.catch((err) => {
+						res.json({
+							success: false,
+							message: err
+						});
+					})
 			})
-			.catch((err) => {
-				res.json({
-					success: false,
-					message: err
-				});
-			});
-
-
+		}
 	}
 }
 
 
-function searchNoPaging(req, res) {				// 페이징 없이
-
+function searchNoPaging(req, res) { // 페이징 없이
 	var query = req.query.query; // get query
 	var type = req.query.type; // get type
 
@@ -411,7 +423,7 @@ function getBody(req, res) {
 	if (type === "tag") { // tag \
 		Post.find({
 
-				'body.tag_name_etc.tag' : new RegExp(query, 'i')
+				'body.tag_name_etc.tag': new RegExp(query, 'i')
 
 			}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
@@ -449,7 +461,7 @@ function getBody(req, res) {
 
 			Post.find({
 					'body.sha1': new RegExp(query, 'i')
-				}).skip(5* (page - 1)).limit(5).then((data) => {
+				}).skip(5 * (page - 1)).limit(5).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -480,20 +492,23 @@ function getBody(req, res) {
 					});
 				});
 
-		}
-		else{
+		} else {
 
-				res.json({
-					success: false,
-					message: "query error"
-				});
+			res.json({
+				success: false,
+				message: "query error"
+			});
 		}
 
 	} else if (type === "node") {
 
 		Post.find({
-			$or : [{ 'body.collector': new RegExp(query, 'i')}, {'body.analyzer' : new RegExp(query, 'i') }]
-		}).skip(5 * (page - 1)).limit(5).then((data) => {
+				$or: [{
+					'body.collector': new RegExp(query, 'i')
+				}, {
+					'body.analyzer': new RegExp(query, 'i')
+				}]
+			}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -508,8 +523,10 @@ function getBody(req, res) {
 	} else if (type === "filetype") {
 
 		Post.find({
-			'body.filetype': new RegExp(query, 'i')
-			},{'body':true}).skip(5 * (page - 1)).limit(5).then((data) => {
+				'body.filetype': new RegExp(query, 'i')
+			}, {
+				'body': true
+			}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -521,10 +538,10 @@ function getBody(req, res) {
 					message: err
 				});
 			});
-						
+
 	} else if (type === "title") {
 		Post.find({
-			'title': new RegExp(query, 'i')
+				'title': new RegExp(query, 'i')
 			}).skip(5 * (page - 1)).limit(5).then((data) => {
 				res.json({
 					success: true,
@@ -546,9 +563,11 @@ function getBody(req, res) {
 }
 
 function count(req, res) {
-    Post.count({}, function (err, count) {
-        return res.json({count: Math.ceil((count / 10))})
-    })
+	Post.count({}, function (err, count) {
+		return res.json({
+			count: Math.ceil((count / 10))
+		})
+	})
 }
 
 
