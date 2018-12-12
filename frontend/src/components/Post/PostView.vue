@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-card>
+        <v-card style="overflow-y: auto;">
             <v-card-title>
                 <h2>{{ post.title }}</h2>
             </v-card-title>
