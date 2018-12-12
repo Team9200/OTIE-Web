@@ -2,7 +2,7 @@
     <v-layout>
         <v-container>
             <v-layout justify-center>
-                <v-pagination total-visible="10" style="padding-bottom: 20px;" circle v-model="page" :length="length"></v-pagination>
+                <v-pagination total-visible="10" style="padding-bottom: 20px;" v-model="page" :length="length"></v-pagination>
             </v-layout>
             <v-card>
                 <v-card-title>
@@ -13,6 +13,7 @@
                     <v-layout>
                         <v-flex xs12>
                             <v-text-field v-model="hash" label="hash"></v-text-field>
+                            <v-text-field v-model="previousBlockHash" label="previousBlockHash"></v-text-field>
                             <v-text-field v-model="timestamp" label="timestamp"></v-text-field>
                         </v-flex>
                     </v-layout>
@@ -21,7 +22,7 @@
             <div style="padding-top: 10px;"></div>
             <v-card v-if="postList[0] !== undefined" class="scroll">
                 <v-card-title>
-                    <h1>Post</h1>
+                    <h1>보고서</h1>
                 </v-card-title>
 
                 <v-container>
@@ -34,7 +35,7 @@
             <div style="padding-top: 10px;"></div>
             <v-card v-if="replyList[0] !== undefined" class="scroll">
                 <v-card-title>
-                    <h1>Reply</h1>
+                    <h1>댓글</h1>
                 </v-card-title>
 
                 <v-container>
@@ -48,7 +49,7 @@
             <div style="padding-top: 10px;"></div>
             <v-card v-if="voteList[0] !== undefined" class="scroll">
                 <v-card-title>
-                    <h1>Vote</h1>
+                    <h1>좋아요</h1>
                 </v-card-title>
 
                 <v-container>
@@ -62,7 +63,7 @@
             <div style="padding-top: 10px;"></div>
             <v-card v-if="transactionList[0] !== undefined">
                 <v-card-title>
-                    <h1>Transaction</h1>
+                    <h1>거래</h1>
                 </v-card-title>
 
                 <v-container class="scroll">
@@ -88,6 +89,7 @@
             page: 1,
             length: 0,
             hash: '',
+            previousBlockHash: '',
             timestamp: '',
             postList: [],
             voteList: [],
@@ -99,6 +101,7 @@
                 apiService.getBlock(index)
                     .then(response => {
                         this.hash = response.message.hash
+                        this.previousBlockHash = response.message.previousBlockHash
                         this.timestamp = this.getDate(response.message.timestamp)
                         this.postList = response.message.postList
                         this.voteList = response.message.voteList
