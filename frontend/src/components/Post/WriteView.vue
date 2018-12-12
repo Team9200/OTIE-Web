@@ -7,33 +7,33 @@
         </v-layout>
         <v-text-field v-model="title" label="title" required></v-text-field>
         <v-text-field v-model="sha256" label="sha256" required></v-text-field>
-        <quill-editor v-model="content"></quill-editor>
+        <markdown-editor preview-class="markdown-body" v-model="content" ref="markdownEditor"></markdown-editor>
+
         <br>
     </v-container>
 </template>
 
 <script>
-    import 'quill/dist/quill.core.css'
-    import 'quill/dist/quill.snow.css'
-    import 'quill/dist/quill.bubble.css'
+    import hljs from 'highlight.js';
 
-    import {
-        quillEditor
-    } from 'vue-quill-editor'
+    window.hljs = hljs;
+    import markdownEditor from 'vue-simplemde/src/markdown-editor'
 
     export default {
         name: 'write-view',
         data: () => ({
             title: '',
             sha256: '',
-            content: '<h1>Hello World</h1>'
+            content: '# Hello World'
         }),
         components: {
-            quillEditor
+            markdownEditor
         }
     }
 </script>
 
 <style>
-
+    @import '~simplemde/dist/simplemde.min.css';
+    @import '~github-markdown-css';
+    @import '~highlight.js/styles/atom-one-dark.css';
 </style>
