@@ -17,7 +17,7 @@
         <div class="flex text-xs-left" :class="computeTextAlgin">
           <div class="text-xs-left">
             <div>
-              Nickname&emsp;{{name}}
+              <div>&emsp;Nickname:&emsp;{{name}}&emsp;&emsp;&emsp;&emsp;&emsp;Publickey:&emsp;{{publickey}}</div>
               <v-btn class="right" flat icon color="grey">
                 <v-icon>star</v-icon>
               </v-btn>
@@ -27,8 +27,8 @@
             </div>
           </div>
           <div style="display:inline-block" class="left">
-          <span class="left">Nodetype&emsp;&nbsp;{{jobTitle}}</span><br>
-          <span class="left">Country&emsp;&emsp;{{country}}</span>
+          <span class="left">&emsp;Nodetype:&emsp;&nbsp;{{jobTitle}}</span><br>
+          <span class="left">&emsp;Country:&emsp;&emsp;{{country}}</span>
           </div>
         </div>
       </div>
@@ -92,7 +92,11 @@ export default {
     mini: {
       type: Boolean,
       default: false
-    }    
+    },
+    publickey: {
+      type: String,
+      default: ''
+    },   
   },
   data: () => ({
 

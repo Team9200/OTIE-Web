@@ -240,9 +240,9 @@ async function searchTest(req, res) {
 
 	}
 	else{
-
-		const and = query.split("&&");
-		const or = query.split("||");
+		const tmp = query.replace(" ","");
+		const and = tmp.split("&&");
+		const or = tmp.split("||");
 
 		if(and.length == 2 && or.length == 1){		// and 
 

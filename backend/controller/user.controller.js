@@ -33,7 +33,7 @@ function searchUser(req, res) {
 
     const publickey = req.query.publickey;
 
-    User.find({'publickey':publickey},{'publickey':true,'nodetype':true, 'username':true}).then((data) => {
+    User.find({'publickey':publickey}).then((data) => {
 
         res.json({
             success: true,

@@ -2,7 +2,7 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex v-if="activity.length >= 1" lg12 sm12 v-for="(item,index) in users" :key=" 'mini' + index">
+        <v-flex v-if="activity.length >= 1" lg12 sm12 v-for="(item,index) in user" :key=" 'mini' + index">
           <name-card
             mini
             v-bind="item"
@@ -40,8 +40,8 @@
           <v-widget title="Activities" contentBg="white">
             <div slot="widget-content" style="height:385px;">
               <ol class="timeline timeline-activity timeline-point-sm timeline-content-right">
-                <li class="timeline-block" v-for="(item, index) in activity" :key="index">
-                  <div class="timeline-point">
+                <li class="timeline-block" v-for="(item, index) in activity" :key="index" @click="locationPost">
+                  <div class="timeline-point" :id="index">
                     <v-circle dot large :color="item.color"></v-circle>
                   </div>
                   <div class="timeline-content">
@@ -73,7 +73,7 @@
                   ['series[0].avoidLabelOverlap', true],         
                   ['series[0].radius', ['50%', '70%']],                      
                 ]"
-                onclick="a = this.innerHTML.split('</span>')[1];tag=a.split(':')[0];console.log(tag)"
+                @click="location"
                 height="367px"
                 width="100%"
                 class="center"
@@ -108,12 +108,12 @@
                   class="elevation-0"
                 >
                   <template slot="items" slot-scope="props">
-                    
+                    <tr @click="$router.push(`/post/${props.item.permlink}`)">
                     <td>{{ props.item.id }}</td>
                     <td>{{ props.item.subject }}</td>
                     <td class="text-xs-left">{{ props.item.date}}</td>
                     <td class="text-xs-left"><v-progress-linear v-if="props.item.progress >= 0" :value="props.item.progress" height="5" :color="props.item.color"></v-progress-linear> </td>
-                
+                    </tr>
                   </template>
                 </v-data-table>
               </template>
@@ -146,11 +146,12 @@
                   class="elevation-0 table-striped"
                 >
                   <template slot="items" slot-scope="props">
+                  <tr @click="$router.push(`/post/${props.item.permlink}`)">
 
                     <td>{{ props.item.id }}</td>
                     <td class="text-xs-left">{{ props.item.subject }}</td>
                     <td class="text-xs-left">{{ props.item.date }}</td>
-
+                  </tr>
                   </template>
                 </v-data-table>
               </template>
@@ -190,6 +191,7 @@ export default {
 
     color: Material,
     selectedTab: 'tab-1',
+    user: [],
     users: [
       {
         jobTitle: 'Analyzer',
@@ -268,11 +270,14 @@ export default {
             this.init_mActive(malwareList);
             this.init_Active(malwareList);
             this.init_List(malwareList);
+            this.init_User()
           
           });
       }
     },
-    init_user (type){
+    init_User (type){
+
+      const pub = this.$route.query.name;
 
       if(type === 'storage'){
 
@@ -281,9 +286,19 @@ export default {
       }
       else{
 
+        let tmp = {};
+        apiService.searchUser(pub).then((user)=>{
 
+          const data = user.message[0];
+          tmp.jobTitle = data.nodetype;
+          tmp.name = data.username;
+          tmp.country = data.country;
+          tmp.avatar = {};
+          tmp.publickey = data.publickey;
+          this.user.push(tmp);
+
+        });
       }
-
 
     },
     init_tagChart (malwareList) {
@@ -415,6 +430,7 @@ export default {
 
         tmp.color = color[i];       // 색
         tmp.text = data.title.slice(0,40)+'....';       // 내용
+        tmp.permlink = data.permlink;
         result.push(tmp);
 
       });
@@ -447,13 +463,14 @@ export default {
         tmp1.id = i;
         tmp1.subject = (data.title).slice(0,30)+'...';
         tmp1.date = new Date(data.body.date).toLocaleString();
-        tmp1.progress = 25*i;
+        tmp1.progress = 50;
         tmp1.color = gradeColor[i];
+        tmp1.permlink = data.permlink;
       
         tmp2.id = i;
         tmp2.subject = (data.title).slice(0,20)+'...';
         tmp2.date = new Date(data.body.date).toLocaleString();
-
+        tmp2.permlink = data.permlink;
         result1.push(tmp1)
         result2.push(tmp2);
 
@@ -481,6 +498,30 @@ export default {
       this.listData2 = result2;
       console.log("created List Data");
 
+    },
+    location (e) {
+
+      const targetId = e.currentTarget;
+      let tag = targetId.innerHTML.split('</span>')[1].split(':')[0];
+      const name = this.user[0].name;
+
+      if(tag == 'other'){
+        tag = '';
+      }
+      location.href =  '/search?query=%23'+tag+'%26%26%40'+name;
+    },
+    locationPost(e){    //activity
+
+      const target = e.currentTarget;
+      const index = target.getElementsByTagName("div")[0].id;
+      const permlink = this.activity[index].permlink;
+
+      location.href="/post/"+permlink;
+    },
+    locationPop(e){
+
+      console.log
+
     }
   },
   created: function () {
@@ -493,4 +534,9 @@ export default {
 </script>
 <style lang="css">
   @import '../assets/css/profile.css';
+</style>
+<style>
+    .timeline-block:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
 </style>
