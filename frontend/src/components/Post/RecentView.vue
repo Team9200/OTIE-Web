@@ -3,7 +3,7 @@
         <div v-for="(post, i) in posts" :key="i">
             <v-card style="overflow-y: auto;">
                 <v-card-title>
-                    <h3 @click="go(post)">{{ post.title }}</h3>
+                    <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
                 <v-card-text>
                     Analyzer: {{ post.body.analyzer }} / Date: {{ getDate(post.timestamp) }}
@@ -11,46 +11,6 @@
             </v-card>
             <br>
         </div>
-
-
-        <!-- <v-card style="overflow-y: auto;" class="post-card">
-            <v-toolbar color="transparent" flat dense card>
-                <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon>
-                    <v-icon class="text--secondary">more_vert</v-icon>
-                </v-btn>
-            </v-toolbar>
-            <v-divider></v-divider>
-            <v-card-text class="pa-0">
-                <ul class="post--list flex-list vertical">
-                    <li class="post--item" v-for="(post, i) in posts" :key="i">
-                        <a @click="go(post)" class="post--link pa-4 layout row ma-0 text--primary">
-                            <div class="post--content ml-3">
-                                <h3 class="title post--title">
-                                    {{ post.title }}
-                                </h3>
-                                <div class="post--desc py-2 text--secondary">
-                                    {{ post.description }}
-                                </div>
-                                <div class="post--meta o-flex justify-space-between">
-                                    <div class="post--author caption grey--text text--darken-1">
-                                        <span>{{post.body.analyzer}}</span>
-                                        <time class="px-2">{{getDate(post.timestamp)}}</time>
-                                    </div>
-                                    <div class="social">
-                                        <a @click="handleThumb" class="grey--text text--darken-1">
-                                            <v-icon small>thumb_up</v-icon>
-                                            <small>100+</small>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </v-card-text>
-        </v-card> -->
         <br>
         <div class="text-xs-center">
             <v-pagination v-model="page" :length="length" total-visible="10"></v-pagination>
@@ -105,14 +65,15 @@
             }
         },
         mounted() {
-            // TODO: Add url routing & router.js
-            this.getPosts(1)
+            this.getPosts(this.$route.params.page)
+            this.page = Number(this.$route.params.page)
             this.getCount()
         },
         watch: {
             page: {
                 handler(val) {
                     this.getPosts(val)
+                    this.$router.push(`/recent/${val}`)
                 }
             }
         }

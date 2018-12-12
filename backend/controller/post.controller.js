@@ -774,6 +774,25 @@ function count(req, res) {
 }
 
 
+function getMalware(req, res) {
+	var query = req.query.query
+
+	Post.findOne({
+		'body.sha256': new RegExp(query, 'i')
+	}).then((data) => {
+		res.json({
+			success: true,
+			message: data
+		});
+	})
+	.catch((err) => {
+		res.json({
+			success: false,
+			message: err
+		});
+	});
+}
+
 export default {
 	view,
 	get,
@@ -782,5 +801,6 @@ export default {
 	searchNoPaging,
 	getBody,
 	count,
-	searchTest
+	searchTest,
+	getMalware
 };

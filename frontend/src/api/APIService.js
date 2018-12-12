@@ -61,7 +61,7 @@ export class APIService {
         }).then(response => response.data)
     }
 
-    searchPost(page,query) {
+    searchPost(page, query) {
         const url = `${API_URL}/api/post/searchTest`
 
         return axios.get(url, {
@@ -93,7 +93,7 @@ export class APIService {
         const url = `${API_URL}/api/user/signup`
 
         return axios.post(url, {
-            
+
             username: username,
             publickey: publickey,
             privatekey: privatekey,
@@ -140,12 +140,23 @@ export class APIService {
 
         return axios.get(url).then(response => response.data)
     }
+
     searchUser(pub) {
         const url = `${API_URL}/api/user/search`
 
         return axios.get(url, {
             params: {
                 publickey: pub
+            }
+        }).then(response => response.data)
+    }
+
+    getMalware(query) {
+        const url = `${API_URL}/api/post/get/malware`
+
+        return axios.get(url, {
+            params: {
+                query: query
             }
         }).then(response => response.data)
     }
