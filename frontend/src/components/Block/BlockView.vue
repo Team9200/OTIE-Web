@@ -27,7 +27,11 @@
 
                 <v-container>
                     <div v-for="(post, i) in postList" :key="i">
-                        <h3>{{ post.permlink }}</h3>
+                        <!-- <h3>{{ post.permlink }}</h3> -->
+                        <v-tooltip bottom>
+                            <span @click="go(post)" slot="activator">{{ post.permlink }}</span>
+                            <span>제목: {{ post.title }}<br>시간: {{ getDate(post.timestamp) }}</span>
+                        </v-tooltip>
                     </div>
                 </v-container>
             </v-card>
@@ -40,7 +44,10 @@
 
                 <v-container>
                     <div v-for="(reply, i) in replyList" :key="i">
-                        <h3>{{ reply.permlink }}</h3>
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ reply.permlink }}</span>
+                            <span>댓글: {{ reply.text }}</span>
+                        </v-tooltip>
                     </div>
                 </v-container>
             </v-card>
@@ -54,7 +61,10 @@
 
                 <v-container>
                     <div v-for="(vote, i) in voteList" :key="i">
-                        <h3>{{ vote.voteid }}</h3>
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ vote.voteid }}</span>
+                            <span>닉네임: {{ vote.publickey }}</span>
+                        </v-tooltip>
                     </div>
                 </v-container>
             </v-card>
@@ -68,7 +78,10 @@
 
                 <v-container class="scroll">
                     <div v-for="(transaction, i) in transactionList" :key="i">
-                        <h3>{{ transaction.txid }}</h3>
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ transaction.txid }}</span>
+                            <span>거래: {{ transaction.txid }}</span>
+                        </v-tooltip>
                     </div>
                 </v-container>
             </v-card>
@@ -122,6 +135,10 @@
                     .catch(err => {
                         if (err) throw err
                     })
+            },
+            go(post) {
+                const string = '/post/' + post.permlink
+                window.location.href = string
             }
         },
         mounted() {
