@@ -61,7 +61,7 @@ export class APIService {
         }).then(response => response.data)
     }
 
-    searchPost(page,query) {
+    searchPost(page, query) {
         const url = `${API_URL}/api/post/searchTest`
 
         return axios.get(url, {
@@ -93,7 +93,7 @@ export class APIService {
         const url = `${API_URL}/api/user/signup`
 
         return axios.post(url, {
-            
+
             username: username,
             publickey: publickey,
             privatekey: privatekey,
