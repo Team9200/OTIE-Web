@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <div v-for="(post, i) in posts" :key="i">
-            <v-card style="overflow-y: auto;">
+            <v-card style="overflow-y: auto;" id="post">
                 <v-card-title>
                     <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
@@ -117,4 +117,10 @@
         transform: scale(1.05);
         transition: 0.7s;
     }
+
+
+    #post:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+
 </style>
