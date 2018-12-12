@@ -263,9 +263,9 @@ function searchTest(req, res) {
 
 						})
 					})
-			} else if (init === "@") { // hash
+			} else if (init === "!") { // hash
 
-				query = query.replace("@","");
+				query = query.replace("!","");
 
 				if (query.length === 32) { //md5
 
@@ -345,9 +345,9 @@ function searchTest(req, res) {
 					})
 				}
 
-			} else if (init === "!") {
+			} else if (init === "@") {
 
-				query = query.replace("!","");
+				query = query.replace("@","");
 
 				User.find({
 						'username': new RegExp(query, 'i')
