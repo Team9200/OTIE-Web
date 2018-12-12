@@ -3,7 +3,7 @@
         <div v-for="(post, i) in posts" :key="i">
             <v-card style="overflow-y: auto;">
                 <v-card-title>
-                    <h3 @click="go(post)">{{ post.title }}</h3>
+                    <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
                 <v-card-text>
                     Analyzer: {{ post.body.analyzer }} / Date: {{ getDate(post.timestamp) }}
