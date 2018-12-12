@@ -10,7 +10,7 @@
                 </v-btn>
             </v-toolbar> -->
             <v-card-title>
-                <h1>Search of "{{ $route.query.query }}"</h1>
+                <h1>검색 결과 "{{ $route.query.query }}"</h1>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text class="pa-0">

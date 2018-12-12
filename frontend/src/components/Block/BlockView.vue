@@ -6,7 +6,7 @@
             </v-layout>
             <v-card>
                 <v-card-title>
-                    <h1>Block #{{ page }}</h1>
+                    <h1>{{ page }}번 블록</h1>
                 </v-card-title>
 
                 <v-container>
