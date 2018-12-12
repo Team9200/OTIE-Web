@@ -39,9 +39,12 @@ export default new Router({
       component: HomeView
     },{
       path: '/recent',  
+      redirect: '/recent/1'
+    },{
+      path: '/recent/:page',
       name: 'recent-view',
       component: RecentView
-    },,{
+    },{
       path: '/search',
       name: 'search-view',
       component: SearchView
