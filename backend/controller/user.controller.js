@@ -13,7 +13,7 @@ function test(req, res) {
 
 function getUser(req, res) {
 
-    User.find({},{'publickey':true,'nodetype':true, 'username':true}).then((data) => {
+    User.find({}).then((data) => {
 
         res.json({
             success: true,

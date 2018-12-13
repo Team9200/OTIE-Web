@@ -51,92 +51,52 @@
 
                 let nodeDatas = [];
 
-                await apiService.getStorage().then(async (response) => {
-
-                    const data = response.message;
-
-                    await forEach(data, async (storage) => {
-
-                        let tmp = {};
-                        const id = storage.id;
-                        const username = await apiService.searchUser(storage.id).then(re => {
-
-                            const data = re.message;
-                            if (data.length !== 0) {
-
-                                tmp.name = data[0].username;
-
-                            } else {
-
-                                tmp.name = id;
-
-                            }
-                        })
-                        tmp.publickey = storage.id;
-                        tmp.color = "#2683ff";
-                        tmp.r = (storage.storageSize / 500) + 10;
-                        tmp.x = 825;
-                        tmp.y = 365;
-                        tmp.forcex = 788;
-                        tmp.forcey = 398;
-                        tmp.type = storage.nodeType;
-
-                        nodeDatas.push(tmp);
-                        this.storage += 1;
-                    });
-                });
-
                 await apiService.getUser().then(async (response) => {
 
                     const data = response.message;
+
                     await forEach(data, async (node) => {
 
+                        let userTmp = {};
 
-                        if (node.nodetype == 'Collector' || node.nodetype == 'Analyzer') {
-                            let vote;
-                            let userTmp = {};
-                            let cot = await apiService.searchPosts('node', node.publickey).then(
-                                async (re) => {
+                        userTmp.publickey = node.publickey;
+                        userTmp.name = node.username;
+                        userTmp.type = node.nodetype;
+                        userTmp.x = 825;
+                        userTmp.y = 365;
+                        userTmp.cont = node.contribution;
+                        userTmp.r = 8 + ((node.contribution) /100)
+                        userTmp.type = node.nodetype;
 
-                                    vote = await apiService.userVote(node.publickey).then(re =>{
-                                        return re.message*5;
-                                    })
-                                    const data = re.message;
-                                    return data.length;
+                        if (node.nodetype == 'Collector') {
+                            
+                            userTmp.color = '#03d6a8';
+                            userTmp.forcex = 262;
+                            userTmp.forcey = 132;
+                            this.collector += 1;
 
-                                })
-                            userTmp.publickey = node.publickey;
-                            userTmp.type = node.nodetype;
-                            userTmp.x = 825;
-                            userTmp.y = 365;
+                        } 
+                        else if (node.nodetype == 'Analyzer') {
 
-                            userTmp.name = node.username;
-
-                            if (node.nodetype == 'Collector') {
-                                
-                                userTmp.r = 5 + (cot+vote)/25;
-                                userTmp.color = '#03d6a8';
-                                userTmp.forcex = 262;
-                                userTmp.forcey = 132;
-                                userTmp.cont = cot+vote;
-                                this.collector += 1;
-
-                            } else if (node.nodetype == 'Analyzer') {
-
-                                userTmp.r = 10 + (cot+vote)/25;
-                                userTmp.color = '#8c25ea';
-                                userTmp.forcex = 525;
-                                userTmp.forcey = 265;
-                                userTmp.cont = cot + vote;
-                                this.analyzer += 1;
-                            }
-                            nodeDatas.push(userTmp);
+                            userTmp.color = '#8c25ea';
+                            userTmp.forcex = 525;
+                            userTmp.forcey = 265;
+                            this.analyzer += 1;
                         }
+                        else if (node.nodetype == 'Storage') {
+
+                            userTmp.color = "#2683ff";
+                            userTmp.forcex = 788;
+                            userTmp.forcey = 398;
+                            this.storage += 1;
+
+                        }
+                        nodeDatas.push(userTmp);
 
                     });
 
                 });
-
+                console.log(nodeDatas);
                 this.setData(nodeDatas);
                 this.number(nodeDatas);
             },

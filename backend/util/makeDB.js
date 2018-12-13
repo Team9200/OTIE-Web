@@ -7,6 +7,7 @@ import User from '../database/models/user';
 import fs from 'fs';
 import mongoose from 'mongoose';
 import { forEach } from 'p-iteration';
+import axios from 'axios';
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/otie", {
@@ -232,37 +233,40 @@ async function blockLists(fileName) {
 
 			const publickey = user.publickey;
 			const id = user._id;
+			const type = user.nodetype;
 			let contribution = 0;
+
 
 			await Vote.find({publickey: user.publickey},{weight:true}).then(async (vote) => {		// vote 한 유저.
 
 				contribution = vote.length;
 
 			})
-				
-			await Post.find({$or: [{'body.collector': publickey}, {'body.analyzer': publickey }]}, {permlink:true}).then(async (posts) => {
+			if(nodetype !== 'Storage') {
+				await Post.find({$or: [{'body.collector': publickey}, {'body.analyzer': publickey }]}, {permlink:true}).then(async (posts) => {
 
-				await forEach(posts, async (post) => {		
+					await forEach(posts, async (post) => {		
 
-					const permlink = post.permlink;
-					let weight = 0					// post 당 웨이트 계산.
+						const permlink = post.permlink;
+						let weight = 0					// post 당 웨이트 계산.
 
-					await Vote.find({refpermlink: permlink},{weight:true}).then(async (votes) => {	// 웨이트 계산
+						await Vote.find({refpermlink: permlink},{weight:true}).then(async (votes) => {	// 웨이트 계산
 
-						await forEach(votes, async (vote) => {
+							await forEach(votes, async (vote) => {
 
-							weight += vote.weight;
+								weight += vote.weight;
 
+							});
+						
 						});
-					
+
+						contribution += weight;	// user 한명의 전체 웨이트.
+
 					});
 
-					contribution += weight;	// user 한명의 전체 웨이트.
 
 				});
-
-
-			});
+			}
 			//console.log(id, contribution);
 			await User.updateOne({_id: id},{$set: {contribution : contribution}}).then((result,err)=>{
 
@@ -303,7 +307,74 @@ async function userLists(){
 
 	})
 }
+async function test() {
 
+		await User.find({},{publickey: true, nodetype: true}).then(async (users) => {
+
+		await forEach(users, async (user, idx) => {
+
+			const publickey = user.publickey;
+			const id = user._id;
+			const type = user.nodetype;
+			let contribution = 0;
+
+
+			await Vote.find({publickey: user.publickey},{weight:true}).then(async (vote) => {		// vote 한 유저.
+
+				contribution = vote.length;
+
+			})
+			if(type !== 'Storage'){
+				await Post.find({$or: [{'body.collector': publickey}, {'body.analyzer': publickey }]}, {permlink:true}).then(async (posts) => {
+
+					await forEach(posts, async (post) => {		
+
+						const permlink = post.permlink;
+						let weight = 0					// post 당 웨이트 계산.
+
+						await Vote.find({refpermlink: permlink},{weight:true}).then(async (votes) => {	// 웨이트 계산
+
+							await forEach(votes, async (vote) => {
+
+								weight += vote.weight;
+
+							});
+						
+						});
+
+						contribution += weight;	// user 한명의 전체 웨이트.
+
+					});
+
+
+				});
+			}
+			else {
+				console.log(publickey);
+		        const url = `http://openti.info:29200/api/findPeer`;
+		        const storage = await axios.get(url,{
+		        	params:{
+
+		        		publickey: publickey
+		        	}
+		        }).then(response => response.data);
+		        contribution += storage.message.storageSize/10
+
+			}
+			//console.log(id, contribution);
+			await User.updateOne({_id: id},{$set: {contribution : contribution}}).then((result,err)=>{
+
+				if(err) console.log(err);
+				else console.log(result);
+
+			});
+
+		});
+
+	});
+
+}
 //blockLists('./sample.json')
 
 //userLists();
+test();
