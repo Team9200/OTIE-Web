@@ -13,7 +13,7 @@ function test(req, res) {
 
 function getUser(req, res) {
 
-    User.find({}).then((data) => {
+    User.find({},{password:false}).then((data) => {
 
         res.json({
             success: true,
