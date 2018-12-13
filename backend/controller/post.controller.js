@@ -93,7 +93,7 @@ function search(req, res) {
 
 				'body.tag_name_etc.tag': new RegExp(query, 'i')
 
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			}).limit(10).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -112,7 +112,7 @@ function search(req, res) {
 
 			Post.find({
 					'body.md5': new RegExp(query, 'i')
-				}).skip(10 * (page - 1)).limit(10).then((data) => {
+				}).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -129,7 +129,7 @@ function search(req, res) {
 
 			Post.find({
 					'body.sha1': new RegExp(query, 'i')
-				}).skip(10 * (page - 1)).limit(10).then((data) => {
+				}).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -147,7 +147,7 @@ function search(req, res) {
 
 			Post.find({
 					'body.sha256': new RegExp(query, 'i')
-				}).skip(10 * (page - 1)).limit(10).then((data) => {
+				}).limit(10).then((data) => {
 					res.json({
 						success: true,
 						message: data
@@ -170,7 +170,7 @@ function search(req, res) {
 				}, {
 					'body.analyzer': new RegExp(query, 'i')
 				}]
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			}).then((data) => {
 				res.json({
 					success: true,
 					message: data
@@ -204,7 +204,7 @@ function search(req, res) {
 	} else if (type === "title") {
 		Post.find({
 				'title': new RegExp(query, 'i')
-			}).skip(10 * (page - 1)).limit(10).then((data) => {
+			}).then((data) => {
 				res.json({
 					success: true,
 					message: data

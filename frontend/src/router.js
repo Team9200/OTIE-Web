@@ -23,6 +23,8 @@ import MalwareView from './components/Malware/MalwareView'
 
 import ErrorView from './components/ErrorView'
 
+import RankView from './components/RankView'
+
 Vue.use(Router)
 
 const requireAuth = (returnPath) => (from, to, next) => {
@@ -90,6 +92,10 @@ export default new Router({
       path: '/status',
       name: 'status-view',
       component: StatusView
+    },{
+      path: '/rank',
+      name: 'rank-view',
+      component: RankView
     },{
       path: '/mypage',
       name: 'my-page-view',

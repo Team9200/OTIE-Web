@@ -160,4 +160,14 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    userVote(pub) {
+
+        const url = `${API_URL}/api/vote/user`
+
+        return axios.get(url, {
+            params: {
+                publickey: pub
+            }
+        }).then(response => response.data)
+    }
 }

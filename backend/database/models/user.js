@@ -29,7 +29,11 @@ class User extends mongoose.Schema {
             country: {
                 type: String
             },
-            clientId: {
+            contribution: {
+                type: Number,
+                default: 0
+            },
+            lientId: {
                 type: String
             },
             authed: {
@@ -52,12 +56,14 @@ class User extends mongoose.Schema {
 
     create(username,password, publickey ,email, nodetype, country) {
         const user = new this({
+        
             username,
             password,
             email,
             publickey,
             nodetype,
             country
+        
         });
 
         return user.save({unique:true});
