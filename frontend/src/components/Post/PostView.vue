@@ -124,7 +124,7 @@
 
     .markdown-editor .CodeMirror,
     .markdown-editor .CodeMirror-scroll {
-        min-height: 100px;
+        min-height: 150px;
     }
 
     .markdown-editor .CodeMirror {
