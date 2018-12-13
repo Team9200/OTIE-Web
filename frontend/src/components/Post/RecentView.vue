@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <div v-for="(post, i) in posts" :key="i">
-            <v-card style="overflow-y: auto;" id="post">
+            <v-card style="cursor: pointer; overflow-y: auto;" id="post">
                 <v-card-title>
                     <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
