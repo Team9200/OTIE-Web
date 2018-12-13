@@ -31,6 +31,15 @@
         <br>
         <v-card>
             <v-card-title>
+                <h2>댓글 달기</h2>
+            </v-card-title>
+            <v-card-text>
+                <markdown-editor preview-class="markdown-body" v-model="replyContent" ref="markdownEditor"></markdown-editor>
+            </v-card-text>
+        </v-card>
+        <br>
+        <v-card>
+            <v-card-title>
                 <h2>댓글</h2>
             </v-card-title>
             <v-card-actions>
@@ -53,6 +62,12 @@
 </template>
 
 <script>
+import hljs from 'highlight.js'
+
+    window.hljs = hljs;
+    import markdownEditor from 'vue-simplemde/src/markdown-editor'
+
+
     import {
         APIService
     } from '../../api/APIService'
@@ -64,10 +79,12 @@
         data: () => ({
             post: {},
             votes: [],
-            replies: []
+            replies: [],
+            replyContent: ''
         }),
         components: {
-            VueMarkdown
+            VueMarkdown,
+            markdownEditor
         },
         methods: {
             viewPost() {
@@ -94,7 +111,10 @@
     }
 </script>
 
-<style>
+<style> 
+    @import '~simplemde/dist/simplemde.min.css';
+    @import '~github-markdown-css';
+    @import '~highlight.js/styles/atom-one-dark.css';
     .post-text {
         font-size: 15px;
         padding-top: 5px;
