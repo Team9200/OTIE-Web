@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
+    <v-navigation-drawer v-if="isMobile || isTablet" style="width: 250px;" fixed :clipped="$vuetify.breakpoint.mdAndUp" v-model="drawer" app>
       <v-list>
         <v-list-tile v-if="isMobile || isTablet">
           <!-- <v-btn icon @click.native.stop="drawer = !drawer">
