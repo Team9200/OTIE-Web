@@ -67,6 +67,25 @@ function get(req, res) {
 
 }
 
+function getPop(req, res){
+
+	var page = req.query.page;
+
+	Post.find({}).sort('-likes').skip(10 * (page - 1)).limit(10).then((data) => {
+			res.json({
+				success: true,
+				message: data
+			});
+		})
+		.catch((err) => {
+			res.json({
+				success: false,
+				message: err
+			});
+		});
+
+}
+
 function getAll(req, res) {
 	Post.find({}).then((data) => {
 			res.json({
@@ -775,8 +794,8 @@ function count(req, res) {
 
 
 function getMalware(req, res) {
-	var query = req.query.query
 
+	var query = req.query.query
 	Post.findOne({
 		'body.sha256': new RegExp(query, 'i')
 	}).then((data) => {
@@ -794,13 +813,16 @@ function getMalware(req, res) {
 }
 
 export default {
+	
 	view,
 	get,
+	getPop,
 	getAll,
 	search,
 	searchNoPaging,
 	getBody,
 	count,
 	searchTest,
-	getMalware
+	getMalware,
+	
 };

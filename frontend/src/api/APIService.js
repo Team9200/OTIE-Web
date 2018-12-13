@@ -170,4 +170,14 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    postPopular(page) {
+
+        const url = `${API_URL}/api/post/popular`
+
+        return axios.get(url, {
+            params: {
+                page: page
+            }
+        }).then(response => response.data)
+    }
 }

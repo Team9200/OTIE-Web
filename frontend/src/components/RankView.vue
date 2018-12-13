@@ -8,11 +8,12 @@
         class="elevation-0"
       >
       <template slot="items" slot-scope="props">
-        <tr @click="$router.push(`/post/${props.item.publickey}`)" style="cursor:pointer;">
+        <tr @click="$router.push(`/profile?type=${props.item.nodetype}&name=${props.item.publickey}`)" style="cursor:pointer;">
         <td>{{ props.index +1 }}</td>
         <td>{{ props.item.username }}</td>
+        <td>{{ props.item.nodetype }}</td>
         <td>{{ props.item.contribution }}</td>
-        <td class="text-xs-left">{{ props.item.date}}</td>
+        <td class="text-xs-left"><country-flag :country="String(props.item.country).toLowerCase()" size='normal'/></td>
         <td class="text-xs-left"><v-progress-linear v-if="props.item.progress >= 0" :value="props.item.progress" height="5" :color="props.item.color"></v-progress-linear> </td>
         </tr>
       </template>
@@ -25,6 +26,7 @@
 
 <script>
 
+  import CountryFlag from 'vue-country-flag'
 
   import {
       APIService
@@ -36,7 +38,10 @@
   const apiService = new APIService();
 
   export default {
-    
+
+    components: {
+        CountryFlag
+    },
     data: () => ({
      
       listHeader1: [
@@ -53,13 +58,19 @@
             sortable: false,
             value: 'name'
           },
+          {
+            text: 'Nodetype',
+            align: 'left',
+            sortable: false,
+            value: 'nodetype'
+          },
                     {
             text: 'cotribution',
             align: 'left',
             sortable: false,
-            value: 'number'
+            value: 'cotributionr'
           },
-          { text: 'Date', sortable: false, value: 'date' },
+          { text: 'country', sortable: false, value: 'country' },
           { text: 'Grade', sortable: false, value: 'progress' },
      
       ],
@@ -79,7 +90,9 @@
         await apiService.getUser().then(async (user) =>{
 
           let result =  user.message.sort(compare).reverse();
+
           this.listData1 = result;
+          console.log(result);
 
         })
       } 

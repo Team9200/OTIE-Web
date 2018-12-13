@@ -26,6 +26,10 @@ class Post extends mongoose.Schema {
             timestamp: {
                 type: String,
                 required: true
+            },            
+            likes: {
+                type: Number,
+                default: 0
             }
         });
     

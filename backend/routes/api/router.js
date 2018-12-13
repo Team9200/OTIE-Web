@@ -23,7 +23,8 @@ router.route('/post/search').get(PostController.search);
 router.route('/post/searchTest').get(PostController.searchTest);
 router.route('/post/node').get(PostController.searchNoPaging);
 router.route('/post/get/body').get(PostController.getBody);
-router.route('/post/count').get(PostController.count)
+router.route('/post/count').get(PostController.count);
+router.route('/post/popular').get(PostController.getPop);
 
 router.route('/block/get').get(BlockController.get);
 router.route('/block/get/page').get(BlockController.getPage);

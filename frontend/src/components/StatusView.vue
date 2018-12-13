@@ -78,14 +78,14 @@
                         } 
                         else if (node.nodetype == 'Analyzer') {
 
-                            userTmp.color = '#8c25ea';
+                            userTmp.color = '#2683ff';
                             userTmp.forcex = 525;
                             userTmp.forcey = 265;
                             this.analyzer += 1;
                         }
                         else if (node.nodetype == 'Storage') {
 
-                            userTmp.color = "#2683ff";
+                            userTmp.color = "#8c25ea";
                             userTmp.forcex = 788;
                             userTmp.forcey = 398;
                             this.storage += 1;
@@ -250,14 +250,14 @@
                     .attr("cx", 910)
                     .attr("cy", 40)
                     .attr("strock", "black")
-                    .attr("fill", "#8c25ea")
+                    .attr("fill", "#2683ff")
 
                 svg.append("circle")
                     .attr("r", 9)
                     .attr("cx", 910)
                     .attr("cy", 70)
                     .attr("strock", "black")
-                    .attr("fill", "#2683ff")
+                    .attr("fill", "#8c25ea")
 
                 svg.append("text")
                     .text("Collector Node")

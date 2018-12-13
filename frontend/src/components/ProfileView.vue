@@ -2,7 +2,7 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex v-if="activity.length >= 1" lg12 sm12 v-for="(item,index) in user" :key=" 'mini' + index">
+        <v-flex v-if="user.length !== 0" lg12 sm12 v-for="(item,index) in user" :key=" 'mini' + index">
           <name-card
             mini
             v-bind="item"
@@ -192,17 +192,6 @@ export default {
     color: Material,
     selectedTab: 'tab-1',
     user: [],
-    users: [
-      {
-        jobTitle: 'Analyzer',
-        name: 'Michael Wang',
-        avatar: {
-          src: 'https://randomuser.me/api/portraits/men/1.jpg',
-          size: '36'
-        },
-        country: 'South korea',  
-      }
-    ],
     nodeType: [],
     monthActivity: [],
     tag: [], 
@@ -253,11 +242,13 @@ export default {
     init () {
 
       const name = this.$route.query.name;
-      const type = this.$route.query.type;
+      const type = this.$route.query.type.toLowerCase();
       this.nodeType = type;
       console.log(this.nodeType);
 
-      if(type === 'Storage'){
+      if(type === 'storage'){
+
+        this.init_User()
 
       }
       else{
@@ -266,39 +257,41 @@ export default {
           .then(response => {
             
             const malwareList = response.message;
+            this.init_User()
             this.init_tagChart(malwareList);
             this.init_mActive(malwareList);
             this.init_Active(malwareList);
             this.init_List(malwareList);
-            this.init_User()
           
           });
       }
     },
     init_User (type){
 
-      const pub = this.$route.query.name;
+      let pub = this.$route.query.name;
 
-      if(type === 'storage'){
-
-        apiService.getStorage()
-
-      }
-      else{
+      apiService.searchUser(pub).then((user)=>{
 
         let tmp = {};
-        apiService.searchUser(pub).then((user)=>{
+        const data = user.message[0];
 
-          const data = user.message[0];
-          tmp.jobTitle = data.nodetype;
-          tmp.name = data.username;
-          tmp.country = data.country;
-          tmp.avatar = {};
-          tmp.publickey = data.publickey;
-          this.user.push(tmp);
+        tmp.jobTitle = data.nodetype;
+        tmp.name = data.username;
+        tmp.country = data.country;
+        tmp.avatar = {};
+        tmp.publickey = data.publickey;
+        
+        if(data.nodetype == 'Collector') tmp.color = '#03d6a8';
 
-        });
-      }
+        else if(data.nodetype == 'Analyzer') tmp.color = '#2683ff';
+
+        else if(data.nodetype == 'Storage') tmp.color = '#8c25ea';
+
+
+
+        this.user.push(tmp);
+        
+      });
 
     },
     init_tagChart (malwareList) {

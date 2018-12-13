@@ -1,6 +1,6 @@
 <template>
 <div class="name-card">
-  <v-card :color="color" ref="card" :dark="dark" :img="cardBgImage">
+  <v-card  ref="card" :dark="dark" :img="cardBgImage">
     <v-card-media v-if="showTopNav">
       <v-layout row justify-space-between class="ma-0">
         <v-flex xs2 class="text-sm-right">
@@ -10,7 +10,7 @@
     </v-card-media>    
     <v-card-text>
       <div class="layout ma-0 align-center" :class="computeCardLayout">
-        <v-avatar :size="computeAvatarSize" color="primary">
+        <v-avatar :size="computeAvatarSize" :color="color">
           <img v-bind:src="avatar.src" v-bind:alt="name" v-if="showAvatar">
           <span v-else class="white--text headline">{{ name.charAt(0) }}</span>
         </v-avatar>
