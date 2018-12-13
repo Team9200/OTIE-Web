@@ -226,6 +226,55 @@ async function blockLists(fileName) {
 	await fs.closeSync(chain);
 	fs.writeFile('./lastSize', fullSize-136, 'utf8');
 
+	await User.find({},{publickey: true, username: true}).then(async (users) => {
+
+		await forEach(users, async (user, idx) => {
+
+			const publickey = user.publickey;
+			const id = user._id;
+			let contribution = 0;
+
+			await Vote.find({publickey: user.publickey},{weight:true}).then(async (vote) => {		// vote 한 유저.
+
+				contribution = vote.length;
+
+			})
+				
+			await Post.find({$or: [{'body.collector': publickey}, {'body.analyzer': publickey }]}, {permlink:true}).then(async (posts) => {
+
+				await forEach(posts, async (post) => {		
+
+					const permlink = post.permlink;
+					let weight = 0					// post 당 웨이트 계산.
+
+					await Vote.find({refpermlink: permlink},{weight:true}).then(async (votes) => {	// 웨이트 계산
+
+						await forEach(votes, async (vote) => {
+
+							weight += vote.weight;
+
+						});
+					
+					});
+
+					contribution += weight;	// user 한명의 전체 웨이트.
+
+				});
+
+
+			});
+			//console.log(id, contribution);
+			await User.updateOne({_id: id},{$set: {contribution : contribution}}).then((result,err)=>{
+
+				if(err) console.log(err);
+				else console.log(result);
+
+			});
+
+		});
+
+	});
+
 }
 async function userLists(){
 
@@ -253,10 +302,8 @@ async function userLists(){
 		User.create(username,password, publickey ,email, nodetype, country)
 
 	})
-
-
 }
 
- blockLists('./sample.json')
+//blockLists('./sample.json')
 
 //userLists();

@@ -74,7 +74,7 @@
                         })
                         tmp.publickey = storage.id;
                         tmp.color = "#2683ff";
-                        tmp.r = storage.storageSize / 1000 + 10;
+                        tmp.r = (storage.storageSize / 500) + 10;
                         tmp.x = 825;
                         tmp.y = 365;
                         tmp.forcex = 788;
@@ -114,16 +114,16 @@
 
                             if (node.nodetype == 'Collector') {
                                 
-                                userTmp.r = 10 + (cot/18) + (vote/20);
+                                userTmp.r = 5 + (cot+vote)/25;
                                 userTmp.color = '#03d6a8';
                                 userTmp.forcex = 262;
                                 userTmp.forcey = 132;
-                                userTmp.cont = cot/2 + vote/5;
+                                userTmp.cont = cot+vote;
                                 this.collector += 1;
 
                             } else if (node.nodetype == 'Analyzer') {
 
-                                userTmp.r = 10 + (cot/9)+ (vote/10);
+                                userTmp.r = 10 + (cot+vote)/25;
                                 userTmp.color = '#8c25ea';
                                 userTmp.forcex = 525;
                                 userTmp.forcey = 265;
