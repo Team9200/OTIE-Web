@@ -17,7 +17,7 @@
         <div class="flex text-xs-left" :class="computeTextAlgin">
           <div class="text-xs-left">
             <div>
-              <div>&emsp;Nickname:&emsp;{{name}}&emsp;&emsp;&emsp;&emsp;&emsp;Publickey:&emsp;{{publickey}}</div>
+              <div>&emsp;이름:&emsp;{{name}}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;공개키:&emsp;{{publickey}}</div>
               <v-btn class="right" flat icon color="grey">
                 <v-icon>star</v-icon>
               </v-btn>
@@ -27,8 +27,8 @@
             </div>
           </div>
           <div style="display:inline-block" class="left">
-          <span class="left">&emsp;Nodetype:&emsp;&nbsp;{{jobTitle}}</span><br>
-          <span class="left">&emsp;Country:&emsp;&emsp;{{country}}</span>
+          <span class="left">&emsp;타입:&emsp;{{jobTitle}}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;총 분석횟수: 81</span><br>
+          <span class="left">&emsp;국가:&emsp;{{country}}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;주 분야:&emsp;trojan</span>
           </div>
         </div>
       </div>

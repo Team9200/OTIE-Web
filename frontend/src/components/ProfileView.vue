@@ -11,7 +11,7 @@
         </v-flex>
 
         <v-flex v-if="monthActivity.length >= 1" lg8 sm12 xs12>
-          <v-widget title="Monthly activities" content-bg="white">n
+          <v-widget title="월간 활동" content-bg="white">n
             <div slot="widget-content">
                 <e-chart 
                 :path-option="[
@@ -37,7 +37,7 @@
         </v-flex>
 
          <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
-          <v-widget title="Activities" contentBg="white">
+          <v-widget title="최근 활동" contentBg="white">
             <div slot="widget-content" style="height:385px;">
               <ol class="timeline timeline-activity timeline-point-sm timeline-content-right">
                 <li class="timeline-block" v-for="(item, index) in activity" :key="index" @click="locationPost">
@@ -60,7 +60,7 @@
           <chat-window height="308px"></chat-window>
         </v-flex>
         <v-flex v-if="tag.length >= 1" lg6 sm12 xs12>
-          <v-widget title="Category" content-bg="white">
+          <v-widget title="주요 분석 태그" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 :path-option="[
@@ -90,13 +90,12 @@
             <v-toolbar card dense color="transparent">
               <v-toolbar-title>
 
-              <h4 v-if="nodeType === 'analyzer' ">Popular post</h4>
-              <h4 v-else-if="nodeType === 'collector'">Unique sample</h4>
+              <h4 v-if="nodeType === 'analyzer' ">인기 분석글</h4>
+              <h4 v-else-if="nodeType === 'collector'">희귀 샘플</h4>
 
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>more_vert</v-icon>
               </v-btn>
             </v-toolbar>
             <v-divider></v-divider>
@@ -129,12 +128,11 @@
            <v-card>
             <v-toolbar card dense color="transparent">
               <v-toolbar-title>
-              <h4 v-if="nodeType === 'analyzer' ">Post</h4>
-              <h4 v-else-if="nodeType === 'collector'">Sample</h4>
+              <h4 v-if="nodeType === 'analyzer'">분석글</h4>
+              <h4 v-else-if="nodeType === 'collector'">샘플</h4>
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>more_vert</v-icon>
               </v-btn>      
             </v-toolbar>
             <v-divider></v-divider>

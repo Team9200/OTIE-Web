@@ -11,11 +11,10 @@
         </v-avatar>  
       </template>
       <v-spacer></v-spacer>
-      <v-toolbar-title> <h4>Visitors' book</h4></v-toolbar-title>
+      <v-toolbar-title> <h4>방명록</h4></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <v-btn icon slot="activator">
-          <v-icon color="text--secondary">add</v-icon>
         </v-btn>
         <span>Add user</span>
       </v-tooltip>

@@ -10,6 +10,7 @@
       <template slot="items" slot-scope="props">
         <tr @click="$router.push(`/profile?type=${props.item.nodetype}&name=${props.item.publickey}`)" style="cursor:pointer;">
         <td>{{ props.index +1 }}</td>
+        <td><icon name="flag"></icon></td>
         <td>{{ props.item.username }}</td>
         <td>{{ props.item.nodetype }}</td>
         <td>{{ props.item.contribution }}</td>
@@ -50,28 +51,41 @@
             text: '#',
             align: 'left',
             sortable: false,
-            value: 'id'
+            value: 'id',
+            width: '5%',
           },
           {
-            text: 'Username',
+            text: '',
             align: 'left',
             sortable: false,
-            value: 'name'
+            value: 'id',
+            width: '5%',
+          }
+          ,
+          {
+            text: '이름',
+            align: 'left',
+            sortable: false,
+            value: 'name',
+            width: '15%',
           },
           {
-            text: 'Nodetype',
+            text: '타입',
             align: 'left',
             sortable: false,
-            value: 'nodetype'
+            value: 'nodetype',
+            width: '15%',
           },
                     {
-            text: 'cotribution',
+            text: '기여도',
             align: 'left',
             sortable: false,
-            value: 'cotributionr'
+            value: 'cotributionr',
+            width: '15%',
           },
-          { text: 'country', sortable: false, value: 'country' },
-          { text: 'Grade', sortable: false, value: 'progress' },
+          { text: '국적', sortable: false, value: 'country',width: '15%', },
+          { text: '소개글', sortable: false, value: 'content',width: '15%', },
+
      
       ],
       listData1: [{},{},{},{},{}]
