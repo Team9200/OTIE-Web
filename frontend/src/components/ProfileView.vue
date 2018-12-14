@@ -110,14 +110,15 @@
                 >
                   <template slot="items" slot-scope="props" >
 
-                    <tr v-if="props.item.id != null" @click="$router.push(`/post/${props.item.permlink}`)" style="background-color: rgba(0, 0, 0, 0.12);">
-                    <td>{{ props.item.id + 1 }}</td>
+                    <tr v-if="props.item.nop != 1" @click="$router.push(`/post/${props.item.permlink}`)" >
+                    <td v-if="props.item.id != null">{{ props.item.id + 1 }}</td>
+                    <td v-else></td>
                     <td>{{ props.item.subject }}</td>
                     <td class="text-xs-left">{{ props.item.date}}</td>
                     <td class="text-xs-left"><v-progress-linear v-if="props.item.progress >= 0" :value="props.item.progress" height="5" :color="props.item.color"></v-progress-linear> </td>
                     </tr>
-                    <div v-else class="nodata"></div>       
-
+                    <div v-else-if="props.index == 1" class="nod">No Data</div>       
+                    <div v-else class="nod"></div>  
 
                   </template>
                 </v-data-table>
@@ -483,20 +484,44 @@ export default {
 
       if( result1.length < 5 ){
 
-        for(var i=result1.length; i < 5; i++){
+        if( result1.length == 0) {
 
-          result1.push({});
+          for(var i=result1.length; i < 5; i++){
 
+            result1.push({nop:1});
+
+          }
         }
+        else{
+
+          for(var i=result1.length; i < 5; i++){
+
+            result1.push({});
+
+          }
+
+        }        
       }
 
       if( result2.length < 5 ){
 
-        for(var i=result2.length; i < 5; i++){
+        if( result2.length == 0) {
 
-          result2.push({});
+          for(var i=result2.length; i < 5; i++){
 
+            result2.push({nop:1});
+
+          }
         }
+        else{
+
+          for(var i=result2.length; i < 5; i++){
+
+            result2.push({});
+
+          }
+
+        }        
       }
 
       this.listData1 = result1;
@@ -544,10 +569,11 @@ export default {
     .timeline-block:hover {
         background-color: rgba(0, 0, 0, 0.12);
     }
-    .nodata {
+    .nod {
       position: relative;
       height: 48px;
       background-color: rgba(0, 0, 0, 0.12);
       width: 532.5%;
+      text-align:center
     }
 </style>
