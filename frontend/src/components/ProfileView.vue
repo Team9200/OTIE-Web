@@ -37,6 +37,8 @@
                 </e-chart> 
             </div>
           </v-widget>  
+          <span class="x caption">Month →</span>
+          <span class="y caption">↑ Count</span>
         </v-flex>
 
          <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
@@ -260,11 +262,11 @@ export default {
           .then(response => {
             
             const malwareList = response.message;
-            this.init_User()
             this.init_tagChart(malwareList);
             this.init_mActive(malwareList);
             this.init_Active(malwareList);
             this.init_List(malwareList);
+            this.init_User();
           
           });
 
@@ -284,6 +286,14 @@ export default {
         tmp.country = data.country;
         tmp.avatar = {};
         tmp.publickey = data.publickey;
+
+        if(data.nodetype != 'Storage'){
+
+          tmp.count2 = this.listData2.length;
+          tmp.count1 = this.listData1.length;
+          tmp.tag = this.tag[0].name;
+
+        }
         
         if(data.nodetype == 'Collector') tmp.color = '#03d6a8';
 
@@ -576,4 +586,19 @@ export default {
       width: 532.5%;
       text-align:center
     }
+    .x{
+
+      position:relative;
+      top:-30px; 
+      left:90%;
+
+      } 
+    .y{
+
+      position:relative;
+      top:-400px; 
+      left:-4%;
+
+      } 
+
 </style>

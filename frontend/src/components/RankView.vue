@@ -1,7 +1,6 @@
 <template>
 <v-container>
   <v-card>
-    <b-table hover :items="listData1"></b-table>
     <v-container v-if="listData1.length !== 0">
       <v-data-table
         :pagination.sync="page"
@@ -12,7 +11,6 @@
       <template slot="items" slot-scope="props">
         <tr @click="$router.push(`/profile?type=${props.item.nodetype}&name=${props.item.publickey}`)" style="cursor:pointer;">
         <td>{{ props.index +1 }}</td>
-        <td><icon name="flag"></icon></td>
         <td>{{ props.item.username }}</td>
         <td>{{ props.item.nodetype }}</td>
         <td>{{ props.item.contribution }}</td>
