@@ -16,7 +16,7 @@
                 <e-chart 
                 :path-option="[
                   ['dataset.source', monthActivity],
-                  ['color', [ color.green.lighten1 ]],
+                  ['color', [ color.green.lighten1, color.blue.lighten1]],
                   ['legend.show', true],
                   ['xAxis.axisLabel.show', true],
                   ['yAxis.axisLabel.show', true],
@@ -26,6 +26,9 @@
                   ['series[0].type', 'bar'],
                   ['series[0].areaStyle', {}],
                   ['series[0].smooth', true],
+                  ['series[1].type', 'bar'],
+                  ['series[1].areaStyle', {}],
+                  ['series[1].smooth', true],
                 ]"
 
                 height="400px"
@@ -95,30 +98,34 @@
 
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon>
-              </v-btn>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text class="pa-0">
               <template>
+
                 <v-data-table
                   :headers="listHeader1"
                   :items="listData1"
                   class="elevation-0"
                 >
-                  <template slot="items" slot-scope="props">
-                    <tr @click="$router.push(`/post/${props.item.permlink}`)">
-                    <td>{{ props.item.id }}</td>
+                  <template slot="items" slot-scope="props" >
+
+                    <tr v-if="props.item.id != null" @click="$router.push(`/post/${props.item.permlink}`)" style="background-color: rgba(0, 0, 0, 0.12);">
+                    <td>{{ props.item.id + 1 }}</td>
                     <td>{{ props.item.subject }}</td>
                     <td class="text-xs-left">{{ props.item.date}}</td>
                     <td class="text-xs-left"><v-progress-linear v-if="props.item.progress >= 0" :value="props.item.progress" height="5" :color="props.item.color"></v-progress-linear> </td>
                     </tr>
+                    <div v-else class="nodata"></div>       
+
+
                   </template>
                 </v-data-table>
               </template>
               <v-divider></v-divider>
             </v-card-text>
           </v-card>
+ 
         </v-flex>
         <!-- end -->
 
@@ -132,8 +139,6 @@
               <h4 v-else-if="nodeType === 'collector'">샘플</h4>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon>
-              </v-btn>      
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text class="pa-0">
@@ -146,7 +151,7 @@
                   <template slot="items" slot-scope="props">
                   <tr @click="$router.push(`/post/${props.item.permlink}`)">
 
-                    <td>{{ props.item.id }}</td>
+                    <td>{{ props.item.id +1 }}</td>
                     <td class="text-xs-left">{{ props.item.subject }}</td>
                     <td class="text-xs-left">{{ props.item.date }}</td>
                   </tr>
@@ -242,7 +247,6 @@ export default {
       const name = this.$route.query.name;
       const type = this.$route.query.type.toLowerCase();
       this.nodeType = type;
-      console.log(this.nodeType);
 
       if(type === 'storage'){
 
@@ -262,6 +266,7 @@ export default {
             this.init_List(malwareList);
           
           });
+
       }
     },
     init_User (type){
@@ -354,24 +359,28 @@ export default {
 
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       let post = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      let vote = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
       malwareList.forEach(function (data) {
 
         let tmp = {};
         let date = new Date(data.body.date);
-
+        let likes = data.likes;
         post[date.getMonth()] += 1;
+        vote[date.getMonth()] += likes;
 
       });
 
-      const result = months.map((m, i) => {
+      const posts = months.map((m, i) => {
         return {
           'month': m,
-          'post': post[i]
+          'post': post[i],
+          'vote': vote[i]
         };
       });
 
-      this.monthActivity = result;
+
+      this.monthActivity = posts;
       console.log('created month activity chart');
 
     },
@@ -451,21 +460,26 @@ export default {
         let tmp1 = {};
         let tmp2 = {};
 
-        tmp1.id = i;
-        tmp1.subject = (data.title).slice(0,30)+'...';
-        tmp1.date = new Date(data.body.date).toLocaleString();
-        tmp1.progress = 50;
-        tmp1.color = gradeColor[i];
-        tmp1.permlink = data.permlink;
-      
+        if(data.likes >= 20){
+         
+          tmp1.id = i;
+          tmp1.subject = (data.title).slice(0,30)+'...';
+          tmp1.date = new Date(data.body.date).toLocaleString();
+          tmp1.progress = 50;
+          tmp1.color = gradeColor[i];
+          tmp1.permlink = data.permlink;
+          result1.push(tmp1)
+
+        }
+
         tmp2.id = i;
         tmp2.subject = (data.title).slice(0,20)+'...';
         tmp2.date = new Date(data.body.date).toLocaleString();
         tmp2.permlink = data.permlink;
-        result1.push(tmp1)
         result2.push(tmp2);
 
       });
+      console.log(result1);
 
       if( result1.length < 5 ){
 
@@ -529,5 +543,11 @@ export default {
 <style>
     .timeline-block:hover {
         background-color: rgba(0, 0, 0, 0.12);
+    }
+    .nodata {
+      position: relative;
+      height: 48px;
+      background-color: rgba(0, 0, 0, 0.12);
+      width: 532.5%;
     }
 </style>

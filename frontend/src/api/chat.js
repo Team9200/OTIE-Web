@@ -129,21 +129,21 @@ const Messages = [
   {
     'uuid': '2cc7e60b-a81b-4859-bb88-e894e11eb77d',
     'chatId': 'a44f8ade-513c-46b5-bae4-0acf809860e6',
-    'text': 'Ex laudantium veniam aut repellendus voluptatem vitae suscipit at quisquam.',
+    'text': '안녕하세요.',
     'userId': 'da95e977-cd54-4077-a767-1b7f33ef6919',
     'created_at': '2018-04-10T18:42:25.141Z'
   },
   {
     'uuid': '2a2c7ea4-e2c1-47ac-8dc8-73ed074abb99',
     'chatId': 'a44f8ade-513c-46b5-bae4-0acf809860e6',
-    'text': 'Natus ex qui at in et porro.',
+    'text': '안녕하세요.',
     'userId': 'da95e977-cd54-4077-a767-1b7f33ef6919',
     'created_at': '2018-04-10T09:39:34.913Z'
   },
   {
     'uuid': '063c9eb5-249a-4778-9367-ebfd33f69a4e',
     'chatId': 'a44f8ade-513c-46b5-bae4-0acf809860e6',
-    'text': 'Ut et qui unde nulla.',
+    'text': '안녕하세요.',
     'userId': 'da95e977-cd54-4077-a767-1b7f33ef6919',
     'created_at': '2018-04-11T04:47:33.345Z'
   },

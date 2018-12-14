@@ -1,11 +1,13 @@
 <template>
 <v-container>
   <v-card>
+    <b-table hover :items="listData1"></b-table>
     <v-container v-if="listData1.length !== 0">
       <v-data-table
+        :pagination.sync="page"
         :headers="listHeader1"
         :items="listData1"
-        class="elevation-0"
+
       >
       <template slot="items" slot-scope="props">
         <tr @click="$router.push(`/profile?type=${props.item.nodetype}&name=${props.item.publickey}`)" style="cursor:pointer;">
@@ -44,7 +46,10 @@
         CountryFlag
     },
     data: () => ({
-     
+      
+      page:{
+        rowsPerPage: 100
+      },
       listHeader1: [
 
           {
