@@ -535,8 +535,9 @@ export default {
       }
 
       this.listData1 = result1;
-      this.listData2 = result2;
+      this.listData2 = result2.reverse();
       console.log("created List Data");
+      console.log(result2);
 
     },
     location (e) {

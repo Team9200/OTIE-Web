@@ -199,6 +199,33 @@ async function blockLists(fileName) {
 	}
 
 	let chainData = JSON.parse(parseData).chain;
+	
+	await forEach(chainData, async (object, idx) => {
+
+		let index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash;
+
+		index = object.index;
+		timestamp = object.timestamp;
+		postList = await postLists(object);
+		voteList = await voteLists(object);
+		replyList = await replyLists(object);
+		transactionList = await transactionLists(object);
+		nonce = object.nonce;
+		hash = object.hash;
+		previousBlockHash = object.previousBlockHash;
+
+
+		await Block.create(index, timestamp, postList, replyList, voteList, transactionList, nonce, hash, previousBlockHash)
+			.then((Transaction) => {
+				console.log({
+					success: true,
+					message: 'Transaction success'
+				});
+			}).catch((error) => {console.log(error)})
+	});
+
+	await fs.closeSync(chain);
+	fs.writeFile('./lastSize', fullSize-136, 'utf8');
 
 	await User.find({},{publickey: true, nodetype: true}).then(async (users) => {
 
@@ -402,7 +429,7 @@ async function test() {
 		});
 	});
 }
-//blockLists('./sample.json')
+blockLists('./result.json')
 
 //userLists();
 // test();
