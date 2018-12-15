@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     API_URL = 'http://localhost:3000'
 }
-API_URL = 'http://192.168.1.37:3000';
+
 export class APIService {
     constructor() {
 
@@ -176,8 +176,14 @@ export class APIService {
 
         return axios.get(url, {
             params: {
-                page: page
+                page: page,
             }
         }).then(response => response.data)
+    }
+
+    getTracker(ip) {
+        const url = `http://${ip}:29200/findMiningStorage`
+
+        return axios.get(url).then(response => response.data)
     }
 }
