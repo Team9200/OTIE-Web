@@ -1,30 +1,33 @@
 <template>
     <v-container>
         <v-card>
-            <v-container>
-                <v-layout>
-                    <h1>Write</h1>
-                    <v-spacer></v-spacer>
-                    <v-btn @click="submit" class="success">Submit</v-btn>
-                </v-layout>
-                <v-text-field v-model="title" label="제목" required></v-text-field>
-                <v-text-field v-model="sha256" label="sha256" required></v-text-field>
-                <v-text-field v-model="sha1" label="sha1" required></v-text-field>
-                <v-text-field v-model="md5" label="md5" required></v-text-field>
-                <v-text-field v-model="filetype" label="파일 타입" required></v-text-field>
-                <v-text-field v-model="first_seen" label="첫 발견 날짜" required></v-text-field>
-                <!-- <v-text-field v-model="behavior" label="behavior" required></v-text-field> -->
-                <v-combobox v-model="chips" :items="items" label="태그 입력" chips clearable prepend-icon="filter_list"
-                    solo multiple>
-                    <template slot="selection" slot-scope="data">
-                        <v-chip :selected="data.selected" close @input="remove(data.item)">
-                            <strong>{{ data.item }}</strong>&nbsp;
-                        </v-chip>
-                    </template>
-                </v-combobox>
+            <v-form ref="form" v-model="valid" lazy-validation>
+                <v-container>
+                    <v-layout>
+                        <h1>Write</h1>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="submit" class="success">Submit</v-btn>
+                    </v-layout>
+                    <v-text-field :rules="rules" v-model="title" label="제목" required></v-text-field>
+                    <v-text-field :rules="rules" v-model="sha256" label="sha256" required></v-text-field>
+                    <v-text-field :rules="rules" v-model="sha1" label="sha1" required></v-text-field>
+                    <v-text-field :rules="rules" v-model="md5" label="md5" required></v-text-field>
+                    <v-text-field :rules="rules" v-model="filetype" label="파일 타입" required></v-text-field>
+                    <v-text-field :rules="rules" v-model="first_seen" label="첫 발견 날짜" required></v-text-field>
+                    <!-- <v-text-field v-model="behavior" label="behavior" required></v-text-field> -->
 
-                <markdown-editor preview-class="markdown-body" v-model="content" ref="markdownEditor"></markdown-editor>
-            </v-container>
+                    <markdown-editor preview-class="markdown-body" v-model="content" ref="markdownEditor"></markdown-editor>
+                    <v-combobox :rules="rules" v-model="chips" :items="items" label="태그 입력" chips clearable
+                        prepend-icon="filter_list" solo multiple>
+                        <template slot="selection" slot-scope="data">
+                            <v-chip :selected="data.selected" close @input="remove(data.item)">
+                                <strong>{{ data.item }}</strong>&nbsp;
+                            </v-chip>
+                        </template>
+                    </v-combobox>
+
+                </v-container>
+            </v-form>
             <br>
 
         </v-card>
@@ -45,8 +48,12 @@
     export default {
         name: 'write-view',
         data: () => ({
+            valid: false,
             title: '',
             sha256: '',
+            rules: [
+                v => !!v || '입력이 필요합니다.'
+            ],
             content: '# Hello World',
             ip: '',
             publickey: '',
@@ -132,49 +139,51 @@
                 this.chips = [...this.chips]
             },
             submit() {
-                apiService.getProfile().then(response => {
-                    this.publickey = response.publickey
-                    this.analyzer = response.publickey
-                })
+                if (this.$refs.form.validate()) {
 
-                var ws = new WebSocket("ws://106.10.43.233:59200");
-                this.chips.forEach(element => {
-                    this.tag_name_etc.push({tag: element})
-                });
+                    apiService.getProfile().then(response => {
+                        this.publickey = response.publickey
+                        this.analyzer = response.publickey
+                    })
 
-                var post = JSON.stringify({
-                    type: 'post',
-                    post: {
-                        title: this.title,
-                        timestamp: new Date().getTime(),
-                        body: {
-                            analyzer: this.analyzer,
-                            collector: this.collector,
-                            md5: this.md5,
-                            sha1: this.sha1,
-                            sha256: this.sha256,
-                            filetype: this.filetype,
-                            tag_name_etc: this.tag_name_etc,
-                            filesize: this.filesize,
-                            behavior: this.behavior,
-                            date: new Date().getTime(),
-                            first_seen: this.first_seen,
-                            description: this.content
-                        },
-                        hashtag: [],
-                        publickey: this.publickey,
-                        sign: [],
-                        permlink: '01' + sha256(JSON.stringify({
-                            date: new Date().getTime(),
-                            description: this.content
-                        }))
-                    }
-                })
-                ws.onopen = function open() {
-                    ws.send(post)
-                        .then(response => {
-                            alert('alert')
+                    var ws = new WebSocket("ws://106.10.43.233:59200");
+                    this.chips.forEach(element => {
+                        this.tag_name_etc.push({
+                            tag: element
                         })
+                    });
+
+                    var post = JSON.stringify({
+                        type: 'post',
+                        post: {
+                            title: this.title,
+                            timestamp: new Date().getTime(),
+                            body: {
+                                analyzer: this.analyzer,
+                                collector: this.collector,
+                                md5: this.md5,
+                                sha1: this.sha1,
+                                sha256: this.sha256,
+                                filetype: this.filetype,
+                                tag_name_etc: this.tag_name_etc,
+                                filesize: this.filesize,
+                                behavior: this.behavior,
+                                date: new Date().getTime(),
+                                first_seen: this.first_seen,
+                                description: this.content
+                            },
+                            hashtag: [],
+                            publickey: this.publickey,
+                            sign: [],
+                            permlink: '01' + sha256(JSON.stringify({
+                                date: new Date().getTime(),
+                                description: this.content
+                            }))
+                        }
+                    })
+                    ws.onopen = function open() {
+                        ws.send(post)
+                    }
                 }
             }
         }
