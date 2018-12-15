@@ -2,7 +2,7 @@
     <v-container>
         <v-card style="overflow-y: auto;" v-if="post != {}">
             <v-card-title>
-                <h2>{{ post.title.replace("report of","").replace("analyze of ","") }}</h2>
+                <h2>{{ post.title }}</h2>
             </v-card-title>
             <v-card-text v-if="post.body !== undefined">
                 <!-- <li>md5: {{ post.body.md5 }}</li>
@@ -27,6 +27,10 @@
                 <vue-markdown>{{ post.body.description }}</vue-markdown>
                 <!-- </v-container> -->
             </v-card-text>
+
+            <v-card-actions>
+                <v-btn @click="vote" color="green" style="color: white;">Vote</v-btn>
+            </v-card-actions>
         </v-card>
         <br>
         <v-card>
@@ -73,8 +77,11 @@
     import {
         APIService
     } from '../../api/APIService'
+    import sign from '../../util/sign'
     const apiService = new APIService()
     import VueMarkdown from 'vue-markdown'
+    import sha256 from 'sha256'
+    import bs58check from 'bs58check'
 
     export default {
         name: 'post-view',
@@ -82,7 +89,8 @@
             post: {},
             votes: [],
             replies: [],
-            replyContent: ''
+            replyContent: '',
+            publickey: ''
         }),
         components: {
             VueMarkdown,
@@ -93,9 +101,10 @@
                 apiService.viewPost(this.$route.params.permlink)
                     .then(async (response) => {
                         this.post = response.message.post[0]
-                        this.post.username = await apiService.searchUser(response.message.post[0].publickey).then((user)=>{
+                        this.post.username = await apiService.searchUser(response.message.post[0].publickey).then(
+                            (user) => {
                                 console.log(user.message);
-                                if(user.message.length == 0){
+                                if (user.message.length == 0) {
                                     return response.message.post[0].publickey;
                                 }
                                 return user.message[0].username;
@@ -116,11 +125,67 @@
                 window.location.href = string
             },
             addReply() {
-                
+                var ws = new WebSocket("ws://106.10.43.233:59200");
+
+                var reply = {
+                    type: 'reply',
+                    reply: {
+                        text: this.replyContent,
+                        permlink: '02' + sha256(JSON.stringify({
+                            replyContent: this.replyContent,
+                            permlink: this.permlink
+                        })),
+                        timestamp: new Date().getTime(),
+                        refpermlink: this.post.permlink,
+                        publickey: this.publickey
+                    }
+                }
+                reply['reply']['sign'] = sign.signPost(reply.reply, bs58check.decode(this.$store.getters.privkey))
+                reply = JSON.stringify(reply)
+
+                ws.onopen = function open() {
+                    ws.send(reply)
+                }
+                alert('댓글 등록이 완료되었습니다.')
+                window.location.reload()
+            },
+            getPublicKey() {
+                apiService.getProfile().then(response => {
+                    this.publickey = response.profile.publickey
+                })
+            },
+            vote() {
+                var ws = new WebSocket("ws://106.10.43.233:59200");
+
+                var vote = {
+                    type: 'vote',
+                    vote: {
+                        voteid: '03' + sha256(JSON.stringify({
+                            timestamp: new Date().getTime(),
+                            refpermlink: this.post.permlink,
+                            weight: 5
+                        })),
+                        timestamp: new Date().getTime(),
+                        refpermlink: this.post.permlink,
+                        publickey: this.publickey,
+                        weight: 5
+                    }
+                }
+                vote['vote']['sign'] = sign.signVote(vote.vote, bs58check.decode(this.$store.getters.privkey))
+                vote = JSON.stringify(vote)
+
+                ws.onopen = function open() {
+                    ws.send(vote)
+                }
+                alert('Voting이 완료되었습니다')
+                window.location.reload()
             }
         },
         created() {
             this.viewPost()
+            if (this.$store.getters.isAuthenticated) {
+                this.getPublicKey()
+            }
         }
     }
 </script>

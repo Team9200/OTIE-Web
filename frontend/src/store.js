@@ -16,22 +16,31 @@ enhanceAccessToeken()
 
 export default new Vuex.Store({
   state: {
-    accessToken: null
+    accessToken: null,
+    privkey: null
   },
   getters: {
     isAuthenticated (state) {
       state.accessToken = state.accessToken || localStorage.accessToken
       return state.accessToken
+    },
+    privkey(state) {
+      state.privkey = state.privkey || localStorage.privkey
+      return state.privkey
     }
   },
   mutations: {
-    LOGIN (state, { accessToken }) {
+    LOGIN (state, { accessToken: accessToken, privkey: privkey }) {
       state.accessToken = accessToken
+      state.privkey = privkey
       localStorage.accessToken = accessToken
+      localStorage.privkey = privkey
     },
     LOGOUT (state) {
       state.accessToken = null
+      state.privkey = null
       delete localStorage.accessToken
+      delete localStorage.privkey
     }
   },
   actions: {
@@ -45,7 +54,7 @@ export default new Vuex.Store({
             alert('비밀번호가 틀립니다.')
           
           if (response.success === true) {
-            commit('LOGIN', response)
+            commit('LOGIN', {accessToken: response.accessToken, privkey: password})
             window.location.href = returnPath
             // axios.defaults.headers.common['Authorization'] = `${response.accessToken}`
             axios.defaults.headers.common['x-access-token'] = `${response.accessToken}`

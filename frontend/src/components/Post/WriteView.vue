@@ -13,7 +13,7 @@
                     <v-text-field :rules="rules" v-model="sha1" label="sha1" required></v-text-field>
                     <v-text-field :rules="rules" v-model="md5" label="md5" required></v-text-field>
                     <v-text-field :rules="rules" v-model="filetype" label="파일 타입" required></v-text-field>
-                    <v-text-field :rules="rules" v-model="first_seen" label="첫 발견 날짜" required></v-text-field>
+                    <!-- <v-text-field :rules="rules" v-model="first_seen" label="첫 발견 날짜" required></v-text-field> -->
                     <!-- <v-text-field v-model="behavior" label="behavior" required></v-text-field> -->
 
                     <markdown-editor preview-class="markdown-body" v-model="content" ref="markdownEditor"></markdown-editor>
@@ -40,8 +40,11 @@
         APIService
     } from '../../api/APIService'
     window.hljs = hljs;
+    import sign from '../../util/sign'
+
     import markdownEditor from 'vue-simplemde/src/markdown-editor'
     import sha256 from 'sha256'
+    import bs58check from 'bs58check'
 
     const apiService = new APIService()
 
@@ -153,7 +156,7 @@
                         })
                     });
 
-                    var post = JSON.stringify({
+                    var post = {
                         type: 'post',
                         post: {
                             title: this.title,
@@ -169,22 +172,37 @@
                                 filesize: this.filesize,
                                 behavior: this.behavior,
                                 date: new Date().getTime(),
-                                first_seen: this.first_seen,
+                                first_seen: new Date().getTime() - (60 * 60 * 1000),
                                 description: this.content
                             },
                             hashtag: [],
                             publickey: this.publickey,
-                            sign: [],
                             permlink: '01' + sha256(JSON.stringify({
                                 date: new Date().getTime(),
                                 description: this.content
                             }))
                         }
-                    })
+                    }
+                    post['post']['sign'] = sign.signPost(post.post, bs58check.decode(this.$store.getters.privkey))
+                    post = JSON.stringify(post)
+
                     ws.onopen = function open() {
                         ws.send(post)
                     }
+                    alert('글이 정상적으로 등록되었습니다.')
+                    window.location.href = '/'
                 }
+            },
+            getPublicKey() {
+                apiService.getProfile().then(response => {
+                    this.publickey = response.profile.publickey
+                    this.analyzer = response.profile.publickey
+                })
+            }
+        },
+        created() {
+            if (this.$store.getters.isAuthenticated) {
+                this.getPublicKey()
             }
         }
     }
