@@ -29,8 +29,8 @@
                     <div v-for="(post, i) in postList" :key="i">
                         <!-- <h3>{{ post.permlink }}</h3> -->
                         <v-tooltip bottom>
-                            <span @click="go(post)" slot="activator">{{ post.permlink }}</span>
-                            <span>제목: {{ post.title }}<br>시간: {{ getDate(post.timestamp) }}</span>
+                            <span @click="go(post)" class="hove" slot="activator">{{ post.title }}&emsp;{{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}</span>
+                            <span>permlink: {{ post.permlink }}</span>
                         </v-tooltip>
                     </div>
                 </v-container>
@@ -115,7 +115,7 @@
                     .then(response => {
                         this.hash = response.message.hash
                         this.previousBlockHash = response.message.previousBlockHash
-                        this.timestamp = this.getDate(response.message.timestamp)
+                        this.timestamp = new Date(parseInt(response.message.timestamp,10)).toLocaleString()
                         this.postList = response.message.postList
                         this.voteList = response.message.voteList
                         this.replyList = response.message.replyList
@@ -160,5 +160,10 @@
 <style>
     .scroll {
         overflow-y: auto;
+    }
+    .hove:hover {
+
+        cursor:pointer;
+
     }
 </style>

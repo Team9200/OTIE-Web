@@ -1,12 +1,12 @@
 <template>
-    <v-container>
+    <v-container v-if="posts.length > 0">
         <div v-for="(post, i) in posts" :key="i">
             <v-card style="cursor: pointer; overflow-y: auto;" id="post">
                 <v-card-title>
                     <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
                 </v-card-title>
                 <v-card-text>
-                    분석가: {{ post.body.analyzer }} / 날짜: {{ getDate(post.timestamp) }}
+                    분석가: {{ post.username }} / 날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}
                 </v-card-text>
             </v-card>
             <br>
@@ -36,7 +36,23 @@
             getPosts(page) {
                 apiService.getPosts(page)
                     .then(response => {
-                        this.posts = response.message
+                        const pos = response.message;
+                        let array = [];
+                        pos.forEach(async function(post){
+                            let tmp = {}
+                            tmp = post;
+                            tmp.username = await apiService.searchUser(post.publickey).then((user)=>{
+
+                                if(user.message.length == 0){
+                                    return post.publickey;
+                                }
+                                return user.message[0].username;
+
+                            })
+                            array.push(tmp);
+
+                        });
+                        this.posts = array;
                     })
                     .catch(err => {
                         if (err) throw err
