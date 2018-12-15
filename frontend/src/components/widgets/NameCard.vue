@@ -7,9 +7,9 @@
           <v-icon>more_vert</v-icon>
         </v-flex>
       </v-layout>
-    </v-card-media>    
+
+    </v-card-media v-if="storage != 0">    
     <v-card-text>
-                
       <div class="layout ma-0 align-center" :class="computeCardLayout" style="height:80px">
         <v-avatar :size="computeAvatarSize" :color="color">
           <img v-bind:src="avatar.src" v-bind:alt="name" v-if="showAvatar">
@@ -29,11 +29,12 @@
         <div v-if="jobTitle == 'Analyzer'" class="second" style="top:75px;">분석 횟수 :&emsp;{{count2}}</div>
 
         <div v-if="jobTitle == 'Storage'" class="second" style="top:25px;">네트워크 상태 :&emsp;좋음</div>
-        <div v-if="jobTitle == 'Storage'" class="second" style="top:50px;">제공 용량 :&emsp;{{jobTitle}}</div>
-        <div v-if="jobTitle == 'Storage'" class="second" style="top:75px;">남은 용량 :&emsp;{{jobTitle}}</div>
+        <div v-if="jobTitle == 'Storage'" class="second" style="top:50px;">제공 용량 :&emsp;{{storage}}</div>
+        <div v-if="jobTitle == 'Storage'" class="second" style="top:75px;">남은 용량 :&emsp;{{remine / 1000}}</div>
 
     </v-card-text>
   </v-card>
+
   <v-bottom-nav :value="true" color="transparent" :height="64" v-if="showBottomNav">
     <v-btn flat color="teal" value="recent">
       <span>Recent</span>
@@ -108,7 +109,15 @@ export default {
     publickey: {
       type: String,
       default: ''
+    },
+    remine: {
+      type: Number,
+      default: 0
     },   
+    storage: {
+      type: Number,
+      default: 0
+    },      
   },
   data: () => ({
 

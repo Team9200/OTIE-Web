@@ -334,6 +334,15 @@ export default {
           tmp.count1 = this.listData1.length;
           tmp.tag = this.tag[0].name;
 
+        }else{
+
+          await apiService.findPeer(pub).then(async (node) =>{
+
+            console.log(node);
+            tmp.remine = node.message.remainingStorageSize;
+            tmp.storage = node.message.storageSize;
+
+          });
         }
         
         if(data.nodetype == 'Collector') tmp.color = '#03d6a8';
@@ -344,7 +353,7 @@ export default {
 
           tmp.color = '#8c25ea';
         }
-
+        console.log("tmp: ",tmp)
         this.user.push(tmp);
         
       });
