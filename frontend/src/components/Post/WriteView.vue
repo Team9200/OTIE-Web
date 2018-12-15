@@ -9,6 +9,10 @@
                 </v-layout>
                 <v-text-field v-model="title" label="title" required></v-text-field>
                 <v-text-field v-model="sha256" label="sha256" required></v-text-field>
+                <v-text-field v-model="sha1" label="sha1" required></v-text-field>
+                <v-text-field v-model="md5" label="md5" required></v-text-field>
+                <v-text-field v-model="filetype" label="filetype" required></v-text-field>
+
                 <markdown-editor preview-class="markdown-body" v-model="content" ref="markdownEditor"></markdown-editor>
             </v-container>
             <br>
@@ -18,11 +22,14 @@
 
 <script>
     import hljs from 'highlight.js'
-    import { APIService } from '../../api/APIService'
+    import {
+        APIService
+    } from '../../api/APIService'
     import WebSocket from 'ws';
     window.hljs = hljs;
     import markdownEditor from 'vue-simplemde/src/markdown-editor'
-    
+    import sha256 from 'sha256'
+
     const apiService = new APIService()
 
     export default {
@@ -32,21 +39,24 @@
             sha256: '',
             content: '# Hello World',
             ip: '',
-            publickey: ''
+            publickey: '',
+            md5: '',
+            sha1: '',
         }),
         components: {
             markdownEditor
         },
         methods: {
             getTracker(ip) {
-              apiService.getTracker(ip)
-                .then(response => {
-                    this.ip = response.address
-                })
+                apiService.getTracker(ip)
+                    .then(response => {
+                        this.ip = response.address
+                    })
             },
             submit() {
                 apiService.getProfile().then(response => {
                     this.publickey = response.publickey
+                    this.analyzer = response.publickey
                 })
 
                 const ws = new WebSocket(`ws://${this.ip}:59200`)
@@ -73,7 +83,7 @@
                             hashtag: [],
                             publickey: this.publickey,
                             sign: [],
-                            permlink: this.permlink
+                            permlink: '01' + sha256(JSON.stringify(post))
                         }
                     }))
                 }
