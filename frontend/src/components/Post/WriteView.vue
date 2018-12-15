@@ -5,7 +5,7 @@
                 <v-layout>
                     <h1>Write</h1>
                     <v-spacer></v-spacer>
-                    <v-btn class="success">Submit</v-btn>
+                    <v-btn @click="submit" class="success">Submit</v-btn>
                 </v-layout>
                 <v-text-field v-model="title" label="title" required></v-text-field>
                 <v-text-field v-model="sha256" label="sha256" required></v-text-field>
@@ -18,19 +18,53 @@
 
 <script>
     import hljs from 'highlight.js'
-
+    import { APIService } from '../../api/APIService'
+    import WebSocket from 'ws';
     window.hljs = hljs;
     import markdownEditor from 'vue-simplemde/src/markdown-editor'
+    
+    const apiService = new APIService()
 
     export default {
         name: 'write-view',
         data: () => ({
             title: '',
             sha256: '',
-            content: '# Hello World'
+            content: '# Hello World',
+            ip: '',
+            publickey: ''
         }),
         components: {
             markdownEditor
+        },
+        methods: {
+            getTracker(ip) {
+              apiService.getTracker(ip)
+                .then(response => {
+                    this.ip = response.address
+                })
+            },
+            submit() {
+                apiService.getProfile().then(response => {
+                    this.publickey = response.publickey
+                })
+
+                const ws = new WebSocket(`ws://${this.ip}:59200`)
+                ws.onopen = (event) => {
+                    ws.send(JSON.stringify({
+                        type: 'post',
+                        pid: {
+                            title: this.title,
+                            timestamp: new Date().getTime(),
+                            body: {},
+                            hashtag: [],
+                            publickey: this.publickey,
+                            sign: [],
+                            permlink: this.permlink
+                        }
+                    }))
+                }
+            }
         }
     }
 </script>
