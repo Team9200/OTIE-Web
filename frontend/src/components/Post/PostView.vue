@@ -32,6 +32,8 @@
         <v-card>
             <v-card-title>
                 <h2>댓글 달기</h2>
+                <v-spacer></v-spacer>
+                <v-btn v-if="replyContent !== ''" @click="addReply" color="green" style="color: white;">Submit</v-btn>
             </v-card-title>
             <v-card-text>
                 <markdown-editor preview-class="markdown-body" v-model="replyContent" ref="markdownEditor"></markdown-editor>
@@ -112,6 +114,9 @@
             go(post) {
                 const string = '/malware/' + post.body.sha256
                 window.location.href = string
+            },
+            addReply() {
+                
             }
         },
         created() {
