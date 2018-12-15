@@ -56,7 +56,20 @@
                         pid: {
                             title: this.title,
                             timestamp: new Date().getTime(),
-                            body: {},
+                            body: {
+                                analyzer: this.analyzer,
+                                collector: this.collector,
+                                md5: this.md5,
+                                sha1: this.sha1,
+                                sha256: this.sha256,
+                                filetype: this.filetype,
+                                tag_name_etc: this.tag_name_etc,
+                                filesize: this.filesize,
+                                behavior: this.behavior,
+                                date: new Date().getTime(),
+                                first_seen: this.first_seen,
+                                description: this.content
+                            },
                             hashtag: [],
                             publickey: this.publickey,
                             sign: [],
