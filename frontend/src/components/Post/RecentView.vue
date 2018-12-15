@@ -1,12 +1,14 @@
 <template>
-    <v-container v-if="posts.length > 0">
+    <v-container v-if="posts.length !== 0">
         <div v-for="(post, i) in posts" :key="i">
             <v-card style="cursor: pointer; overflow-y: auto;" id="post" @click="go(post)">
                 <v-card-title>
-                    <h3><u>{{ post.title }}</u></h3>
+                    <h3><u>{{ post.title.replace("report of","").replace("analyze of ","") }}</u></h3>
                 </v-card-title>
                 <v-card-text>
-                    분석가: {{ post.username }} / 날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}
+                    분석가: {{ post.username }}<br>
+                    날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}&emsp;
+                    <i class="material-icons">thumb_up</i> <i>{{ post.likes }}</i>
                 </v-card-text>
             </v-card>
             <br>
@@ -20,6 +22,9 @@
 </template>
 
 <script>
+      import {
+          forEach as ForEach
+      } from 'p-iteration';
     import {
         APIService
     } from '../../api/APIService'
@@ -33,14 +38,19 @@
             length: 0
         }),
         methods: {
-            getPosts(page) {
-                apiService.getPosts(page)
-                    .then(response => {
+            async getPosts(page) {
+
+                await apiService.postPopular(page)
+                    .then(async (response) => {
+
                         const pos = response.message;
                         let array = [];
-                        pos.forEach(async function(post){
+
+                        await ForEach(pos, async (post)=>{
+
                             let tmp = {}
                             tmp = post;
+
                             tmp.username = await apiService.searchUser(post.publickey).then((user)=>{
 
                                 if(user.message.length == 0){
@@ -52,11 +62,16 @@
                             array.push(tmp);
 
                         });
+
                         this.posts = array;
+                        this.posts = this.posts.sort((a, b) => b.likes - a.likes);
                     })
                     .catch(err => {
+
                         if (err) throw err
+
                     })
+
             },
             getCount() {
                 apiService.getPostsCount()
