@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     API_URL = 'http://localhost:3000'
 }
-
+API_URL = 'http://192.168.1.37:3000';
 export class APIService {
     constructor() {
 
