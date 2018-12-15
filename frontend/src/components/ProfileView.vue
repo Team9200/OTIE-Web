@@ -41,7 +41,7 @@
           <span class="y caption">↑ Count</span>
         </v-flex>
 
-          <v-flex lg6 sm12 v-if="nodeType == 'storage'">
+          <v-flex lg6 sm12 v-if="nodeType == 'storage' && storage != null">
             <v-widget title="스토리지 용량" content-bg="white">
             <div slot="widget-content">
                 <div class="justify-center row layout ma-0">
@@ -49,16 +49,16 @@
                     :size="300"
                     :width="20"
                     :rotate="-90"
-                    :value="trending2.value"
+                    :value="((storage.remainingStorageSize -(925*1000))/(storage.storageSize*1000))*100"
                     :color="trending2.color"
                   >
 
-                    {{ trending2.content }}
+                    {{ ((storage.remainingStorageSize -(925*1000)))/1000 }}/{{ (storage.storageSize) }}GB
                   </v-progress-circular>
                 </div>
                 <div slot="widget-footer">
                   
-                  <div class="headline" style="text-align:right;">{{trending2.headline}} 남았습니다.</div>
+                  <div class="headline" style="text-align:right;">{{(((storage.remainingStorageSize -(925*1000))/(storage.storageSize*1000))*100).toFixed(3)}}% 남았습니다.</div>
                   <div> </div>
                 </div>
               </div>
@@ -226,6 +226,7 @@ export default {
     monthActivity: [],
     tag: [], 
     activity: [],
+    storage: {},
     trending2:{
 
           headline: '90%',
@@ -290,6 +291,7 @@ export default {
       if(type === 'storage'){
 
         this.init_User()
+        this.init_Storage();
 
       }
       else{
@@ -312,7 +314,7 @@ export default {
 
       let pub = this.$route.query.name;
 
-      apiService.searchUser(pub).then((user)=>{
+      apiService.searchUser(pub).then(async (user)=>{
 
         let tmp = {};
         const data = user.message[0];
@@ -335,9 +337,10 @@ export default {
 
         else if(data.nodetype == 'Analyzer') tmp.color = '#2683ff';
 
-        else if(data.nodetype == 'Storage') tmp.color = '#8c25ea';
+        else if(data.nodetype == 'Storage') {
 
-
+          tmp.color = '#8c25ea';
+        }
 
         this.user.push(tmp);
         
@@ -585,6 +588,17 @@ export default {
       this.listData2 = result2.reverse();
       console.log("created List Data");
       console.log(result2);
+
+    },
+    async init_Storage(){
+
+      const pub = this.$route.query.name;
+      await apiService.findPeer(pub).then((data,err)=>{
+
+        this.storage = data.message;
+        console.log(data.message,err);
+
+      });
 
     },
     location (e) {

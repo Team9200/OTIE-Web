@@ -180,6 +180,16 @@ export class APIService {
             }
         }).then(response => response.data)
     }
+    findPeer(publickey) {
+
+        const url = `http://openti.info:29200/api/findPeer`
+
+        return axios.get(url, {
+            params: {
+                publickey: publickey,
+            }
+        }).then(response => response.data)
+    }
 
     getTracker(ip) {
         const url = `http://${ip}:29200/findMiningStorage`
