@@ -1,9 +1,9 @@
 <template>
     <v-container v-if="posts.length > 0">
         <div v-for="(post, i) in posts" :key="i">
-            <v-card style="cursor: pointer; overflow-y: auto;" id="post">
+            <v-card style="cursor: pointer; overflow-y: auto;" id="post" @click="go(post)">
                 <v-card-title>
-                    <h3 @click="go(post)"><u>{{ post.title }}</u></h3>
+                    <h3 ><u>{{ post.title }}</u></h3>
                 </v-card-title>
                 <v-card-text>
                     분석가: {{ post.username }} / 날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}

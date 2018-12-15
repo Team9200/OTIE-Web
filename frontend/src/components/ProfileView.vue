@@ -49,16 +49,16 @@
                     :size="300"
                     :width="20"
                     :rotate="-90"
-                    :value="((storage.remainingStorageSize -(925*1000))/(storage.storageSize*1000))*100"
+                    :value="((storage.remainingStorageSize)/(storage.storageSize*1000))*100"
                     :color="trending2.color"
                   >
 
-                    {{ ((storage.remainingStorageSize -(925*1000)))/1000 }}/{{ (storage.storageSize) }}GB
+                    {{ ((storage.remainingStorageSize))/1000 }}/{{ (storage.storageSize) }}GB
                   </v-progress-circular>
                 </div>
                 <div slot="widget-footer">
                   
-                  <div class="headline" style="text-align:right;">{{(((storage.remainingStorageSize -(925*1000))/(storage.storageSize*1000))*100).toFixed(3)}}% 남았습니다.</div>
+                  <div class="headline" style="text-align:right;">{{(((storage.remainingStorageSize)/(storage.storageSize*1000))*100).toFixed(3)}}% 남았습니다.</div>
                   <div> </div>
                 </div>
               </div>
