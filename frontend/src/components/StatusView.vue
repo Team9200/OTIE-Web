@@ -291,6 +291,16 @@
                     .attr("x", "1030")
                     .attr("y", "74")
 
+                svg.append("text")
+                    .text("구의 크기는 시스템 기여도에 비례합니다.")
+                    .attr("x", "0")
+                    .attr("y", "480")
+
+                svg.append("text")
+                    .text("마우스 휠을 통해 정렬이 가능합니다.")
+                    .attr("x", "0")
+                    .attr("y", "500")
+
                 // start
 
                 restart();
@@ -380,5 +390,6 @@
 <style>
     circle:hover {
         opacity: 0.4;
+        cursor: pointer;
     }
 </style>

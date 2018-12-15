@@ -41,7 +41,7 @@
           <span class="y caption">↑ Count</span>
         </v-flex>
 
-          <v-flex lg6 sm12 v-if="nodeType == 'storage' && storage != null">
+          <v-flex lg12 sm12 v-if="nodeType == 'storage' && storage != null">
             <v-widget title="스토리지 용량" content-bg="white">
             <div slot="widget-content">
                 <div class="justify-center row layout ma-0">
@@ -64,6 +64,9 @@
               </div>
              </v-widget> 
           </v-flex>
+
+
+
 
          <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
           <v-widget title="최근 활동" contentBg="white">
@@ -600,6 +603,14 @@ export default {
 
       });
 
+    },
+    init_StorageChart() {
+
+      let tag = {};
+
+
+      
+      
     },
     location (e) {
 
