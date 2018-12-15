@@ -41,6 +41,30 @@
           <span class="y caption">↑ Count</span>
         </v-flex>
 
+          <v-flex lg6 sm12 v-if="nodeType == 'storage'">
+            <v-widget title="스토리지 용량" content-bg="white">
+            <div slot="widget-content">
+                <div class="justify-center row layout ma-0">
+                  <v-progress-circular
+                    :size="300"
+                    :width="20"
+                    :rotate="-90"
+                    :value="trending2.value"
+                    :color="trending2.color"
+                  >
+
+                    {{ trending2.content }}
+                  </v-progress-circular>
+                </div>
+                <div slot="widget-footer">
+                  
+                  <div class="headline" style="text-align:right;">{{trending2.headline}} 남았습니다.</div>
+                  <div> </div>
+                </div>
+              </div>
+             </v-widget> 
+          </v-flex>
+
          <v-flex v-if="activity.length >= 1" lg4 sm12 xs12>
           <v-widget title="최근 활동" contentBg="white">
             <div slot="widget-content" style="height:385px;">
@@ -202,6 +226,18 @@ export default {
     monthActivity: [],
     tag: [], 
     activity: [],
+    trending2:{
+
+          headline: '90%',
+          caption: 'tasks completed.',
+          percent: 90,
+          label: 'list',
+          label_color: 'primary',
+          value: 90,
+          color: 'success',
+          content: "100/1000"
+
+        },
     listHeader1: [
 
       {
@@ -383,14 +419,25 @@ export default {
       });
 
       const posts = months.map((m, i) => {
-        return {
-          'month': m,
-          'post': post[i],
-          'vote': vote[i]
-        };
+
+        if(this.nodeType == "analyzer"){
+        
+            return {
+              'month': m,
+              'post': post[i],
+              'vote': vote[i]
+            };
+        }
+        else{
+
+            return {
+              'month': m,
+              'sample': post[i],
+              'vote': vote[i]
+            };
+
+        }
       });
-
-
       this.monthActivity = posts;
       console.log('created month activity chart');
 
