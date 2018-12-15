@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-card style="overflow-y: auto;">
+        <v-card style="overflow-y: auto;" v-if="post != {}">
             <v-card-title>
                 <h2>{{ post.title }}</h2>
             </v-card-title>
@@ -9,9 +9,9 @@
                     <li>sha1: {{ post.body.sha1 }}</li>
                     <li>sha256: {{ post.body.sha256 }}</li> -->
                 <!-- <li>collector: {{ post.body.collector }}</li> -->
-                <div class="post-text">분석가: {{ post.body.analyzer }}</div>
+                <div class="post-text">분석가: {{ post.username }}</div>
                 <v-divider></v-divider>
-                <div class="post-text">날짜: {{ getDate(post.timestamp) }}</div>
+                <div class="post-text">날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}</div>
                 <v-divider></v-divider>
                 <v-btn @click="go(post)" style="color: white;" color="green">Malware Info ({{ post.body.sha256 }})</v-btn>
                 <!-- <li>first_seen: {{ post.body.first_seen }}</li> -->
@@ -89,8 +89,17 @@
         methods: {
             viewPost() {
                 apiService.viewPost(this.$route.params.permlink)
-                    .then(response => {
+                    .then(async (response) => {
                         this.post = response.message.post[0]
+                        this.post.username = await apiService.searchUser(response.message.post[0].publickey).then((user)=>{
+                                console.log(user.message);
+                                if(user.message.length == 0){
+                                    return response.message.post[0].publickey;
+                                }
+                                return user.message[0].username;
+
+                            });
+
                         this.votes = response.message.vote
                         this.replies = response.message.reply
                     })
