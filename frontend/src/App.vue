@@ -130,6 +130,11 @@
           title: '상태',
           to: '/status',
           visible: true
+        }, {
+          icon: 'info',
+          title: '랭크',
+          to: '/rank',
+          visible: true
         },
         {
           icon: 'info',

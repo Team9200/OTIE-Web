@@ -117,6 +117,7 @@
 
           result.forEach(function(data, index){
             let tmp = {};
+            tmp.publickey = data.publickey;
             tmp.username = data.username;
             tmp.nodetype = data.nodetype
             tmp.contribution = data.contribution;

@@ -2,7 +2,7 @@
     <v-container>
         <v-card style="overflow-y: auto;" v-if="post != {}">
             <v-card-title>
-                <h2>{{ post.title }}</h2>
+                <h2>{{ post.title.replace("report of","").replace("analyze of ","") }}</h2>
             </v-card-title>
             <v-card-text v-if="post.body !== undefined">
                 <!-- <li>md5: {{ post.body.md5 }}</li>

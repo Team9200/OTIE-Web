@@ -29,7 +29,7 @@
                     <div v-for="(post, i) in postList" :key="i">
                         <!-- <h3>{{ post.permlink }}</h3> -->
                         <v-tooltip bottom>
-                            <span @click="go(post)" class="hove" slot="activator">{{ post.title }}&emsp;{{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}</span>
+                            <span @click="go(post)" class="hove" style="color:green" slot="activator">{{ post.title }}&emsp;{{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}</span>
                             <span>permlink: {{ post.permlink }}</span>
                         </v-tooltip>
                     </div>
