@@ -1,55 +1,18 @@
 <template>
-    <v-container>
-
-        <v-card style="overflow-y: auto;" class="post-card">
-            <!-- <v-toolbar color="transparent" flat dense card>
-                <v-toolbar-title class="subheading ft-200">Recent Posts</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon>
-                    <v-icon class="text--secondary">more_vert</v-icon>
-                </v-btn>
-            </v-toolbar> -->
-            <v-card-title>
-                <h1>검색 결과 "{{ $route.query.query }}"</h1>
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text class="pa-0">
-                <ul class="post--list flex-list vertical">
-                    <li class="post--item" v-for="(post, i) in posts" :key="i">
-                        <a @click="go(post)" class="post--link pa-4 layout row ma-0 text--primary">
-                            <div class="post--content ml-3">
-                                <h3 class="title post--title">
-                                    {{ post.title }}
-                                </h3>
-                                <div class="post--desc py-2 text--secondary">
-                                    {{ post.description }}
-                                </div>
-                                <div class="post--meta o-flex justify-space-between">
-                                    <div class="post--author caption grey--text text--darken-1">
-                                        <span>{{post.body.analyzer}}</span>
-                                        <time class="px-2">{{getDate(post.timestamp)}}</time>
-                                    </div>
-                                    <div class="social">
-                                        <a @click="handleThumb" class="grey--text text--darken-1">
-                                            <v-icon small>thumb_up</v-icon>
-                                            <small>100+</small>
-                                        </a>
-                                        <!-- <a @click="handleComment" class="grey--text text--darken-1 mx-3">
-                                            <v-icon small>mode_comment</v-icon>
-                                            <small>12+</small>
-                                        </a>
-                                        <a @click="handleFavorite" class="grey--text text--darken-1">
-                                            <v-icon small>favorite</v-icon>
-                                            <small>50+</small>
-                                        </a> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </v-card-text>
-        </v-card>
+    <v-container v-if="posts.length !== 0">
+        <div v-for="(post, i) in posts" :key="i">
+            <v-card style="cursor: pointer; overflow-y: auto;" id="post" @click="go(post)">
+                <v-card-title>
+                    <h3><u>{{ post.title.replace("report of","").replace("analyze of ","") }}</u></h3>
+                </v-card-title>
+                <v-card-text>
+                    분석가: {{ post.username }}<br>
+                    날짜: {{ new Date(parseInt(post.timestamp,10)).toLocaleString() }}&emsp;
+                    <i class="material-icons">thumb_up</i> <i>{{ post.likes }}</i>
+                </v-card-text>
+            </v-card>
+            <br>
+        </div>
         <br>
         <div class="text-xs-center">
             <v-pagination v-model="page" :length="length" total-visible="10"></v-pagination>
@@ -59,35 +22,60 @@
 </template>
 
 <script>
+      import {
+          forEach as ForEach
+      } from 'p-iteration';
     import {
         APIService
     } from '../../api/APIService'
     const apiService = new APIService()
 
     export default {
-        name: 'search-view',
+        name: 'recent-view',
         data: () => ({
             posts: [],
             page: 1,
             length: 0
         }),
         methods: {
-            getPosts(page) {
-            	const query = this.$route.query.query;
+            async getPosts(page) {
 
-                apiService.searchPost(page,query)
-                    .then(response => {
-                        this.posts = response.message
-                        this.length = Math.ceil(response.count / 10)
+                const query = this.$route.query.query;
+
+                await apiService.searchPost(page, query)
+                    .then(async (response) => {
+
+                        const pos = response.message;
+                        let array = [];
+
+                        await ForEach(pos, async (post)=>{
+
+                            this.length = Math.ceil(response.count / 10)
+                            console.log(this.length)
+                            let tmp = {}
+                            tmp = post;
+
+                            tmp.username = await apiService.searchUser(post.publickey).then((user)=>{
+
+                                if(user.message.length == 0){
+                                    return post.publickey;
+                                }
+                                return user.message[0].username;
+
+                            })
+                            array.push(tmp);
+
+                        });
+
+                        this.posts = array;
+                        this.posts = this.posts.sort((a, b) => b.likes - a.likes);
                     })
                     .catch(err => {
+
                         if (err) throw err
+
                     })
-            },
-            getDate(value) {
-                const date = new Date(value);
-                return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() +
-                    ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+
             },
             go(post) {
                 const string = '/post/' + post.permlink
@@ -98,8 +86,9 @@
             }
         },
         mounted() {
-            // TODO: Add url routing & router.js
-            this.getPosts(1)
+            this.getPosts(this.$route.params.page)
+            this.page = Number(this.$route.params.page)
+            this.getCount()
         },
         watch: {
             page: {
@@ -148,4 +137,10 @@
         transform: scale(1.05);
         transition: 0.7s;
     }
+
+
+    #post:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+
 </style>
