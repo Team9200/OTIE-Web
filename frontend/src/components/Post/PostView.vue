@@ -28,12 +28,12 @@
                 <!-- </v-container> -->
             </v-card-text>
 
-            <v-card-actions>
+            <v-card-actions v-if="$store.getters.isAuthenticated">
                 <v-btn @click="vote" color="green" style="color: white;">Vote</v-btn>
             </v-card-actions>
         </v-card>
         <br>
-        <v-card>
+        <v-card v-if="$store.getters.isAuthenticated">
             <v-card-title>
                 <h2>댓글 달기</h2>
                 <v-spacer></v-spacer>
@@ -58,7 +58,7 @@
                             <v-btn icon>
                                 <v-icon>favorite</v-icon>
                             </v-btn>
-                            140
+                            
                         </v-card-actions>
                     </v-card>
                 </v-container>
